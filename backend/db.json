@@ -1,0 +1,92 @@
+{
+  "scenes": [
+    {
+      "id": "cena-1",
+      "name": "Floresta Sombrias",
+      "background": "",
+      "mobs": [
+        {
+          "id": "mob-1767995073957",
+          "name": "lobo",
+          "color": "red",
+          "maxHp": 10,
+          "currentHp": 5,
+          "damageDice": "1d6",
+          "toHit": 0,
+          "image": ""
+        }
+      ],
+      "playlist": [
+        {
+          "id": "track-1767992788546",
+          "name": "RPG  D&D Ambience - Violent Storm (wind, thunder, rain), 1 hour version",
+          "url": "/audio/audio-1767992788423.mp3",
+          "type": "ambiente",
+          "volume": 0.1
+        },
+        {
+          "id": "track-1767992804349",
+          "name": "Pirates of The Caribbean - He's a PirateDavy Jones  Danish National Symphony Orchestra (live)",
+          "url": "/audio/audio-1767992804345.mp3",
+          "type": "musica",
+          "volume": 0.3
+        },
+        {
+          "id": "track-1767993226020",
+          "name": "sound-effect-1904",
+          "url": "/audio/audio-1767993226017.mp3",
+          "type": "sfx",
+          "volume": 0.5
+        }
+      ]
+    },
+    {
+      "id": "cena-1767974201000",
+      "name": "Floresta Sombrias (cópia)",
+      "background": "",
+      "mobs": [
+        {
+          "id": "mob-1767974201000-72527368e4a99",
+          "name": "Aranha Gigante",
+          "color": "red",
+          "maxHp": 30,
+          "currentHp": 20,
+          "damageDice": "1d8+2",
+          "toHit": 4,
+          "image": ""
+        },
+        {
+          "id": "mob-1767974201000-db3d073eec9b3",
+          "name": "Esquilo",
+          "color": "fuchsia",
+          "maxHp": 10,
+          "currentHp": 10,
+          "damageDice": "1d6",
+          "toHit": 4,
+          "image": ""
+        }
+      ],
+      "playlist": [
+        {
+          "id": "track-1767974201000-21194b987a43c8",
+          "name": "Vento na Floresta",
+          "type": "ambiente",
+          "url": "/audio/wind.mp3",
+          "volume": 0.5
+        },
+        {
+          "id": "track-1767974201000-3aeedb8195d478",
+          "name": "jumpland44100.mp3",
+          "type": "sfx",
+          "url": "/audio/audio-1767971306429.mp3",
+          "volume": 0.5
+        }
+      ]
+    }
+  ],
+  "activeSceneId": "cena-1",
+  "library": {
+    "mobs": [],
+    "tracks": []
+  }
+}
