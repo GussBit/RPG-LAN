@@ -1,3 +1,14 @@
+# Ignorar todos os arquivos de áudio em qualquer pasta
+*.mp3
+*.wav
+*.ogg
+*.m4a
+
+# Caminho específico da sua pasta de uploads do servidor
+backend/public/audio/
+server/public/audio/
+
+
 # --- DEPENDÊNCIAS ---
 node_modules/
 .pnpm-store/
