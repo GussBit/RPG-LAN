@@ -321,6 +321,8 @@ app.delete('/api/scenes/:sceneId/mobs/:mobId', async (req, res) => {
 
 // --- PLAYERS ---
 
+// --- PLAYERS (Substitua toda a seção de PLAYERS) ---
+
 app.post('/api/scenes/:sceneId/players', async (req, res) => {
   const { sceneId } = req.params;
   const player = req.body;
@@ -328,8 +330,12 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
   const scene = db.data.scenes.find((s) => s.id === sceneId);
   if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
 
-  const token = Math.random().toString(36).substring(2, 15);
+  // LÓGICA DE PRESET: Se vier token do body, usa ele. Senão, gera novo.
+  const token = player.accessToken || Math.random().toString(36).substring(2, 15);
   const safeName = (player.playerName || 'player').toLowerCase().replace(/\s+/g, '-');
+  
+  // Se vier URL do body, usa ela. Senão, gera nova.
+  const accessUrl = player.accessUrl || `/p/${safeName}-${token}`;
   
   const newPlayer = {
     id: `player-${Date.now()}`,
@@ -338,14 +344,15 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
     photo: player.photo || '',
     maxHp: Number(player.maxHp || 10),
     currentHp: Number(player.currentHp ?? player.maxHp ?? 10),
-    accessUrl: `/p/${safeName}-${token}`,
-    accessToken: token,
-    conditions: [],
+    accessUrl: accessUrl,
+    accessToken: token, // <--- PERSISTÊNCIA DO LINK
+    conditions: player.conditions || [],
   };
 
   scene.players = scene.players || [];
   scene.players.push(newPlayer);
   await db.write();
+
   res.status(201).json(newPlayer);
 });
 
@@ -361,6 +368,7 @@ app.patch('/api/scenes/:sceneId/players/:playerId', async (req, res) => {
 
   Object.assign(player, updates);
   await db.write();
+
   res.json(player);
 });
 
@@ -372,26 +380,32 @@ app.delete('/api/scenes/:sceneId/players/:playerId', async (req, res) => {
 
   scene.players = (scene.players || []).filter((p) => p.id !== playerId);
   await db.write();
+
   res.status(204).send();
 });
 
-// Buscar Player por Token (Para a página pública do jogador)
+// Buscar Player por Token (PRIORIZA CENA ATIVA)
 app.get('/api/players/token/:token', (req, res) => {
   const { token } = req.params;
   
-  for (const scene of db.data.scenes) {
-    const player = (scene.players || []).find(p => p.accessToken === token);
+  // 1. Tenta achar na cena ativa primeiro (para o jogador ir direto pra ação)
+  const activeScene = db.data.scenes.find(s => s.id === db.data.activeSceneId);
+  if (activeScene) {
+    const player = (activeScene.players || []).find(p => p.accessToken === token);
     if (player) {
-      return res.json({
-        player,
-        scene: {
-          id: scene.id,
-          name: scene.name,
-          background: scene.background
-        }
-      });
+       return res.json({ player, scene: activeScene });
     }
   }
+
+  // 2. Se não estiver na ativa, procura nas outras (fallback)
+  for (const scene of db.data.scenes) {
+    if (scene.id === db.data.activeSceneId) continue; // Já checou
+    const player = (scene.players || []).find(p => p.accessToken === token);
+    if (player) {
+      return res.json({ player, scene });
+    }
+  }
+  
   res.status(404).json({ error: 'Jogador não encontrado ou token inválido' });
 });
 

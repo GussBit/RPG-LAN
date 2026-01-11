@@ -3,7 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { 
   Loader2, Plus, Trash2, Edit2, Upload, Map as MapIcon, Link as LinkIcon, 
-  FolderOpen, Image as ImageIcon, Upload as UploadIcon 
+  FolderOpen, Image as ImageIcon, Upload as UploadIcon, BookMarked, Download 
 } from 'lucide-react';
 
 // Hooks e Stores
@@ -26,7 +26,7 @@ export default function App() {
     scenes, activeScene, fetchScenes, isLoading,
     updateMobHp, deleteMob, createMob, setActiveScene, createScene, duplicateScene, deleteScene,
     createPlayer, updatePlayerHp, deletePlayer, updatePlayer, togglePlayerCondition, syncPlayers,
-    updateSceneBackground, updateMob, addTrackToScene // Certifique-se de ter addTrackToScene no store ou lógica similar
+    updateSceneBackground, updateMob, createPreset
   } = useGameStore();
 
   // --- ESTADOS ---
@@ -57,7 +57,7 @@ export default function App() {
   const [galleryCallback, setGalleryCallback] = useState(null);
   
   const [presetsOpen, setPresetsOpen] = useState(false);
-  const [presetsType, setPresetsType] = useState('mobs');
+  const [presetsType, setPresetsType] = useState('players');
   const [presetsCallback, setPresetsCallback] = useState(null);
 
   // Estados de loading local
@@ -162,9 +162,7 @@ export default function App() {
     e.preventDefault();
     if (!editingScene) return;
     try {
-        // Se updateSceneBackground já lida com updateScene genérico, use-o ou use updateScene direto se tiver
         await updateSceneBackground(editingScene.id, editingScene.background);
-        // Se precisar atualizar nome também: updateScene(editingScene.id, { name: editingScene.name, background: editingScene.background })
         toast.success('Cena atualizada!');
         setEditSceneModalOpen(false);
     } catch (err) {
@@ -270,7 +268,27 @@ export default function App() {
             <div className="p-4">
               {/* Jogadores */}
               <div className="mb-8 border-b border-white/5 pb-6">
-                <div className="flex items-center justify-between mb-4"><div className="text-2xl font-black tracking-tight text-zinc-100 uppercase">Jogadores</div></div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-sm font-bold text-zinc-500 tracking-widest uppercase">Jogadores</h2>
+                    <span className="px-1.5 py-0.5 rounded bg-zinc-800 text-[10px] text-zinc-400 border border-white/5">{players.length}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-1">
+                     {/* NOVO: Botão de Presets */}
+                    <button 
+                      onClick={() => { setPresetsType('players'); setPresetsOpen(true); }} 
+                      className="p-1.5 text-zinc-400 hover:text-indigo-400 hover:bg-indigo-500/10 rounded-lg transition" 
+                      title="Carregar Jogador Salvo"
+                    >
+                      <BookMarked size={16} />
+                    </button>
+                    
+                    <button onClick={() => setPlayerModalOpen(true)} className="p-1.5 text-zinc-400 hover:text-white hover:bg-white/10 rounded-lg transition">
+                      <Plus size={16} />
+                    </button>
+                  </div>
+                </div>
                 <div className="flex flex-wrap gap-4">
                   {(activeScene.players || []).map((p) => (
                     <div key={p.id} className="relative w-64 bg-zinc-900/60 border border-white/10 rounded-xl overflow-hidden shadow-lg group transition-all">
@@ -295,9 +313,16 @@ export default function App() {
                           {[1, 5, 10].map(v => <button key={v} onClick={() => updatePlayerHp(activeScene.id, p.id, v)} className="px-2 py-1 bg-emerald-950/50 text-emerald-400 rounded text-xs hover:bg-emerald-900">+{v}</button>)}
                         </div>
                         <div className="bg-black/40 p-2 rounded border border-white/5 text-[10px] text-zinc-500 font-mono truncate select-all cursor-pointer mb-2" 
-                             onClick={() => { navigator.clipboard.writeText(`http://${window.location.hostname}:5173${p.accessUrl}`); toast.success('Link copiado!'); }}>
-                          http://{window.location.hostname}:5173{p.accessUrl}
-                        </div>
+     onClick={() => { 
+       // Esta lógica remove o nome e a barra, pegando apenas o código final do token
+       const tokenPuro = p.accessUrl.split('/').pop().split('-').pop();
+       const urlLimpa = `http://${window.location.hostname}:5173/p/${tokenPuro}`;
+       
+       navigator.clipboard.writeText(urlLimpa); 
+       toast.success('Link corrigido copiado!'); 
+     }}>
+  http://{window.location.hostname}:5173/p/{p.accessUrl.split('/').pop().split('-').pop()}
+</div>
                       </div>
                       <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => { setEditingPlayer(p); setEditPlayerModalOpen(true); }} className="p-1.5 text-zinc-600 hover:text-indigo-400 bg-black/50 rounded"><Edit2 size={14} /></button>
@@ -433,7 +458,23 @@ export default function App() {
             <Field label="Foto"><div className="flex gap-2"><input value={editingPlayer?.photo || ''} onChange={e => setEditingPlayer({...editingPlayer, photo: e.target.value})} className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /><button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setEditingPlayer({ ...editingPlayer, photo: url })); setGalleryOpen(true); }} className="px-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400">📁</button></div></Field>
             <Field label="HP"><input type="number" value={editingPlayer?.maxHp || 20} onChange={e => setEditingPlayer({...editingPlayer, maxHp: Number(e.target.value)})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
           </div>
-          <div className="flex justify-end gap-2"><PillButton type="submit" variant="primary">Salvar</PillButton></div>
+          <div className="flex justify-between items-center mt-4">
+            {/* Botão de Salvar como Preset (Aparece só se estiver editando um player existente) */}
+            {editingPlayer ? (
+                <button 
+                    type="button"
+                    onClick={async () => {
+                        await createPreset('players', editingPlayer); // Salva o player atual como preset
+                        toast.success('Jogador salvo nos presets!');
+                    }}
+                    className="flex items-center gap-2 text-xs text-indigo-400 hover:text-indigo-300 px-3 py-2 rounded-lg hover:bg-indigo-500/10 transition"
+                >
+                    <Download size={14} /> Salvar como Preset
+                </button>
+            ) : <div></div>}
+
+            <PillButton type="submit" variant="primary">Salvar</PillButton>
+          </div>
         </form>
       </Modal>
 

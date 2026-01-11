@@ -180,5 +180,22 @@
         "uploadedAt": "2026-01-11T14:15:11.454Z"
       }
     ]
+  },
+  "presets": {
+    "mobs": [],
+    "players": [
+      {
+        "id": "player-1768136217552",
+        "playerName": "testeaz",
+        "characterName": "tesfr",
+        "photo": "/images/img-1768088706074.webp",
+        "maxHp": 20,
+        "currentHp": 0,
+        "accessUrl": "/p/testeaz-83em2nxef23",
+        "accessToken": "83em2nxef23",
+        "conditions": [],
+        "createdAt": "2026-01-11T15:06:17.393Z"
+      }
+    ]
   }
 }
