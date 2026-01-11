@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { 
-  Loader2, Plus, Trash2, Edit2, Upload, Map as MapIcon, Link as LinkIcon, 
-  FolderOpen, Image as ImageIcon, Upload as UploadIcon, BookMarked, Download 
+import {
+  Loader2, Plus, Trash2, Edit2, Upload, Map as MapIcon, Link as LinkIcon,
+  FolderOpen, Image as ImageIcon, Upload as UploadIcon, BookMarked, Download
 } from 'lucide-react';
 
 // Hooks e Stores
@@ -34,7 +34,7 @@ export default function App() {
   const [mobModalOpen, setMobModalOpen] = useState(false);
   const [playerModalOpen, setPlayerModalOpen] = useState(false);
   const [sceneModalOpen, setSceneModalOpen] = useState(false);
-  
+
   // Modais de Edição e Visualização
   const [editSceneModalOpen, setEditSceneModalOpen] = useState(false);
   const [editMobModalOpen, setEditMobModalOpen] = useState(false);
@@ -45,7 +45,7 @@ export default function App() {
   const [sceneName, setSceneName] = useState('');
   const [mobForm, setMobForm] = useState({ name: '', color: 'red', maxHp: 10, damageDice: '1d6', toHit: 0, image: '' });
   const [playerForm, setPlayerForm] = useState({ playerName: '', characterName: '', photo: '', maxHp: 20 });
-  
+
   const [editingScene, setEditingScene] = useState(null);
   const [editingMob, setEditingMob] = useState(null);
   const [editingPlayer, setEditingPlayer] = useState(null);
@@ -55,7 +55,7 @@ export default function App() {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryType, setGalleryType] = useState('images');
   const [galleryCallback, setGalleryCallback] = useState(null);
-  
+
   const [presetsOpen, setPresetsOpen] = useState(false);
   const [presetsType, setPresetsType] = useState('players');
   const [presetsCallback, setPresetsCallback] = useState(null);
@@ -86,7 +86,7 @@ export default function App() {
   const tensionFactor = 1 + (1 - partyPct) * (tensionMaxMultiplier - 1);
 
   // --- HANDLERS ---
-  
+
   // Função auxiliar para abrir galeria do Mixer
   const openGalleryForAudio = (callback) => {
     setGalleryType('audio');
@@ -103,7 +103,7 @@ export default function App() {
       setMobForm({ name: '', color: 'red', maxHp: 10, damageDice: '1d6', toHit: 0, image: '' });
       setMobModalOpen(false);
       toast.success(`Mob criado!`);
-    } catch (err) { toast.error(err?.message || 'Erro'); } 
+    } catch (err) { toast.error(err?.message || 'Erro'); }
     finally { setIsCreating(false); }
   };
 
@@ -129,7 +129,7 @@ export default function App() {
       setPlayerForm({ playerName: '', characterName: '', photo: '', maxHp: 20 });
       setPlayerModalOpen(false);
       toast.success(`Jogador adicionado!`);
-    } catch (err) { toast.error(err.message); } 
+    } catch (err) { toast.error(err.message); }
     finally { setIsCreatingPlayer(false); }
   };
 
@@ -154,19 +154,19 @@ export default function App() {
       await createScene({ name: sceneName.trim() });
       setSceneName(''); setSceneModalOpen(false);
       toast.success('Cena criada!');
-    } catch (err) { toast.error(err?.message); } 
+    } catch (err) { toast.error(err?.message); }
     finally { setBusyScene(false); }
   };
-  
+
   const submitEditScene = async (e) => {
     e.preventDefault();
     if (!editingScene) return;
     try {
-        await updateSceneBackground(editingScene.id, editingScene.background);
-        toast.success('Cena atualizada!');
-        setEditSceneModalOpen(false);
+      await updateSceneBackground(editingScene.id, editingScene.background);
+      toast.success('Cena atualizada!');
+      setEditSceneModalOpen(false);
     } catch (err) {
-        toast.error('Erro ao salvar cena');
+      toast.error('Erro ao salvar cena');
     }
   };
 
@@ -181,7 +181,7 @@ export default function App() {
       const { url } = await res.json();
       setEditingScene({ ...editingScene, background: url });
       toast.success('Imagem enviada! Clique em Salvar para confirmar.');
-    } catch (err) { toast.error('Erro ao fazer upload'); } 
+    } catch (err) { toast.error('Erro ao fazer upload'); }
     finally { setUploadingImage(false); }
   };
 
@@ -197,9 +197,10 @@ export default function App() {
   if (!activeScene) return <div className="h-screen flex flex-col items-center justify-center bg-zinc-950 text-zinc-500"><h2 className="text-xl">Nenhuma cena encontrada</h2><p className="text-sm mt-2">Verifique se o backend está rodando.</p></div>;
 
   return (
-    <div className="h-dvh overflow-hidden bg-[#09090b] text-zinc-100" style={{ backgroundColor: activeScene.background ? 'transparent' : undefined }}>
+    // LAYOUT CORRIGIDO: min-h-dvh no mobile, lg:h-dvh no desktop. overflow-y-auto no mobile.
+    <div className="min-h-dvh lg:h-dvh bg-[#09090b] text-zinc-100 overflow-y-auto lg:overflow-hidden" style={{ backgroundColor: activeScene.background ? 'transparent' : undefined }}>
       <ToastContainer position="top-right" autoClose={3000} theme="dark" />
-      
+
       {/* Background da Cena */}
       {activeScene.background && (
         <div className="fixed inset-0 z-0 opacity-10 bg-cover bg-center" style={{ backgroundImage: `url(${getImageUrl(activeScene.background)})` }} />
@@ -207,14 +208,14 @@ export default function App() {
 
       <div className="relative z-10 h-full grid grid-rows-[56px_1fr]">
         {/* Topbar */}
-        <header className="flex items-center justify-between px-4 border-b border-white/5 bg-zinc-950/50 backdrop-blur-md">
+        <header className="flex items-center justify-between px-4 border-b border-white/5 bg-zinc-950/50 backdrop-blur-md sticky top-0 z-50">
           <div className="flex items-center gap-3 min-w-0">
             <div className="text-amber-600 font-semibold tracking-wide">RPG-LAN LAB</div>
             <div className="hidden sm:block text-xs text-zinc-500 truncate">
               Cena ativa: <span className="text-zinc-200">{activeScene.name}</span>
             </div>
           </div>
-          
+
           {players.length > 0 && (
             <div className="flex flex-col w-48 mx-4">
               <div className="flex justify-between text-[10px] uppercase font-bold tracking-widest text-red-500 mb-1">
@@ -239,10 +240,11 @@ export default function App() {
           </div>
         </header>
 
-        {/* 3 colunas */}
-        <div className="h-full grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)_360px]">
-          {/* Esquerda: Cenas */}
-          <aside className="border-r border-white/5 bg-zinc-900/25 backdrop-blur-md overflow-y-auto">
+        {/* 3 colunas - LAYOUT CORRIGIDO: lg:h-full para forçar grid no desktop */}
+        <div className="lg:h-full grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)_360px]">
+          
+          {/* Esquerda: Cenas - Scroll no desktop apenas */}
+          <aside className="border-r border-white/5 bg-zinc-900/25 backdrop-blur-md lg:overflow-y-auto">
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="text-2xl font-black tracking-tight text-zinc-100 uppercase">Cenas</div>
@@ -263,8 +265,8 @@ export default function App() {
             </div>
           </aside>
 
-          {/* Centro: Arena */}
-          <main className="overflow-y-auto">
+          {/* Centro: Arena - Scroll no desktop apenas */}
+          <main className="lg:overflow-y-auto">
             <div className="p-4">
               {/* Jogadores */}
               <div className="mb-8 border-b border-white/5 pb-6">
@@ -273,26 +275,58 @@ export default function App() {
                     <h2 className="text-sm font-bold text-zinc-500 tracking-widest uppercase">Jogadores</h2>
                     <span className="px-1.5 py-0.5 rounded bg-zinc-800 text-[10px] text-zinc-400 border border-white/5">{players.length}</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-1">
-                     {/* NOVO: Botão de Presets */}
-                    <button 
-                      onClick={() => { setPresetsType('players'); setPresetsOpen(true); }} 
-                      className="p-1.5 text-zinc-400 hover:text-indigo-400 hover:bg-indigo-500/10 rounded-lg transition" 
+                    {/* Botão de Presets */}
+                    <button
+                      onClick={() => { setPresetsType('players'); setPresetsOpen(true); }}
+                      className="p-1.5 text-zinc-400 hover:text-indigo-400 hover:bg-indigo-500/10 rounded-lg transition"
                       title="Carregar Jogador Salvo"
                     >
                       <BookMarked size={16} />
                     </button>
-                    
+
                     <button onClick={() => setPlayerModalOpen(true)} className="p-1.5 text-zinc-400 hover:text-white hover:bg-white/10 rounded-lg transition">
                       <Plus size={16} />
                     </button>
                   </div>
                 </div>
+
                 <div className="flex flex-wrap gap-4">
                   {(activeScene.players || []).map((p) => (
-                    <div key={p.id} className="relative w-64 bg-zinc-900/60 border border-white/10 rounded-xl overflow-hidden shadow-lg group transition-all">
-                      <div className="flex items-center p-3 gap-3">
+                    <div
+                      key={p.id}
+                      className={`
+                        relative w-64 bg-zinc-900/60 border border-white/10 rounded-xl overflow-hidden shadow-lg group transition-all duration-500
+                        ${(p.conditions || []).includes('invisible') ? 'opacity-30 border-dashed border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.1)]' : 'opacity-100'}
+                        ${(p.conditions || []).includes('blinded') ? 'brightness-[0.2] blur-[1px] grayscale' : ''}
+                        ${(p.conditions || []).includes('charmed') ? 'border-pink-500/60 shadow-[0_0_20px_rgba(236,72,153,0.3)]' : ''}
+                        ${(p.conditions || []).includes('prone') ? 'rotate-3 scale-95 origin-center grayscale-[0.5]' : ''}
+                        ${(p.conditions || []).includes('dead') ? 'grayscale border-red-900/50 brightness-50' : ''}
+                        ${(p.conditions || []).includes('paralyzed') ? 'brightness-150 contrast-150 saturate-0' : ''}
+                      `}
+                    >
+                      {/* Efeito Visual de Veneno (Overlay Verde) */}
+                      {(p.conditions || []).includes('poisoned') && (
+                        <div className="absolute inset-0 bg-green-500/10 pointer-events-none z-0 mix-blend-overlay animate-pulse"></div>
+                      )}
+
+                      {/* Efeito Visual de Amedrontado (Pulsar Roxo) */}
+                      {(p.conditions || []).includes('frightened') && (
+                        <div className="absolute inset-0 border-2 border-purple-500/30 animate-pulse rounded-xl pointer-events-none z-0"></div>
+                      )}
+
+                      {/* Efeito de Correntes (Restrained) */}
+                      {(p.conditions || []).includes('restrained') && (
+                        <div className="absolute inset-0 border-[3px] border-dashed border-zinc-600 rounded-xl pointer-events-none z-10 opacity-60"></div>
+                      )}
+
+                      {/* Efeito Visual de Enfeitiçado (Overlay Rosa) */}
+                      {(p.conditions || []).includes('charmed') && (
+                        <div className="absolute inset-0 bg-pink-500/10 pointer-events-none z-0 mix-blend-color animate-pulse"></div>
+                      )}
+
+                      <div className="flex items-center p-3 gap-3 relative z-20">
                         <div className="h-12 w-12 rounded-full bg-black/50 overflow-hidden border border-white/10 shrink-0">
                           {p.photo ? <img src={getImageUrl(p.photo)} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xs text-zinc-600">Foto</div>}
                         </div>
@@ -302,7 +336,7 @@ export default function App() {
                           <ConditionsBar conditions={p.conditions || []} onToggle={(cId) => handleToggleCondition(p.id, cId)} />
                         </div>
                       </div>
-                      <div className="px-3 pb-3">
+                      <div className="px-3 pb-3 relative z-20">
                         <div className="flex items-center justify-between text-xs text-zinc-400 mb-1"><span>HP</span><span>{p.currentHp} / {p.maxHp}</span></div>
                         <div className="h-2 w-full bg-black rounded-full overflow-hidden mb-3">
                           <div className="h-full bg-emerald-500 transition-all" style={{ width: `${(p.currentHp / p.maxHp) * 100}%` }} />
@@ -312,24 +346,25 @@ export default function App() {
                           <div className="w-px bg-white/10 mx-1"></div>
                           {[1, 5, 10].map(v => <button key={v} onClick={() => updatePlayerHp(activeScene.id, p.id, v)} className="px-2 py-1 bg-emerald-950/50 text-emerald-400 rounded text-xs hover:bg-emerald-900">+{v}</button>)}
                         </div>
-                        <div className="bg-black/40 p-2 rounded border border-white/5 text-[10px] text-zinc-500 font-mono truncate select-all cursor-pointer mb-2" 
-     onClick={() => { 
-       // Esta lógica remove o nome e a barra, pegando apenas o código final do token
-       const tokenPuro = p.accessUrl.split('/').pop().split('-').pop();
-       const urlLimpa = `http://${window.location.hostname}:5173/p/${tokenPuro}`;
-       
-       navigator.clipboard.writeText(urlLimpa); 
-       toast.success('Link corrigido copiado!'); 
-     }}>
-  http://{window.location.hostname}:5173/p/{p.accessUrl.split('/').pop().split('-').pop()}
-</div>
+
+                        {/* Link Corrigido */}
+                        <div className="bg-black/40 p-2 rounded border border-white/5 text-[10px] text-zinc-500 font-mono truncate select-all cursor-pointer mb-2 hover:text-zinc-300 hover:bg-black/60 transition-colors"
+                          onClick={() => {
+                            const tokenPuro = p.accessUrl ? p.accessUrl.split('/').pop().split('-').pop() : p.id;
+                            const urlLimpa = `http://${window.location.hostname}:5173/p/${tokenPuro}`;
+                            navigator.clipboard.writeText(urlLimpa);
+                            toast.success('Link corrigido copiado!');
+                          }}>
+                          http://{window.location.hostname}:5173/p/{p.accessUrl ? p.accessUrl.split('/').pop().split('-').pop() : p.id}
+                        </div>
                       </div>
-                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => { setEditingPlayer(p); setEditPlayerModalOpen(true); }} className="p-1.5 text-zinc-600 hover:text-indigo-400 bg-black/50 rounded"><Edit2 size={14} /></button>
-                        <button onClick={() => window.confirm('Remover player?') && deletePlayer(activeScene.id, p.id)} className="p-1.5 text-zinc-600 hover:text-red-400 bg-black/50 rounded"><Trash2 size={14} /></button>
+                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-30">
+                        <button onClick={() => { setEditingPlayer(p); setEditPlayerModalOpen(true); }} className="p-1.5 text-zinc-600 hover:text-indigo-400 bg-black/80 rounded backdrop-blur-sm"><Edit2 size={14} /></button>
+                        <button onClick={() => window.confirm('Remover player?') && deletePlayer(activeScene.id, p.id)} className="p-1.5 text-zinc-600 hover:text-red-400 bg-black/80 rounded backdrop-blur-sm"><Trash2 size={14} /></button>
                       </div>
                     </div>
                   ))}
+                  {/* Botão Novo Jogador */}
                   <button onClick={() => setPlayerModalOpen(true)} className="w-64 h-40 border border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-white/20 transition-colors gap-2">
                     <Plus size={24} /><span className="text-xs uppercase font-bold tracking-widest">Novo Jogador</span>
                   </button>
@@ -344,7 +379,12 @@ export default function App() {
               <div className="flex flex-wrap gap-6 justify-center items-start">
                 {(activeScene.mobs || []).map((mob) => (
                   <div key={mob.id} className="relative group">
-                    <MobCard mob={mob} onUpdate={(mobId, delta) => updateMobHp(activeScene.id, mobId, delta)} onDelete={(mobId) => window.confirm(`Remover ${mob.name}?`) && deleteMob(activeScene.id, mobId)} />
+                    {/* Atualizado para usar updateMob e permitir envio de objetos (hp + conditions) */}
+                    <MobCard 
+                      mob={mob} 
+                      onUpdate={(mobId, updates) => updateMob(activeScene.id, mobId, updates)} 
+                      onDelete={(mobId) => window.confirm(`Remover ${mob.name}?`) && deleteMob(activeScene.id, mobId)} 
+                    />
                     <button onClick={() => { setEditingMob(mob); setEditMobModalOpen(true); }} className="absolute top-2 right-2 p-2 bg-black/50 text-zinc-400 hover:text-indigo-400 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"><Edit2 size={14} /></button>
                   </div>
                 ))}
@@ -354,18 +394,18 @@ export default function App() {
 
           {/* Direita: Mixer */}
           <aside className="border-l border-white/5 bg-zinc-900/25 backdrop-blur-md overflow-hidden">
-             <Mixer 
-               playlist={activeScene.playlist} 
-               mode="panel" 
-               tensionFactor={tensionFactor} 
-               onOpenGallery={openGalleryForAudio} 
-             />
+            <Mixer
+              playlist={activeScene.playlist}
+              mode="panel"
+              tensionFactor={tensionFactor}
+              onOpenGallery={openGalleryForAudio}
+            />
           </aside>
         </div>
       </div>
 
       {/* --- MODAIS --- */}
-      
+
       {/* 1. Criar Cena */}
       <Modal open={sceneModalOpen} title="Criar cena" onClose={() => setSceneModalOpen(false)}>
         <form onSubmit={submitScene} className="space-y-4">
@@ -374,7 +414,7 @@ export default function App() {
         </form>
       </Modal>
 
-      {/* 2. Editar Cena (Atualizado com botão da galeria) */}
+      {/* 2. Editar Cena */}
       <Modal open={editSceneModalOpen} title="Editar cena" onClose={() => { setEditSceneModalOpen(false); setEditingScene(null); }}>
         <form onSubmit={submitEditScene} className="space-y-4">
           <Field label="Nome da cena"><input value={editingScene?.name || ''} onChange={(e) => setEditingScene({ ...editingScene, name: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
@@ -382,14 +422,14 @@ export default function App() {
             <div className="space-y-2">
               {editingScene?.background && <div className="relative w-full h-48 rounded-xl overflow-hidden border border-white/10"><img src={getImageUrl(editingScene.background)} className="w-full h-full object-cover" /></div>}
               <div className="flex gap-2">
-                 <input value={editingScene?.background || ''} readOnly className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-500 outline-none" placeholder="Selecione..." />
-                 <button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setEditingScene({ ...editingScene, background: url })); setGalleryOpen(true); }} className="px-4 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300" title="Abrir Galeria">
-                    <ImageIcon size={20} />
-                 </button>
-                 <label className="px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 flex items-center justify-center cursor-pointer" title="Upload Rápido">
-                    <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleUploadSceneImage(e.target.files[0])} />
-                    <UploadIcon size={20} />
-                 </label>
+                <input value={editingScene?.background || ''} readOnly className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-500 outline-none" placeholder="Selecione..." />
+                <button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setEditingScene({ ...editingScene, background: url })); setGalleryOpen(true); }} className="px-4 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300" title="Abrir Galeria">
+                  <ImageIcon size={20} />
+                </button>
+                <label className="px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 flex items-center justify-center cursor-pointer" title="Upload Rápido">
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleUploadSceneImage(e.target.files[0])} />
+                  <UploadIcon size={20} />
+                </label>
               </div>
             </div>
           </Field>
@@ -440,37 +480,36 @@ export default function App() {
       <Modal open={playerModalOpen} title="Novo Jogador" onClose={() => setPlayerModalOpen(false)}>
         <form onSubmit={submitPlayer} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
-             <Field label="Nome"><input value={playerForm.playerName} onChange={e => setPlayerForm({...playerForm, playerName: e.target.value})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-             <Field label="Personagem"><input value={playerForm.characterName} onChange={e => setPlayerForm({...playerForm, characterName: e.target.value})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-             <Field label="Foto"><div className="flex gap-2"><input value={playerForm.photo} onChange={e => setPlayerForm({...playerForm, photo: e.target.value})} className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /><button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setPlayerForm({ ...playerForm, photo: url })); setGalleryOpen(true); }} className="px-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400">📁</button></div></Field>
-             <Field label="HP"><input type="number" value={playerForm.maxHp} onChange={e => setPlayerForm({...playerForm, maxHp: Number(e.target.value)})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
+            <Field label="Nome"><input value={playerForm.playerName} onChange={e => setPlayerForm({ ...playerForm, playerName: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
+            <Field label="Personagem"><input value={playerForm.characterName} onChange={e => setPlayerForm({ ...playerForm, characterName: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
+            <Field label="Foto"><div className="flex gap-2"><input value={playerForm.photo} onChange={e => setPlayerForm({ ...playerForm, photo: e.target.value })} className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /><button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setPlayerForm({ ...playerForm, photo: url })); setGalleryOpen(true); }} className="px-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400">📁</button></div></Field>
+            <Field label="HP"><input type="number" value={playerForm.maxHp} onChange={e => setPlayerForm({ ...playerForm, maxHp: Number(e.target.value) })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
           </div>
           <div className="flex justify-end gap-2"><PillButton type="submit" disabled={isCreatingPlayer} variant="primary">Criar</PillButton></div>
         </form>
       </Modal>
-      
+
       {/* 6. Editar Player */}
       <Modal open={editPlayerModalOpen} title="Editar Jogador" onClose={() => { setEditPlayerModalOpen(false); setEditingPlayer(null); }}>
         <form onSubmit={submitEditPlayer} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Nome"><input value={editingPlayer?.playerName || ''} onChange={e => setEditingPlayer({...editingPlayer, playerName: e.target.value})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-            <Field label="Personagem"><input value={editingPlayer?.characterName || ''} onChange={e => setEditingPlayer({...editingPlayer, characterName: e.target.value})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-            <Field label="Foto"><div className="flex gap-2"><input value={editingPlayer?.photo || ''} onChange={e => setEditingPlayer({...editingPlayer, photo: e.target.value})} className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /><button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setEditingPlayer({ ...editingPlayer, photo: url })); setGalleryOpen(true); }} className="px-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400">📁</button></div></Field>
-            <Field label="HP"><input type="number" value={editingPlayer?.maxHp || 20} onChange={e => setEditingPlayer({...editingPlayer, maxHp: Number(e.target.value)})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
+            <Field label="Nome"><input value={editingPlayer?.playerName || ''} onChange={e => setEditingPlayer({ ...editingPlayer, playerName: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
+            <Field label="Personagem"><input value={editingPlayer?.characterName || ''} onChange={e => setEditingPlayer({ ...editingPlayer, characterName: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
+            <Field label="Foto"><div className="flex gap-2"><input value={editingPlayer?.photo || ''} onChange={e => setEditingPlayer({ ...editingPlayer, photo: e.target.value })} className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /><button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setEditingPlayer({ ...editingPlayer, photo: url })); setGalleryOpen(true); }} className="px-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400">📁</button></div></Field>
+            <Field label="HP"><input type="number" value={editingPlayer?.maxHp || 20} onChange={e => setEditingPlayer({ ...editingPlayer, maxHp: Number(e.target.value) })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
           </div>
           <div className="flex justify-between items-center mt-4">
-            {/* Botão de Salvar como Preset (Aparece só se estiver editando um player existente) */}
             {editingPlayer ? (
-                <button 
-                    type="button"
-                    onClick={async () => {
-                        await createPreset('players', editingPlayer); // Salva o player atual como preset
-                        toast.success('Jogador salvo nos presets!');
-                    }}
-                    className="flex items-center gap-2 text-xs text-indigo-400 hover:text-indigo-300 px-3 py-2 rounded-lg hover:bg-indigo-500/10 transition"
-                >
-                    <Download size={14} /> Salvar como Preset
-                </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  await createPreset('players', editingPlayer);
+                  toast.success('Jogador salvo nos presets!');
+                }}
+                className="flex items-center gap-2 text-xs text-indigo-400 hover:text-indigo-300 px-3 py-2 rounded-lg hover:bg-indigo-500/10 transition"
+              >
+                <Download size={14} /> Salvar como Preset
+              </button>
             ) : <div></div>}
 
             <PillButton type="submit" variant="primary">Salvar</PillButton>

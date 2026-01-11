@@ -30,14 +30,27 @@ app.use(cors());
 app.use(express.json());
 
 // --- BANCO DE DADOS (JSON) ---
-// Note: Removemos 'gallery' daqui, pois agora é lido do disco
 const defaultData = { 
   scenes: [], 
   activeSceneId: null,
-  presets: { mob: [], player: [] } 
+  presets: { mobs: [], players: [] } 
 };
 
+// Inicializa o banco
 const db = await JSONFilePreset('db.json', defaultData);
+
+// Helper para garantir integridade
+const ensureActiveSceneValid = () => {
+  const scenes = db.data.scenes || [];
+  if (scenes.length === 0) {
+    db.data.activeSceneId = null;
+    return;
+  }
+  const exists = scenes.some((s) => s.id === db.data.activeSceneId);
+  if (!exists) {
+    db.data.activeSceneId = scenes[0].id;
+  }
+};
 
 // Configuração de Upload (Memória para processamento)
 const storage = multer.memoryStorage();
@@ -47,10 +60,6 @@ const upload = multer({ storage });
 // --- SISTEMA DE ARQUIVOS (FILE SYSTEM SCAN) ---
 // ====================================================================
 
-/**
- * Lê uma pasta física e retorna os arquivos formatados para o Frontend.
- * Isso garante que o que está na pasta é o que aparece na tela.
- */
 const scanDirectory = (dirPath, typeUrl, fileType) => {
   try {
     if (!fs.existsSync(dirPath)) return [];
@@ -58,49 +67,44 @@ const scanDirectory = (dirPath, typeUrl, fileType) => {
     const files = fs.readdirSync(dirPath);
     
     return files
-      .filter(file => !file.startsWith('.')) // Ignora arquivos ocultos do sistema
+      .filter(file => !file.startsWith('.')) // Ignora arquivos ocultos
       .map(file => {
-        // Cria um ID único baseado no nome (para o React key)
         const id = Buffer.from(file).toString('base64');
         const isAmbience = file.toLowerCase().includes('amb');
         
         return {
           id: id,
-          name: file, // O nome real do arquivo
-          url: `${typeUrl}/${file}`, // Ex: /images/foto.webp
-          // Se for áudio, tenta definir o tipo (ambiente ou sfx)
+          name: file,
+          url: `${typeUrl}/${file}`,
           type: fileType === 'audio' ? (isAmbience ? 'ambiente' : 'sfx') : undefined
         };
       })
-      .sort((a, b) => a.name.localeCompare(b.name)); // Ordem alfabética
+      .sort((a, b) => a.name.localeCompare(b.name));
   } catch (err) {
     console.error(`Erro ao ler diretório ${dirPath}:`, err);
     return [];
   }
 };
 
-// 1. Rota de Listagem (Lê o disco em tempo real)
+// 1. Rota de Listagem
 app.get('/api/gallery', (req, res) => {
   const images = scanDirectory(imagesDir, '/images', 'image');
   const audio = scanDirectory(audioDir, '/audio', 'audio');
   res.json({ images, audio });
 });
 
-// 2. Rota de Upload de Imagem (Salva no disco)
+// 2. Upload Imagem
 app.post('/api/upload/image', upload.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Nenhum arquivo enviado' });
 
   try {
-    // No início do bloco try:
     const dataInclusao = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
     const nomeOriginal = path.parse(req.file.originalname).name;
     const extension = sharp ? '.webp' : path.extname(req.file.originalname);
     
-    // Nome final: NomeOriginal-11-05-2024.webp
     const fileName = `${nomeOriginal}-${dataInclusao}${extension}`;
     const filePath = path.join(imagesDir, fileName);
 
-    // Salva o arquivo (com ou sem otimização)
     if (sharp) {
       await sharp(req.file.buffer)
         .resize(1920, 1080, { fit: 'inside', withoutEnlargement: true })
@@ -110,33 +114,25 @@ app.post('/api/upload/image', upload.single('file'), async (req, res) => {
       fs.writeFileSync(filePath, req.file.buffer);
     }
 
-    // Retorna o objeto do arquivo recém-criado
-    res.json({ 
-      name: fileName, 
-      url: `/images/${fileName}` 
-    });
+    res.json({ name: fileName, url: `/images/${fileName}` });
   } catch (err) {
     console.error('Erro upload imagem:', err);
     res.status(500).json({ error: 'Falha ao salvar imagem' });
   }
 });
 
-// 3. Rota de Upload de Áudio (Salva no disco)
+// 3. Upload Audio
 app.post('/api/upload/audio', upload.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Nenhum arquivo enviado' });
 
   try {
-    // --- LÓGICA DE RENOMEAÇÃO ---
-    const dataInclusao = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-'); // Formato: DD-MM-AAAA
-    const nomeOriginal = path.parse(req.file.originalname).name; // Pega o nome sem a extensão
-    const extensao = path.extname(req.file.originalname); // Pega a extensão (.mp3, .wav)
+    const dataInclusao = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+    const nomeOriginal = path.parse(req.file.originalname).name;
+    const extensao = path.extname(req.file.originalname);
     
-    // Nome final: NomeOriginal-11-05-2024.mp3
     const fileName = `${nomeOriginal}-${dataInclusao}${extensao}`;
     const filePath = path.join(audioDir, fileName);
-    // ----------------------------
 
-    // Salva o arquivo no disco
     fs.writeFileSync(filePath, req.file.buffer);
 
     res.json({ 
@@ -150,13 +146,12 @@ app.post('/api/upload/audio', upload.single('file'), async (req, res) => {
   }
 });
 
-// 4. Rota de Exclusão (Remove do disco)
+// 4. Delete Arquivo
 app.delete('/api/gallery/:type/:fileName', (req, res) => {
   const { type, fileName } = req.params;
   
-  // Segurança básica contra Directory Traversal
   if (fileName.includes('..') || fileName.includes('/')) {
-    return res.status(400).json({ error: 'Nome de arquivo inválido' });
+    return res.status(400).json({ error: 'Nome inválido' });
   }
 
   const folder = type === 'images' ? imagesDir : audioDir;
@@ -167,34 +162,19 @@ app.delete('/api/gallery/:type/:fileName', (req, res) => {
       fs.unlinkSync(filePath);
       res.json({ success: true });
     } catch (e) {
-      res.status(500).json({ error: 'Erro ao deletar arquivo' });
+      res.status(500).json({ error: 'Erro ao deletar' });
     }
   } else {
     res.status(404).json({ error: 'Arquivo não encontrado' });
   }
 });
 
-// Serve arquivos estáticos (Imagens e Áudios)
-// Importante: Colocar isso APÓS as rotas da API para evitar conflitos
 app.use(express.static(publicDir));
 
 
 // ====================================================================
-// --- LÓGICA DO JOGO (DB.JSON) ---
+// --- LÓGICA DO JOGO ---
 // ====================================================================
-
-// Helper para evitar crash se não houver cena ativa
-const ensureActiveSceneValid = () => {
-  const scenes = db.data.scenes || [];
-  if (scenes.length === 0) {
-    db.data.activeSceneId = null;
-    return;
-  }
-  const exists = scenes.some((s) => s.id === db.data.activeSceneId);
-  if (!exists) {
-    db.data.activeSceneId = scenes[0].id;
-  }
-};
 
 // Estado Geral
 app.get('/api/state', (req, res) => {
@@ -247,7 +227,6 @@ app.post('/api/scenes/:id/duplicate', async (req, res) => {
   newScene.id = `cena-${Date.now()}`;
   newScene.name = `${original.name} (cópia)`;
   
-  // Regenera IDs internos para evitar duplicatas
   newScene.mobs = (newScene.mobs || []).map(m => ({ ...m, id: `mob-${Date.now()}-${Math.random().toString(16).slice(2)}` }));
   newScene.playlist = (newScene.playlist || []).map(t => ({ ...t, id: `track-${Date.now()}-${Math.random().toString(16).slice(2)}` }));
 
@@ -298,30 +277,31 @@ app.post('/api/scenes/:sceneId/mobs', async (req, res) => {
 app.patch('/api/scenes/:sceneId/mobs/:mobId', async (req, res) => {
   const { sceneId, mobId } = req.params;
   const updates = req.body;
-  const scene = db.data.scenes.find((s) => s.id === sceneId);
+
+  const scene = db.data.scenes.find(s => s.id === sceneId);
   if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
 
-  const mob = scene.mobs.find((m) => m.id === mobId);
-  if (!mob) return res.status(404).json({ error: 'Mob não encontrado' });
+  const mobIndex = scene.mobs.findIndex(m => m.id === mobId);
+  if (mobIndex === -1) return res.status(404).json({ error: 'Mob não encontrado' });
 
-  Object.assign(mob, updates);
+  // Atualiza e persiste
+  scene.mobs[mobIndex] = { ...scene.mobs[mobIndex], ...updates };
   await db.write();
-  res.json(mob);
+  
+  res.json(scene.mobs[mobIndex]);
 });
 
 app.delete('/api/scenes/:sceneId/mobs/:mobId', async (req, res) => {
   const { sceneId, mobId } = req.params;
-  const scene = db.data.scenes.find((s) => s.id === sceneId);
+  const scene = db.data.scenes.find(s => s.id === sceneId);
   if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
 
-  scene.mobs = scene.mobs.filter((m) => m.id !== mobId);
+  scene.mobs = scene.mobs.filter(m => m.id !== mobId);
   await db.write();
   res.status(204).send();
 });
 
 // --- PLAYERS ---
-
-// --- PLAYERS (Substitua toda a seção de PLAYERS) ---
 
 app.post('/api/scenes/:sceneId/players', async (req, res) => {
   const { sceneId } = req.params;
@@ -330,11 +310,8 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
   const scene = db.data.scenes.find((s) => s.id === sceneId);
   if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
 
-  // LÓGICA DE PRESET: Se vier token do body, usa ele. Senão, gera novo.
   const token = player.accessToken || Math.random().toString(36).substring(2, 15);
   const safeName = (player.playerName || 'player').toLowerCase().replace(/\s+/g, '-');
-  
-  // Se vier URL do body, usa ela. Senão, gera nova.
   const accessUrl = player.accessUrl || `/p/${safeName}-${token}`;
   
   const newPlayer = {
@@ -345,7 +322,7 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
     maxHp: Number(player.maxHp || 10),
     currentHp: Number(player.currentHp ?? player.maxHp ?? 10),
     accessUrl: accessUrl,
-    accessToken: token, // <--- PERSISTÊNCIA DO LINK
+    accessToken: token,
     conditions: player.conditions || [],
   };
 
@@ -388,7 +365,6 @@ app.delete('/api/scenes/:sceneId/players/:playerId', async (req, res) => {
 app.get('/api/players/token/:token', (req, res) => {
   const { token } = req.params;
   
-  // 1. Tenta achar na cena ativa primeiro (para o jogador ir direto pra ação)
   const activeScene = db.data.scenes.find(s => s.id === db.data.activeSceneId);
   if (activeScene) {
     const player = (activeScene.players || []).find(p => p.accessToken === token);
@@ -397,9 +373,8 @@ app.get('/api/players/token/:token', (req, res) => {
     }
   }
 
-  // 2. Se não estiver na ativa, procura nas outras (fallback)
   for (const scene of db.data.scenes) {
-    if (scene.id === db.data.activeSceneId) continue; // Já checou
+    if (scene.id === db.data.activeSceneId) continue;
     const player = (scene.players || []).find(p => p.accessToken === token);
     if (player) {
       return res.json({ player, scene });
@@ -409,7 +384,15 @@ app.get('/api/players/token/:token', (req, res) => {
   res.status(404).json({ error: 'Jogador não encontrado ou token inválido' });
 });
 
-// Sincronização leve (Players da cena ativa)
+// Busca player por rota privada (Fallback para novo padrão)
+app.get('/api/players/private/:token', (req, res) => {
+    // Redireciona a lógica para o endpoint de token padrão
+    req.url = `/api/players/token/${req.params.token}`;
+    app.handle(req, res);
+});
+
+
+// Sincronização leve
 app.get('/api/sync/players/:sceneId', (req, res) => {
   const { sceneId } = req.params;
   const scene = db.data.scenes.find(s => s.id === sceneId);
@@ -418,7 +401,7 @@ app.get('/api/sync/players/:sceneId', (req, res) => {
 });
 
 
-// --- PLAYLIST / TRACKS ---
+// --- PLAYLIST ---
 
 app.post('/api/scenes/:sceneId/playlist', async (req, res) => {
   const { sceneId } = req.params;
@@ -460,7 +443,7 @@ app.delete('/api/scenes/:sceneId/playlist/:trackId', async (req, res) => {
 // --- PRESETS ---
 
 app.get('/api/presets/:type', (req, res) => {
-  const { type } = req.params; // 'mobs' ou 'players'
+  const { type } = req.params;
   if (!db.data.presets) db.data.presets = { mobs: [], players: [] };
   res.json(db.data.presets[type] || []);
 });
@@ -485,10 +468,7 @@ app.post('/api/presets/:type', async (req, res) => {
 
 app.delete('/api/presets/:type/:presetId', async (req, res) => {
   const { type, presetId } = req.params;
-  
-  if (!db.data.presets || !db.data.presets[type]) {
-    return res.status(404).json({ error: 'Preset não encontrado' });
-  }
+  if (!db.data.presets || !db.data.presets[type]) return res.status(404).json({ error: 'Preset não encontrado' });
   
   db.data.presets[type] = db.data.presets[type].filter(p => p.id !== presetId);
   await db.write();

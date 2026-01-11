@@ -40,14 +40,14 @@
           "name": "RPG  D&D Ambience - Violent Storm (wind, thunder, rain), 1 hour version-11-01-2026.mp3",
           "url": "/audio/RPG  D&D Ambience - Violent Storm (wind, thunder, rain), 1 hour version-11-01-2026.mp3",
           "type": "ambiente",
-          "volume": 0.1
+          "volume": 0.35
         },
         {
           "id": "track-1768142374949",
           "name": "Pirates of The Caribbean - He's a PirateDavy Jones  Danish National Symphony Orchestra (live)-11-01-2026.mp3",
           "url": "/audio/Pirates of The Caribbean - He's a PirateDavy Jones  Danish National Symphony Orchestra (live)-11-01-2026.mp3",
           "type": "musica",
-          "volume": 0.25
+          "volume": 0.2
         }
       ],
       "players": [
@@ -68,13 +68,10 @@
           "characterName": "Pafis",
           "photo": "/images/img-1768083732380.webp",
           "maxHp": 20,
-          "currentHp": 0,
+          "currentHp": 15,
           "accessUrl": "/p/martur-vrqnvar3zem",
           "accessToken": "vrqnvar3zem",
-          "conditions": [
-            "poisoned",
-            "paralyzed"
-          ]
+          "conditions": []
         },
         {
           "id": "player-1768136217552",
