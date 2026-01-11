@@ -6,6 +6,11 @@ export const useGameStore = create((set, get) => ({
   scenes: [],
   activeScene: null,
   isLoading: false,
+  
+  // Estado inicial da galeria
+  gallery: { images: [], audio: [] },
+
+  // --- CENAS (SCENES) ---
 
   fetchScenes: async () => {
     set({ isLoading: true });
@@ -72,6 +77,25 @@ export const useGameStore = create((set, get) => ({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name }),
     });
+  },
+
+  updateScene: async (sceneId, updates) => {
+    const { scenes, activeScene } = get();
+    const updatedScenes = scenes.map((s) => (s.id === sceneId ? { ...s, ...updates } : s));
+    const updatedActive = activeScene?.id === sceneId ? { ...activeScene, ...updates } : activeScene;
+
+    set({ scenes: updatedScenes, activeScene: updatedActive });
+    
+    await fetch(`${API_URL}/scenes/${sceneId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
+  },
+  
+  updateSceneBackground: async (sceneId, backgroundUrl) => {
+    // Usa a função updateScene para evitar duplicação de lógica
+    get().updateScene(sceneId, { background: backgroundUrl });
   },
 
   deleteScene: async (sceneId) => {
@@ -156,7 +180,180 @@ export const useGameStore = create((set, get) => ({
     await fetch(`${API_URL}/scenes/${sceneId}/mobs/${mobId}`, { method: 'DELETE' });
   },
 
-  // --- AUDIO ---
+  toggleMobCondition: async (sceneId, mobId, condition) => {
+    const { scenes, activeScene } = get();
+    const scene = scenes.find(s => s.id === sceneId);
+    if (!scene) return;
+
+    const mob = (scene.mobs || []).find(m => m.id === mobId);
+    if (!mob) return;
+
+    const conditions = mob.conditions || [];
+    const hasCondition = conditions.includes(condition);
+    const newConditions = hasCondition 
+      ? conditions.filter(c => c !== condition)
+      : [...conditions, condition];
+
+    const updatedMobs = scene.mobs.map(m => 
+      m.id === mobId ? { ...m, conditions: newConditions } : m
+    );
+    const updatedScene = { ...scene, mobs: updatedMobs };
+
+    set({
+      scenes: scenes.map(s => s.id === sceneId ? updatedScene : s),
+      activeScene: activeScene?.id === sceneId ? updatedScene : activeScene
+    });
+
+    try {
+      await fetch(`${API_URL}/scenes/${sceneId}/mobs/${mobId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conditions: newConditions })
+      });
+    } catch (error) { console.error("Erro ao atualizar condição:", error); }
+  },
+
+  // --- PLAYERS ---
+
+  createPlayer: async (playerData) => {
+    const { activeScene, scenes } = get();
+    const res = await fetch(`${API_URL}/scenes/${activeScene.id}/players`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(playerData),
+    });
+    const newPlayer = await res.json();
+    
+    const updatedScene = { ...activeScene, players: [...(activeScene.players || []), newPlayer] };
+    set({
+      activeScene: updatedScene,
+      scenes: scenes.map(s => s.id === activeScene.id ? updatedScene : s)
+    });
+  },
+
+  updatePlayerHp: async (sceneId, playerId, delta) => {
+    const { scenes, activeScene } = get();
+    const scene = scenes.find(s => s.id === sceneId);
+    if (!scene) return;
+
+    const player = (scene.players || []).find(p => p.id === playerId);
+    if (!player) return;
+
+    const newHp = Math.max(0, Math.min(player.maxHp, (player.currentHp ?? player.maxHp) + delta));
+
+    // Otimista
+    const updatedPlayers = scene.players.map(p => p.id === playerId ? { ...p, currentHp: newHp } : p);
+    const updatedScene = { ...scene, players: updatedPlayers };
+
+    set({
+      scenes: scenes.map(s => s.id === sceneId ? updatedScene : s),
+      activeScene: activeScene?.id === sceneId ? updatedScene : activeScene
+    });
+
+    try {
+      await fetch(`${API_URL}/scenes/${sceneId}/players/${playerId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentHp: newHp })
+      });
+    } catch (error) { console.error("Erro HP Player:", error); }
+  },
+
+  togglePlayerCondition: async (sceneId, playerId, condition) => {
+    const { scenes, activeScene } = get();
+    const scene = scenes.find(s => s.id === sceneId);
+    if (!scene) return;
+
+    const player = (scene.players || []).find(p => p.id === playerId);
+    if (!player) return;
+
+    const conditions = player.conditions || [];
+    const hasCondition = conditions.includes(condition);
+    const newConditions = hasCondition 
+      ? conditions.filter(c => c !== condition)
+      : [...conditions, condition];
+
+    // Otimista
+    const updatedPlayers = scene.players.map(p => 
+      p.id === playerId ? { ...p, conditions: newConditions } : p
+    );
+    const updatedScene = { ...scene, players: updatedPlayers };
+
+    set({
+      scenes: scenes.map(s => s.id === sceneId ? updatedScene : s),
+      activeScene: activeScene?.id === sceneId ? updatedScene : activeScene
+    });
+
+    try {
+      await fetch(`${API_URL}/scenes/${sceneId}/players/${playerId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conditions: newConditions })
+      });
+    } catch (error) { console.error("Erro ao atualizar condição:", error); }
+  },
+
+  deletePlayer: async (sceneId, playerId) => {
+    const { scenes, activeScene } = get();
+    const updatedPlayers = (activeScene.players || []).filter(p => p.id !== playerId);
+    const updatedScene = { ...activeScene, players: updatedPlayers };
+
+    set({
+      scenes: scenes.map(s => s.id === sceneId ? updatedScene : s),
+      activeScene: activeScene?.id === sceneId ? updatedScene : activeScene
+    });
+
+    await fetch(`${API_URL}/scenes/${sceneId}/players/${playerId}`, { method: 'DELETE' });
+  },
+
+  updatePlayer: async (sceneId, playerId, updates) => {
+    const { scenes, activeScene } = get();
+    const scene = scenes.find(s => s.id === sceneId);
+    if (!scene) return;
+
+    const updatedPlayers = (scene.players || []).map(p => 
+      p.id === playerId ? { ...p, ...updates } : p
+    );
+    const updatedScene = { ...scene, players: updatedPlayers };
+
+    set({
+      scenes: scenes.map(s => s.id === sceneId ? updatedScene : s),
+      activeScene: activeScene?.id === sceneId ? updatedScene : activeScene
+    });
+
+    try {
+      await fetch(`${API_URL}/scenes/${sceneId}/players/${playerId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      });
+    } catch (error) { console.error("Erro ao atualizar player:", error); }
+  },
+
+  // Sincroniza apenas os players sem recarregar tudo
+  syncPlayers: async () => {
+    const { activeScene, scenes } = get();
+    if (!activeScene?.id) return;
+
+    try {
+      const res = await fetch(`${API_URL}/sync/players/${activeScene.id}`);
+      if (!res.ok) return;
+      
+      const { players } = await res.json();
+      
+      // Atualiza apenas os players da cena ativa
+      const updatedScene = { ...activeScene, players };
+      
+      set({
+        activeScene: updatedScene,
+        scenes: scenes.map(s => s.id === activeScene.id ? updatedScene : s)
+      });
+    } catch (error) {
+      console.error('Erro na sincronização:', error);
+    }
+  },
+
+  // --- AUDIO / TRACKS ---
 
   addTrackToActiveScene: async (file, type = 'ambiente') => {
     const { activeScene } = get();
@@ -236,6 +433,67 @@ export const useGameStore = create((set, get) => ({
     }
 
     await fetch(`${API_URL}/scenes/${sceneId}/playlist/${trackId}`, { method: 'DELETE' });
-  }
+  },
+
+  // --- PRESETS ---
+  
+  fetchPresets: async (type) => {
+    try {
+      const res = await fetch(`${API_URL}/presets/${type}`);
+      return await res.json();
+    } catch (error) {
+      console.error('Erro ao buscar presets:', error);
+      return [];
+    }
+  },
+
+  createPreset: async (type, data) => {
+    const res = await fetch(`${API_URL}/presets/${type}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  },
+
+  deletePreset: async (type, presetId) => {
+    await fetch(`${API_URL}/presets/${type}/${presetId}`, {
+      method: 'DELETE'
+    });
+  },
+
+  // --- GALERIA ---
+  // (Lógica centralizada da galeria)
+  
+  fetchGallery: async () => {
+    try {
+      const res = await fetch(`${API_URL}/gallery`);
+      const data = await res.json();
+      set({ gallery: data });
+    } catch (error) {
+      console.error('Erro ao buscar galeria:', error);
+    }
+  },
+
+  // Função correta de delete usando o NOME do arquivo
+  deleteFromGallery: async (type, fileName) => {
+    // type: 'images' | 'audio'
+    // fileName: 'nome-do-arquivo.webp' (Exatamente como vem na API)
+    
+    await fetch(`${API_URL}/gallery/${type}/${fileName}`, {
+      method: 'DELETE'
+    });
+    
+    // Atualiza o estado local removendo o item que tem esse nome
+    const { gallery } = get();
+    const updatedList = gallery[type].filter(item => item.name !== fileName);
+    
+    set({ 
+      gallery: { 
+        ...gallery, 
+        [type]: updatedList 
+      } 
+    });
+  },
 
 }));

@@ -58,7 +58,8 @@ export default function MobCard({ mob, onUpdate, onDelete }) {
       {/* Imagem */}
       <div className="relative w-full h-40 bg-black/50 group border-b border-white/5">
         {mob.image ? (
-           <img src={`http://localhost:3333${mob.image}`} className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700" alt={mob.name} />
+           <img src={`http://${window.location.hostname}:3333${mob.image}`}
+ className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700" alt={mob.name} />
         ) : (
            <div className="w-full h-full flex items-center justify-center text-zinc-700">
              <Skull size={48} />

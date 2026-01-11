@@ -2,41 +2,90 @@
   "scenes": [
     {
       "id": "cena-1",
-      "name": "Floresta Sombrias",
-      "background": "",
+      "background": "/images/img-1768083732380.webp",
       "mobs": [
         {
-          "id": "mob-1767995073957",
-          "name": "lobo",
+          "id": "mob-1768088273141",
+          "name": "as",
           "color": "red",
           "maxHp": 10,
-          "currentHp": 5,
+          "currentHp": 10,
           "damageDice": "1d6",
           "toHit": 0,
-          "image": ""
+          "image": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
+          "conditions": []
+        },
+        {
+          "id": "mob-1768088699588",
+          "name": "asdsa",
+          "color": "red",
+          "maxHp": 10,
+          "currentHp": 10,
+          "damageDice": "1d6",
+          "toHit": 0,
+          "image": "/images/img-1768088706074.webp",
+          "conditions": []
         }
       ],
       "playlist": [
         {
-          "id": "track-1767992788546",
-          "name": "RPG  D&D Ambience - Violent Storm (wind, thunder, rain), 1 hour version",
-          "url": "/audio/audio-1767992788423.mp3",
+          "id": "track-1768142329066",
+          "name": "mulhe gritando-11-01-2026.mp3",
+          "url": "/audio/mulhe gritando-11-01-2026.mp3",
+          "type": "sfx",
+          "volume": 0.1
+        },
+        {
+          "id": "track-1768142365590",
+          "name": "RPG  D&D Ambience - Violent Storm (wind, thunder, rain), 1 hour version-11-01-2026.mp3",
+          "url": "/audio/RPG  D&D Ambience - Violent Storm (wind, thunder, rain), 1 hour version-11-01-2026.mp3",
           "type": "ambiente",
           "volume": 0.1
         },
         {
-          "id": "track-1767992804349",
-          "name": "Pirates of The Caribbean - He's a PirateDavy Jones  Danish National Symphony Orchestra (live)",
-          "url": "/audio/audio-1767992804345.mp3",
+          "id": "track-1768142374949",
+          "name": "Pirates of The Caribbean - He's a PirateDavy Jones  Danish National Symphony Orchestra (live)-11-01-2026.mp3",
+          "url": "/audio/Pirates of The Caribbean - He's a PirateDavy Jones  Danish National Symphony Orchestra (live)-11-01-2026.mp3",
           "type": "musica",
-          "volume": 0.3
+          "volume": 0.25
+        }
+      ],
+      "players": [
+        {
+          "id": "player-1768018492588",
+          "playerName": "Gustavo",
+          "characterName": "Paragon",
+          "photo": "",
+          "maxHp": 50,
+          "currentHp": 0,
+          "accessUrl": "/p/gustavo-ttzrmwsb9b",
+          "accessToken": "ttzrmwsb9b",
+          "conditions": []
         },
         {
-          "id": "track-1767993226020",
-          "name": "sound-effect-1904",
-          "url": "/audio/audio-1767993226017.mp3",
-          "type": "sfx",
-          "volume": 0.5
+          "id": "player-1768055139470",
+          "playerName": "Martur",
+          "characterName": "Pafis",
+          "photo": "/images/img-1768083732380.webp",
+          "maxHp": 20,
+          "currentHp": 0,
+          "accessUrl": "/p/martur-vrqnvar3zem",
+          "accessToken": "vrqnvar3zem",
+          "conditions": [
+            "poisoned",
+            "paralyzed"
+          ]
+        },
+        {
+          "id": "player-1768136217552",
+          "playerName": "testeaz",
+          "characterName": "tesfr",
+          "photo": "/images/img-1768088706074.webp",
+          "maxHp": 20,
+          "currentHp": 0,
+          "accessUrl": "/p/testeaz-83em2nxef23",
+          "accessToken": "83em2nxef23",
+          "conditions": []
         }
       ]
     },
@@ -88,5 +137,48 @@
   "library": {
     "mobs": [],
     "tracks": []
+  },
+  "gallery": {
+    "images": [
+      {
+        "id": "gallery-1768087265581",
+        "url": "/images/img-1768087265438.webp",
+        "name": "3a.webp",
+        "uploadedAt": "2026-01-10T23:21:05.581Z"
+      },
+      {
+        "id": "gallery-1768088659058",
+        "url": "/images/img-1768088658951.webp",
+        "name": "2149365813.jpg",
+        "uploadedAt": "2026-01-10T23:44:19.058Z"
+      },
+      {
+        "id": "gallery-1768088706209",
+        "url": "/images/img-1768088706074.webp",
+        "name": "gussbit_patient_looking_confused_at_medication_bottles_versus_86f18450-f50a-44c8-8a3e-34570244c450_1.png",
+        "uploadedAt": "2026-01-10T23:45:06.209Z"
+      },
+      {
+        "id": "gallery-1768134362078",
+        "url": "/images/img-1768134361912.webp",
+        "name": "mythicalproduction_35248_A_breathtaking_mythical_enchanted_fore_68bc5483-6e2b-4630-83f4-f760da68abe5.png",
+        "uploadedAt": "2026-01-11T12:26:02.078Z"
+      },
+      {
+        "id": "img-1768140904946",
+        "url": "/images/img-1768140904862.webp",
+        "name": "3a.webp",
+        "uploadedAt": "2026-01-11T14:15:04.946Z"
+      }
+    ],
+    "audio": [
+      {
+        "id": "audio-1768140911453",
+        "url": "/audio/audio-1768140911453.mp3",
+        "name": "sound-effect-1904.mp3",
+        "type": "sfx",
+        "uploadedAt": "2026-01-11T14:15:11.454Z"
+      }
+    ]
   }
 }
