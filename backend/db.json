@@ -5,25 +5,11 @@
       "background": "/images/img-1768083732380.webp",
       "mobs": [
         {
-          "id": "mob-1768088273141",
-          "name": "as",
-          "color": "red",
-          "maxHp": 10,
-          "currentHp": 10,
-          "damageDice": "1d6",
-          "toHit": 0,
-          "image": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
-          "conditions": [
-            "paralyzed",
-            "frightened"
-          ]
-        },
-        {
           "id": "mob-1768088699588",
           "name": "asdsa",
           "color": "red",
           "maxHp": 10,
-          "currentHp": 10,
+          "currentHp": 5,
           "damageDice": "1d6",
           "toHit": 0,
           "image": "/images/img-1768088706074.webp",
@@ -84,10 +70,15 @@
           "characterName": "Paragon",
           "photo": "",
           "maxHp": 50,
-          "currentHp": 34,
+          "currentHp": 46,
           "accessUrl": "/p/gustavo-ttzrmwsb9b",
           "accessToken": "ttzrmwsb9b",
-          "conditions": [],
+          "conditions": [
+            "poisoned",
+            "frightened",
+            "incapacitated",
+            "restrained"
+          ],
           "inventory": [
             {
               "nome": "Amigos",
@@ -268,8 +259,13 @@
         "id": "preset-player-1769883643901",
         "characterName": "Paragon",
         "maxHp": 50,
-        "currentHp": 34,
-        "conditions": [],
+        "currentHp": 46,
+        "conditions": [
+          "poisoned",
+          "frightened",
+          "incapacitated",
+          "restrained"
+        ],
         "photo": "",
         "playerName": "Gustavo",
         "createdAt": "2026-01-31T18:20:43.901Z",
