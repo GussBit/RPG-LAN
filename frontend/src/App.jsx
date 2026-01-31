@@ -2,10 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { 
-  Loader2, Plus, Trash2, Edit2, Upload, Map as MapIcon, Link as LinkIcon, 
-  FolderOpen, Image as ImageIcon, Upload as UploadIcon, Users, Skull
+  Loader2, Plus, Trash2, Edit2, Map as MapIcon, 
+  FolderOpen, Image as ImageIcon, Upload as UploadIcon, Users, Skull, BookOpen,
+  PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Square, Play, Pause,
+  Wind, Music, Zap
 } from 'lucide-react';
-import { BookOpen } from 'lucide-react'; // Novo ícone
+import { Howler } from 'howler';
 
 // Hooks e Stores
 import { useGameStore } from './store';
@@ -20,7 +22,7 @@ import MobCard from './MobCard';
 import Mixer from './Mixer';
 import MediaGallery from './MediaGallery';
 import PresetsManager from './PresetsManager';
-import Compendium from './components/Compendium'; // Importar Compendium
+import Compendium from './components/Compendium';
 import { CONDITIONS, getImageUrl, BACKEND_URL } from './constants';
 
 export default function App() {
@@ -28,25 +30,19 @@ export default function App() {
     scenes, activeScene, fetchScenes, isLoading,
     updateMobHp, deleteMob, createMob, setActiveScene, createScene, duplicateScene, deleteScene,
     createPlayer, updatePlayerHp, deletePlayer, updatePlayer, togglePlayerCondition, syncPlayers,
-    updateSceneBackground, updateMob, presets, fetchPresets, deletePreset, createPreset // Adicionado createPreset
+    updateSceneBackground, updateMob, presets, fetchPresets, deletePreset, createPreset
   } = useGameStore();
 
-  // --- ESTADOS ---
-  // Modais de Criação
+  // --- ESTADOS DE UI E FORMULÁRIOS ---
   const [mobModalOpen, setMobModalOpen] = useState(false);
   const [playerModalOpen, setPlayerModalOpen] = useState(false);
   const [sceneModalOpen, setSceneModalOpen] = useState(false);
-  
-  // Modais de Edição e Visualização
   const [editSceneModalOpen, setEditSceneModalOpen] = useState(false);
   const [editMobModalOpen, setEditMobModalOpen] = useState(false);
   const [editPlayerModalOpen, setEditPlayerModalOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
-  
-  // Estado da Barra Lateral
-  const [sidebarMode, setSidebarMode] = useState('scenes'); // 'scenes' | 'players' | 'mobs'
+  const [sidebarMode, setSidebarMode] = useState('scenes');
 
-  // Forms e Selecionados
   const [sceneName, setSceneName] = useState('');
   const [mobForm, setMobForm] = useState({ name: '', color: 'red', maxHp: 10, damageDice: '1d6', toHit: 0, image: '' });
   const [playerForm, setPlayerForm] = useState({ playerName: '', characterName: '', photo: '', maxHp: 20 });
@@ -56,7 +52,6 @@ export default function App() {
   const [editingPlayer, setEditingPlayer] = useState(null);
   const [mapSceneId, setMapSceneId] = useState(null);
 
-  // Galeria e Presets
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryType, setGalleryType] = useState('images');
   const [galleryCallback, setGalleryCallback] = useState(null);
@@ -65,17 +60,29 @@ export default function App() {
   const [presetsType, setPresetsType] = useState('mobs');
   const [presetsCallback, setPresetsCallback] = useState(null);
 
-  // Estado do Compêndio
   const [compendiumOpen, setCompendiumOpen] = useState(false);
 
-  // Estados de loading local
   const [isCreating, setIsCreating] = useState(false);
   const [isCreatingPlayer, setIsCreatingPlayer] = useState(false);
   const [busyScene, setBusyScene] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Tensão
   const [tensionMaxMultiplier, setTensionMaxMultiplier] = useState(1.5);
+
+  // --- ESTADOS DE LAYOUT E ÁUDIO (NOVO) ---
+  const [mixerWidth, setMixerWidth] = useState(360);
+  const [leftSidebarWidth, setLeftSidebarWidth] = useState(320);
+  const [isResizingMixer, setIsResizingMixer] = useState(false);
+  const [isResizingLeft, setIsResizingLeft] = useState(false);
+  
+  const [showLeftSidebar, setShowLeftSidebar] = useState(true);
+  const [showRightSidebar, setShowRightSidebar] = useState(true);
+
+  const [volAmbience, setVolAmbience] = useState(1);
+  const [volMusic, setVolMusic] = useState(0.8);
+  const [volSfx, setVolSfx] = useState(1);
+  
+  const [isGlobalPaused, setIsGlobalPaused] = useState(false);
 
   const mapScene = useMemo(() => (scenes || []).find((s) => s.id === mapSceneId) || null, [scenes, mapSceneId]);
 
@@ -91,16 +98,68 @@ export default function App() {
     return () => clearInterval(interval);
   }, [syncPlayers]);
 
+  // Lógica de Redimensionamento Unificada
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // Redimensionar Esquerda
+      if (isResizingLeft) {
+        const newWidth = e.clientX;
+        if (newWidth > 200 && newWidth < 600) {
+            setLeftSidebarWidth(newWidth);
+        }
+      }
+      // Redimensionar Direita
+      if (isResizingMixer) {
+        const newWidth = window.innerWidth - e.clientX;
+        if (newWidth > 280 && newWidth < 800) {
+          setMixerWidth(newWidth);
+        }
+      }
+    };
+
+    const handleMouseUp = () => {
+        setIsResizingMixer(false);
+        setIsResizingLeft(false);
+    };
+
+    if (isResizingMixer || isResizingLeft) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'col-resize';
+    } else {
+      document.body.style.cursor = 'default';
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizingMixer, isResizingLeft]);
+
   // --- HELPERS E CÁLCULOS ---
   const players = activeScene?.players || [];
   const totalMaxHp = players.reduce((acc, p) => acc + (p.maxHp || 0), 0);
   const totalCurrentHp = players.reduce((acc, p) => acc + (p.currentHp ?? p.maxHp ?? 0), 0);
   const partyPct = totalMaxHp > 0 ? Math.max(0, totalCurrentHp / totalMaxHp) : 1;
-  const tensionFactor = 1 + (1 - partyPct) * (tensionMaxMultiplier - 1);
+  // const tensionFactor = 1 + (1 - partyPct) * (tensionMaxMultiplier - 1); // Pode ser usado para efeitos visuais globais
 
   // --- HANDLERS ---
   
-  // Função auxiliar para abrir galeria do Mixer
+  const toggleGlobalPause = () => {
+    if (Howler.ctx.state === 'running') {
+      Howler.ctx.suspend();
+      setIsGlobalPaused(true);
+    } else {
+      Howler.ctx.resume();
+      setIsGlobalPaused(false);
+    }
+  };
+
+  const stopAllAudio = () => {
+    Howler.stop();
+    setIsGlobalPaused(false);
+  };
+
   const openGalleryForAudio = (callback) => {
     setGalleryType('audio');
     setGalleryCallback(() => callback);
@@ -175,9 +234,7 @@ export default function App() {
     e.preventDefault();
     if (!editingScene) return;
     try {
-        // Se updateSceneBackground já lida com updateScene genérico, use-o ou use updateScene direto se tiver
         await updateSceneBackground(editingScene.id, editingScene.background);
-        // Se precisar atualizar nome também: updateScene(editingScene.id, { name: editingScene.name, background: editingScene.background })
         toast.success('Cena atualizada!');
         setEditSceneModalOpen(false);
     } catch (err) {
@@ -208,67 +265,76 @@ export default function App() {
     toast.info(isActive ? `${player?.characterName}: ${condition?.label} removido` : `${player?.characterName}: ${condition?.label} ativado`, { autoClose: 2000 });
   };
 
-  // Handler para adicionar Preset à Cena
   const handleAddPreset = async (type, preset) => {
     if (!activeScene) return;
     try {
         if (type === 'mobs') {
             await createMob({
-                name: preset.name,
-                color: preset.color,
-                maxHp: preset.maxHp,
-                damageDice: preset.damageDice,
-                toHit: preset.toHit,
-                image: preset.image
+                name: preset.name, color: preset.color, maxHp: preset.maxHp,
+                damageDice: preset.damageDice, toHit: preset.toHit, image: preset.image
             });
             toast.success(`${preset.name} invocado!`);
         } else if (type === 'players') {
             await createPlayer({
-                playerName: preset.playerName,
-                characterName: preset.characterName,
-                photo: preset.photo,
-                maxHp: preset.maxHp,
+                playerName: preset.playerName, characterName: preset.characterName,
+                photo: preset.photo, maxHp: preset.maxHp,
             });
             toast.success(`${preset.characterName} entrou na cena!`);
         }
     } catch (err) { toast.error('Erro ao adicionar preset'); }
   };
 
-  // Handler para salvar Mob como Preset
   const handleSaveMobPreset = async () => {
     if (!mobForm.name) return toast.error('Nome é obrigatório para salvar preset');
     await createPreset('mobs', mobForm);
     toast.success('Preset de mob salvo!');
   };
 
+  // --- RENDERIZADORES ---
+
   if (isLoading) return <div className="h-screen flex items-center justify-center bg-zinc-950 text-indigo-500"><Loader2 className="animate-spin w-12 h-12" /></div>;
   if (!activeScene) return <div className="h-screen flex flex-col items-center justify-center bg-zinc-950 text-zinc-500"><h2 className="text-xl">Nenhuma cena encontrada</h2><p className="text-sm mt-2">Verifique se o backend está rodando.</p></div>;
 
+  // Estilos da Scrollbar
+  const scrollbarStyles = `
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #09090b; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #52525b; }
+  `;
+
   return (
     <div className="h-dvh overflow-hidden bg-[#09090b] text-zinc-100" style={{ backgroundColor: activeScene.background ? 'transparent' : undefined }}>
+      <style>{scrollbarStyles}</style>
       <ToastContainer position="top-right" autoClose={3000} theme="dark" />
       
-      {/* Background da Cena */}
       {activeScene.background && (
         <div className="fixed inset-0 z-0 opacity-10 bg-cover bg-center" style={{ backgroundImage: `url(${getImageUrl(activeScene.background)})` }} />
       )}
 
       <div className="relative z-10 h-full grid grid-rows-[56px_1fr]">
-        {/* Topbar */}
+        {/* Topbar Renovada */}
         <header className="flex items-center justify-between px-4 border-b border-white/5 bg-zinc-950/50 backdrop-blur-md">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="text-amber-600 font-semibold tracking-wide">RPG-LAN LAB</div>
+          <div className="flex items-center gap-4 min-w-0">
+            {/* Toggle Left Sidebar */}
+            <button onClick={() => setShowLeftSidebar(!showLeftSidebar)} className="text-zinc-400 hover:text-white transition-colors">
+                {showLeftSidebar ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
+            </button>
+            
+            <div className="hidden md:block text-amber-600 font-semibold tracking-wide">RPG-LAN</div>
+            
             <div className="hidden sm:block text-xs text-zinc-500 truncate">
-              Cena ativa: <span className="text-zinc-200">{activeScene.name}</span>
+              Cena: <span className="text-zinc-200">{activeScene.name}</span>
             </div>
           </div>
           
+          {/* Barra de Tensão (Mantida do original e ajustada) */}
           {players.length > 0 && (
-            <div className="flex flex-col w-48 mx-4">
+            <div className="hidden xl:flex flex-col w-40 mx-4">
               <div className="flex justify-between text-[10px] uppercase font-bold tracking-widest text-red-500 mb-1">
-                <span>Tensão</span><span>{Math.round((1 - partyPct) * 100)}%</span>
+                <span>Tensão</span>
                 <div className="flex items-center gap-1 ml-2">
-                  <span className="text-[9px] text-zinc-600">MAX:</span>
+                  <span className="text-[9px] text-zinc-600">X:</span>
                   <input type="number" step="0.1" min="1" max="3" value={tensionMaxMultiplier} onChange={(e) => setTensionMaxMultiplier(Number(e.target.value))} className="bg-transparent border-b border-white/10 w-8 text-red-400 text-[10px] outline-none" />
                 </div>
               </div>
@@ -278,20 +344,62 @@ export default function App() {
             </div>
           )}
 
+          {/* Master Volumes & Controles Globais */}
+          <div className="hidden lg:flex items-center gap-4 mx-4 bg-black/20 px-4 py-1.5 rounded-full border border-white/5">
+             {/* Play/Pause & Stop */}
+             <div className="flex items-center gap-2 border-r border-white/10 pr-4 mr-2">
+                <button onClick={toggleGlobalPause} className="text-zinc-400 hover:text-white transition-colors" title={isGlobalPaused ? "Resumir Áudio" : "Pausar Áudio"}>
+                   {isGlobalPaused ? <Play size={18} fill="currentColor" /> : <Pause size={18} fill="currentColor" />}
+                </button>
+                <button onClick={stopAllAudio} className="text-red-400 hover:text-red-300 transition-colors" title="Parar Tudo (Forçado)">
+                   <Square size={18} fill="currentColor" />
+                </button>
+             </div>
+
+             <div className="flex items-center gap-2 group" title="Ambiente">
+                <Wind size={14} className="text-emerald-500" />
+                <input type="range" min="0" max="1" step="0.05" value={volAmbience} onChange={(e) => setVolAmbience(Number(e.target.value))} className="w-20 md:w-32 lg:w-48 h-1 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" />
+             </div>
+             <div className="flex items-center gap-2 group" title="Música">
+                <Music size={14} className="text-indigo-500" />
+                <input type="range" min="0" max="1" step="0.05" value={volMusic} onChange={(e) => setVolMusic(Number(e.target.value))} className="w-20 md:w-32 lg:w-48 h-1 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500" />
+             </div>
+             <div className="flex items-center gap-2 group" title="Efeitos">
+                <Zap size={14} className="text-amber-500" />
+                <input type="range" min="0" max="1" step="0.05" value={volSfx} onChange={(e) => setVolSfx(Number(e.target.value))} className="w-20 md:w-32 lg:w-48 h-1 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+             </div>
+          </div>
+
+          {/* Ações Rápidas */}
           <div className="flex items-center gap-2">
-            <PillButton variant="neutral" onClick={() => { setGalleryType('images'); setGalleryCallback(null); setGalleryOpen(true); }} className="px-3">
-              <FolderOpen size={16} /> Arquivos
+            <PillButton variant="neutral" onClick={() => { setGalleryType('images'); setGalleryCallback(null); setGalleryOpen(true); }} className="px-2 sm:px-3">
+              <FolderOpen size={16} /> <span className="hidden sm:inline ml-1">Arquivos</span>
             </PillButton>
-            <PillButton variant="neutral" onClick={() => setPlayerModalOpen(true)} className="px-3"><Plus size={16} /> Player</PillButton>
-            <PillButton variant="primary" onClick={() => setMobModalOpen(true)} className="px-3"><Plus size={16} /> Mob</PillButton>
+            <PillButton variant="neutral" onClick={() => setPlayerModalOpen(true)} className="px-2 sm:px-3">
+                <Plus size={16} /> <span className="hidden sm:inline ml-1">Player</span>
+            </PillButton>
+            <PillButton variant="primary" onClick={() => setMobModalOpen(true)} className="px-2 sm:px-3">
+                <Plus size={16} /> <span className="hidden sm:inline ml-1">Mob</span>
+            </PillButton>
+            
+            {/* Toggle Right Sidebar */}
+            <button onClick={() => setShowRightSidebar(!showRightSidebar)} className="text-zinc-400 hover:text-white transition-colors ml-2">
+                {showRightSidebar ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
+            </button>
           </div>
         </header>
 
-        {/* 3 colunas */}
-        <div className="h-full grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)_360px]">
-          {/* Esquerda: Cenas */}
-          <aside className="border-r border-white/5 bg-zinc-900/25 backdrop-blur-md flex flex-col overflow-hidden">
-            {/* Abas de Navegação */}
+        {/* LAYOUT PRINCIPAL COM GRID DINÂMICO DE 5 COLUNAS */}
+        <div 
+          className="h-full grid transition-all duration-300 ease-in-out"
+          style={{ 
+            // 1. Sidebar Esq | 2. Resizer Esq | 3. Arena (Auto) | 4. Resizer Dir | 5. Mixer Dir
+            gridTemplateColumns: `${showLeftSidebar ? leftSidebarWidth : 0}px ${showLeftSidebar ? 4 : 0}px minmax(0, 1fr) ${showRightSidebar ? 4 : 0}px ${showRightSidebar ? mixerWidth : 0}px` 
+          }}
+        >
+          {/* 1. Esquerda: Cenas e Presets */}
+          <aside className="border-r border-white/5 bg-zinc-900/25 backdrop-blur-md flex flex-col overflow-hidden shrink-0">
+             {/* Conteúdo da Sidebar Esquerda */}
             <div className="flex items-center p-2 gap-1 border-b border-white/5 bg-black/20">
                <button onClick={() => setSidebarMode('scenes')} className={`flex-1 py-2 rounded-lg flex justify-center transition-colors ${sidebarMode === 'scenes' ? 'bg-indigo-500/20 text-indigo-300' : 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300'}`} title="Cenas"><MapIcon size={18} /></button>
                <button onClick={() => setSidebarMode('players')} className={`flex-1 py-2 rounded-lg flex justify-center transition-colors ${sidebarMode === 'players' ? 'bg-indigo-500/20 text-indigo-300' : 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300'}`} title="Jogadores (Presets)"><Users size={18} /></button>
@@ -299,8 +407,6 @@ export default function App() {
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-              
-              {/* MODO: CENAS */}
               {sidebarMode === 'scenes' && (
                 <>
                   <div className="flex items-center justify-between mb-4">
@@ -321,8 +427,7 @@ export default function App() {
                   </div>
                 </>
               )}
-
-              {/* MODO: PLAYERS PRESETS */}
+              {/* Presets de Player */}
               {sidebarMode === 'players' && (
                 <>
                   <div className="flex items-center justify-between mb-4">
@@ -332,22 +437,20 @@ export default function App() {
                   <div className="space-y-2">
                     {(presets.players || []).map((p) => (
                       <div key={p.id} onClick={() => handleAddPreset('players', p)} className="group flex items-center gap-3 p-2 rounded-xl bg-zinc-900/40 border border-white/5 hover:border-indigo-500/50 hover:bg-indigo-500/10 cursor-pointer transition-all">
-                         <div className="h-10 w-10 rounded-full bg-black/50 overflow-hidden shrink-0 border border-white/10">
+                          <div className="h-10 w-10 rounded-full bg-black/50 overflow-hidden shrink-0 border border-white/10">
                             {p.photo ? <img src={getImageUrl(p.photo)} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xs text-zinc-600">Foto</div>}
-                         </div>
-                         <div className="flex-1 min-w-0">
+                          </div>
+                          <div className="flex-1 min-w-0">
                             <div className="font-bold text-zinc-200 truncate text-sm">{p.characterName}</div>
                             <div className="text-[10px] text-zinc-500 truncate">{p.playerName} • HP {p.maxHp}</div>
-                         </div>
-                         <button onClick={(e) => { e.stopPropagation(); if(window.confirm('Deletar preset?')) deletePreset('players', p.id); }} className="p-1.5 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={14} /></button>
+                          </div>
+                          <button onClick={(e) => { e.stopPropagation(); if(window.confirm('Deletar preset?')) deletePreset('players', p.id); }} className="p-1.5 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={14} /></button>
                       </div>
                     ))}
-                    {(presets.players || []).length === 0 && <div className="text-xs text-zinc-600 text-center py-4">Nenhum preset salvo.</div>}
                   </div>
                 </>
               )}
-
-              {/* MODO: MOBS PRESETS */}
+              {/* Presets de Mobs */}
               {sidebarMode === 'mobs' && (
                 <>
                   <div className="flex items-center justify-between mb-4">
@@ -357,24 +460,28 @@ export default function App() {
                   <div className="grid grid-cols-2 gap-2">
                     {(presets.mobs || []).map((m) => (
                       <div key={m.id} onClick={() => handleAddPreset('mobs', m)} className="group relative p-2 rounded-xl bg-zinc-900/40 border border-white/5 hover:border-red-500/50 hover:bg-red-500/10 cursor-pointer transition-all flex flex-col items-center text-center">
-                         <div className="h-12 w-12 rounded-lg bg-black/50 overflow-hidden mb-2 border border-white/10">
+                          <div className="h-12 w-12 rounded-lg bg-black/50 overflow-hidden mb-2 border border-white/10">
                             {m.image ? <img src={getImageUrl(m.image)} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-zinc-700"><Skull size={20} /></div>}
-                         </div>
-                         <div className="font-bold text-zinc-300 text-xs truncate w-full">{m.name}</div>
-                         <div className="text-[10px] text-zinc-500">HP {m.maxHp}</div>
-                         <button onClick={(e) => { e.stopPropagation(); if(window.confirm('Deletar preset?')) deletePreset('mobs', m.id); }} className="absolute top-1 right-1 p-1 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 rounded"><Trash2 size={12} /></button>
+                          </div>
+                          <div className="font-bold text-zinc-300 text-xs truncate w-full">{m.name}</div>
+                          <div className="text-[10px] text-zinc-500">HP {m.maxHp}</div>
+                          <button onClick={(e) => { e.stopPropagation(); if(window.confirm('Deletar preset?')) deletePreset('mobs', m.id); }} className="absolute top-1 right-1 p-1 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 rounded"><Trash2 size={12} /></button>
                       </div>
                     ))}
                   </div>
-                  {(presets.mobs || []).length === 0 && <div className="text-xs text-zinc-600 text-center py-4">Nenhum mob salvo.</div>}
                 </>
               )}
-
             </div>
           </aside>
 
-          {/* Centro: Arena */}
-          <main className="overflow-y-auto">
+          {/* 2. Resizer Esquerdo */}
+          <div 
+            className="w-1 bg-white/5 hover:bg-indigo-500 cursor-col-resize z-20 transition-colors h-full"
+            onMouseDown={() => setIsResizingLeft(true)}
+          />
+
+          {/* 3. Centro: Arena (Conteúdo Principal) */}
+          <main className="overflow-y-auto custom-scrollbar min-h-0">
             <div className="p-4">
               {/* Jogadores */}
               <div className="mb-8 border-b border-white/5 pb-6">
@@ -427,20 +534,33 @@ export default function App() {
               <div className="flex flex-wrap gap-6 justify-center items-start">
                 {(activeScene.mobs || []).map((mob) => (
                   <div key={mob.id} className="relative group">
-                    <MobCard mob={mob} onUpdate={(mobId, delta) => updateMobHp(activeScene.id, mobId, delta)} onDelete={(mobId) => window.confirm(`Remover ${mob.name}?`) && deleteMob(activeScene.id, mobId)} />
-                    <button onClick={() => { setEditingMob(mob); setEditMobModalOpen(true); }} className="absolute top-2 right-2 p-2 bg-black/50 text-zinc-400 hover:text-indigo-400 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"><Edit2 size={14} /></button>
+                    <MobCard 
+                      mob={mob} 
+                      onUpdate={(mobId, delta) => updateMobHp(activeScene.id, mobId, delta)} 
+                      onDelete={(mobId) => window.confirm(`Remover ${mob.name}?`) && deleteMob(activeScene.id, mobId)}
+                      onEdit={(mob) => { setEditingMob(mob); setEditMobModalOpen(true); }}
+                      onToggleCondition={handleToggleCondition} // Usando o handler genérico se aplicável, ou crie um específico para mobs
+                    />
                   </div>
                 ))}
               </div>
             </div>
           </main>
 
-          {/* Direita: Mixer */}
-          <aside className="border-l border-white/5 bg-zinc-900/25 backdrop-blur-md overflow-hidden">
+          {/* 4. Resizer Direito */}
+          <div 
+             className="w-1 bg-white/5 hover:bg-indigo-500 cursor-col-resize z-20 transition-colors h-full"
+             onMouseDown={() => setIsResizingMixer(true)}
+          />
+
+          {/* 5. Direita: Mixer (Redimensionável) */}
+          <aside className="border-l border-white/5 bg-zinc-900/25 backdrop-blur-md overflow-hidden flex flex-col">
              <Mixer 
                playlist={activeScene.playlist} 
-               mode="panel" 
-               tensionFactor={tensionFactor} 
+               // Passando volumes para o Mixer usar
+               volAmbience={volAmbience}
+               volMusic={volMusic}
+               volSfx={volSfx}
                onOpenGallery={openGalleryForAudio} 
              />
           </aside>
@@ -458,9 +578,7 @@ export default function App() {
         </button>
       </div>
 
-      {/* --- MODAIS --- */}
-      
-      {/* 1. Criar Cena */}
+      {/* --- MODAIS (Igual ao original) --- */}
       <Modal open={sceneModalOpen} title="Criar cena" onClose={() => setSceneModalOpen(false)}>
         <form onSubmit={submitScene} className="space-y-4">
           <Field label="Nome da cena"><input value={sceneName} onChange={(e) => setSceneName(e.target.value)} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" autoFocus /></Field>
@@ -468,7 +586,6 @@ export default function App() {
         </form>
       </Modal>
 
-      {/* 2. Editar Cena (Atualizado com botão da galeria) */}
       <Modal open={editSceneModalOpen} title="Editar cena" onClose={() => { setEditSceneModalOpen(false); setEditingScene(null); }}>
         <form onSubmit={submitEditScene} className="space-y-4">
           <Field label="Nome da cena"><input value={editingScene?.name || ''} onChange={(e) => setEditingScene({ ...editingScene, name: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
@@ -491,7 +608,6 @@ export default function App() {
         </form>
       </Modal>
 
-      {/* 3. Criar Mob */}
       <Modal open={mobModalOpen} title="Novo mob" onClose={() => setMobModalOpen(false)}>
         <form onSubmit={submitMob} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -514,7 +630,6 @@ export default function App() {
         </form>
       </Modal>
 
-      {/* 4. Editar Mob */}
       <Modal open={editMobModalOpen} title="Editar mob" onClose={() => { setEditMobModalOpen(false); setEditingMob(null); }}>
         <form onSubmit={submitEditMob} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -531,7 +646,6 @@ export default function App() {
         </form>
       </Modal>
 
-      {/* 5. Criar Player */}
       <Modal open={playerModalOpen} title="Novo Jogador" onClose={() => setPlayerModalOpen(false)}>
         <form onSubmit={submitPlayer} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -544,7 +658,6 @@ export default function App() {
         </form>
       </Modal>
       
-      {/* 6. Editar Player */}
       <Modal open={editPlayerModalOpen} title="Editar Jogador" onClose={() => { setEditPlayerModalOpen(false); setEditingPlayer(null); }}>
         <form onSubmit={submitEditPlayer} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
@@ -557,7 +670,6 @@ export default function App() {
         </form>
       </Modal>
 
-      {/* 7. Mapa */}
       <Modal open={mapOpen} title="Mapa da cena" onClose={() => setMapOpen(false)} widthClass="max-w-5xl">
         <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
           <div className="aspect-[16/9] relative">

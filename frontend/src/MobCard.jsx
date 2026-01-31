@@ -1,7 +1,8 @@
 import React from 'react';
-import { Shield, Heart, Skull, Trash2 } from 'lucide-react';
+import { Shield, Heart, Skull, Trash2, Edit2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import ConditionsBar from './components/players/ConditionsBar';
 
 const COLORS = {
   red: { bg: 'bg-red-950/40', border: 'border-red-500/50', text: 'text-red-400', dot: 'bg-red-500' },
@@ -14,7 +15,7 @@ const COLORS = {
   white: { bg: 'bg-zinc-200/10', border: 'border-zinc-200/50', text: 'text-zinc-200', dot: 'bg-white' },
 };
 
-export default function MobCard({ mob, onUpdate, onDelete }) {
+export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondition }) {
   // Pega o tema ou usa red como fallback
   const theme = COLORS[mob.color] || COLORS.red;
   
@@ -31,7 +32,7 @@ export default function MobCard({ mob, onUpdate, onDelete }) {
 
   return (
     <div className={twMerge(
-      "relative w-64 rounded-xl border-2 transition-all duration-500 flex flex-col overflow-hidden backdrop-blur-sm",
+      "relative w-64 rounded-xl border-2 transition-all duration-500 flex flex-col backdrop-blur-sm",
       theme.bg, theme.border,
       isDead ? "opacity-60 grayscale" : "opacity-100 shadow-lg"
     )}>
@@ -45,14 +46,25 @@ export default function MobCard({ mob, onUpdate, onDelete }) {
            </h3>
         </div>
 
-        {/* Botão Deletar */}
-        <button 
-          onClick={() => onDelete && onDelete(mob.id)}
-          className="text-zinc-500 hover:text-red-400 hover:bg-red-950/30 p-1.5 rounded transition-colors"
-          title="Excluir mob"
-        >
-          <Trash2 size={16} />
-        </button>
+        <div className="flex items-center gap-1">
+          {/* Botão Editar */}
+          <button 
+            onClick={() => onEdit && onEdit(mob)}
+            className="text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 p-1.5 rounded transition-colors"
+            title="Editar mob"
+          >
+            <Edit2 size={16} />
+          </button>
+
+          {/* Botão Deletar */}
+          <button 
+            onClick={() => onDelete && onDelete(mob.id)}
+            className="text-zinc-500 hover:text-red-400 hover:bg-red-950/30 p-1.5 rounded transition-colors"
+            title="Excluir mob"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Imagem */}
@@ -78,6 +90,9 @@ export default function MobCard({ mob, onUpdate, onDelete }) {
 
       {/* Stats e Controles */}
       <div className="p-3 space-y-3">
+        {/* Condições */}
+        <ConditionsBar conditions={mob.conditions || []} onToggle={(cId) => onToggleCondition && onToggleCondition(mob.id, cId)} />
+
         {/* Status Bar */}
         <div className="flex justify-between text-sm font-mono text-zinc-400 items-end">
           <div className="flex gap-3 text-xs uppercase tracking-wider">

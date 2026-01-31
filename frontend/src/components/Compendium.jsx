@@ -1,24 +1,43 @@
 import React, { useState, useMemo } from 'react';
-import { Search, X, Zap, Scroll, Sword, Book } from 'lucide-react';
+import { 
+  Search, X, Zap, Scroll, Sword, Book, Activity, Plus,
+  ArrowDownCircle, Link as LinkIcon, ZapOff, Skull, 
+  FlaskConical, Ghost, Heart, EyeOff, Cloud, Moon, Timer, HelpCircle 
+} from 'lucide-react';
 
 // Importando os dados (Certifique-se que os arquivos estão em src/data)
 import spellsData from '../data/spells.json';
 import actionsData from '../data/actions.json';
+import conditionsData from '../data/conditions.json';
 
-export default function Compendium({ open, onClose }) {
+const CONDITION_ICONS = {
+  'Caído': { icon: ArrowDownCircle, color: 'text-amber-500' },
+  'Contido': { icon: LinkIcon, color: 'text-zinc-400' },
+  'Paralisado': { icon: ZapOff, color: 'text-blue-500' },
+  'Incapacitado': { icon: Skull, color: 'text-red-500' },
+  'Envenenado': { icon: FlaskConical, color: 'text-green-500' },
+  'Amedrontado': { icon: Ghost, color: 'text-purple-500' },
+  'Enfeitiçado': { icon: Heart, color: 'text-pink-500' },
+  'Cego': { icon: EyeOff, color: 'text-gray-600' },
+  'Invisível': { icon: Cloud, color: 'text-cyan-400' },
+  'Inconsciente': { icon: Moon, color: 'text-indigo-500' },
+  'Exaustão': { icon: Timer, color: 'text-orange-500' },
+};
+
+export default function Compendium({ open, onClose, onAddItem }) {
   const [search, setSearch] = useState('');
-  const [tab, setTab] = useState('spells'); // 'spells' | 'actions'
+  const [tab, setTab] = useState('spells'); // 'spells' | 'actions' | 'conditions'
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const data = tab === 'spells' ? spellsData : actionsData;
-  const folder = tab === 'spells' ? 'spells' : 'actions';
+  const data = tab === 'spells' ? spellsData : tab === 'actions' ? actionsData : conditionsData;
+  const folder = tab; // 'spells', 'actions', 'conditions'
 
   // Filtro de busca (Nome PT ou EN)
   const filtered = useMemo(() => {
     const lower = search.toLowerCase();
     return data.filter(item => 
       item.nome.toLowerCase().includes(lower) || 
-      item.nome_ingles.toLowerCase().includes(lower)
+      (item.nome_ingles && item.nome_ingles.toLowerCase().includes(lower))
     );
   }, [search, data]);
 
@@ -35,7 +54,7 @@ export default function Compendium({ open, onClose }) {
              <input 
                value={search}
                onChange={e => setSearch(e.target.value)}
-               placeholder={`Buscar ${tab === 'spells' ? 'magia' : 'ação'}...`}
+               placeholder={`Buscar...`}
                className="w-full bg-zinc-950/50 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-zinc-200 outline-none focus:border-indigo-500/50 transition-colors"
                autoFocus
              />
@@ -57,6 +76,12 @@ export default function Compendium({ open, onClose }) {
           >
             <Sword size={16} /> Ações
           </button>
+          <button 
+            onClick={() => { setTab('conditions'); setSelectedItem(null); }}
+            className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors ${tab === 'conditions' ? 'bg-red-500/10 text-red-400 border-b-2 border-red-500' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
+          >
+            <Activity size={16} /> Condições
+          </button>
         </div>
 
         {/* Conteúdo Principal */}
@@ -71,22 +96,31 @@ export default function Compendium({ open, onClose }) {
                   className={`w-full text-left p-2 rounded-lg flex items-center gap-3 transition-all group ${selectedItem === item ? 'bg-white/10 text-white' : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-200'}`}
                 >
                   {/* Ícone */}
-                  <div className="h-12 w-12 rounded-lg bg-black/50 border border-white/10 flex items-center justify-center overflow-hidden shrink-0 relative">
-                     <img 
-                       src={`/${folder}/${item.nome_ingles}.png`} 
-                       alt={item.nome_ingles}
-                       className="w-full h-full object-cover"
-                       onError={(e) => { e.target.style.display = 'none'; }} 
-                     />
-                     {/* Fallback se imagem não existir */}
-                     <div className="absolute inset-0 flex items-center justify-center text-xs font-bold opacity-20 group-hover:opacity-40 -z-10">
-                        {item.nome_ingles[0]}
-                     </div>
+                  <div className={`h-12 w-12 rounded-lg bg-black/50 border border-white/10 flex items-center justify-center overflow-hidden shrink-0 relative ${tab === 'conditions' ? 'p-2' : ''}`}>
+                     {tab === 'conditions' ? (
+                        (() => {
+                            const config = CONDITION_ICONS[item.nome] || { icon: HelpCircle, color: 'text-zinc-600' };
+                            const Icon = config.icon;
+                            return <Icon size={24} className={config.color} />;
+                        })()
+                     ) : (
+                        <>
+                            <img 
+                            src={`/${folder}/${item.nome_ingles || item.nome}.png`} 
+                            alt={item.nome}
+                            className="w-full h-full object-cover"
+                            onError={(e) => { e.target.style.display = 'none'; }} 
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center text-xs font-bold opacity-20 group-hover:opacity-40 -z-10">
+                                {(item.nome_ingles || item.nome)[0]}
+                            </div>
+                        </>
+                     )}
                   </div>
                   
                   <div className="min-w-0">
                     <div className="font-bold truncate text-sm">{item.nome}</div>
-                    <div className="text-[10px] opacity-60 truncate">{item.nome_ingles}</div>
+                    <div className="text-[10px] opacity-60 truncate">{item.nome_ingles || ''}</div>
                   </div>
                 </button>
               ))}
@@ -97,19 +131,39 @@ export default function Compendium({ open, onClose }) {
            <div className={`flex-1 overflow-y-auto custom-scrollbar p-6 bg-zinc-900/50 ${!selectedItem ? 'hidden md:flex items-center justify-center' : 'block'}`}>
               {selectedItem ? (
                 <div className="max-w-2xl mx-auto animate-in slide-in-from-right-4 duration-300">
-                   <button onClick={() => setSelectedItem(null)} className="md:hidden mb-4 text-xs text-zinc-500 flex items-center gap-1">← Voltar</button>
+                   <div className="flex items-center justify-between mb-4">
+                      <button onClick={() => setSelectedItem(null)} className="md:hidden text-xs text-zinc-500 flex items-center gap-1">← Voltar</button>
+                      {onAddItem && (
+                        <button 
+                          onClick={() => onAddItem(selectedItem)}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-colors ml-auto"
+                        >
+                          <Plus size={14} /> Adicionar
+                        </button>
+                      )}
+                   </div>
                    
                    <div className="flex flex-col sm:flex-row items-start gap-6 mb-8">
                       <div className="h-32 w-32 rounded-2xl bg-black/50 border border-white/10 overflow-hidden shrink-0 shadow-2xl mx-auto sm:mx-0">
-                         <img 
-                           src={`/${folder}/${selectedItem.nome_ingles}.png`} 
-                           className="w-full h-full object-cover"
-                           onError={(e) => e.target.style.display = 'none'} 
-                         />
+                         {tab === 'conditions' ? (
+                            <div className="w-full h-full flex items-center justify-center">
+                                {(() => {
+                                    const config = CONDITION_ICONS[selectedItem.nome] || { icon: HelpCircle, color: 'text-zinc-600' };
+                                    const Icon = config.icon;
+                                    return <Icon size={64} className={config.color} />;
+                                })()}
+                            </div>
+                         ) : (
+                            <img 
+                            src={`/${folder}/${selectedItem.nome_ingles || selectedItem.nome}.png`} 
+                            className="w-full h-full object-cover"
+                            onError={(e) => e.target.style.display = 'none'} 
+                            />
+                         )}
                       </div>
                       <div className="text-center sm:text-left flex-1">
                         <h2 className="text-3xl font-black text-white mb-1 leading-tight">{selectedItem.nome}</h2>
-                        <div className="text-lg text-zinc-400 italic mb-3">{selectedItem.nome_ingles}</div>
+                        <div className="text-lg text-zinc-400 italic mb-3">{selectedItem.nome_ingles || ''}</div>
                         {selectedItem.caracteristicas && (
                             <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                                 {selectedItem.caracteristicas.split('\n')[0].split(',').map((tag, i) => (

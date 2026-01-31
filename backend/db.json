@@ -13,7 +13,10 @@
           "damageDice": "1d6",
           "toHit": 0,
           "image": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
-          "conditions": []
+          "conditions": [
+            "paralyzed",
+            "frightened"
+          ]
         },
         {
           "id": "mob-1768088699588",
@@ -24,7 +27,9 @@
           "damageDice": "1d6",
           "toHit": 0,
           "image": "/images/img-1768088706074.webp",
-          "conditions": []
+          "conditions": [
+            "invisible"
+          ]
         },
         {
           "id": "mob-1769871068630",
@@ -44,14 +49,32 @@
           "name": "powerful-cannon-shot-352459-31-01-2026.mp3",
           "url": "/audio/powerful-cannon-shot-352459-31-01-2026.mp3",
           "type": "sfx",
-          "volume": 0.5
+          "volume": 0.7,
+          "ambienceMode": "exploration",
+          "pulseActive": false,
+          "pulseInterval": 3
         },
         {
           "id": "track-1769871927427",
           "name": "Final Fantasy 13 OST Orphan Phase 1 Theme ( Born Anew ).mp3",
           "url": "/audio/Final Fantasy 13 OST Orphan Phase 1 Theme ( Born Anew ).mp3",
+          "type": "ambiente",
+          "volume": 0.15,
+          "ambienceMode": "exploration"
+        },
+        {
+          "id": "track-1769882618804",
+          "name": "Bloodborne Soundtrack OST - Lady Maria (The Old Hunters).mp3",
+          "url": "/audio/Bloodborne Soundtrack OST - Lady Maria (The Old Hunters).mp3",
           "type": "musica",
-          "volume": 0.15
+          "volume": 0.5
+        },
+        {
+          "id": "track-1769883287702",
+          "name": "The Plagues (Prince of Egypt) - Cover by Caleb Hyles and Jonathan Young.mp3",
+          "url": "/audio/The Plagues (Prince of Egypt) - Cover by Caleb Hyles and Jonathan Young.mp3",
+          "type": "musica",
+          "volume": 0.5
         }
       ],
       "players": [
@@ -61,10 +84,24 @@
           "characterName": "Paragon",
           "photo": "",
           "maxHp": 50,
-          "currentHp": 0,
+          "currentHp": 34,
           "accessUrl": "/p/gustavo-ttzrmwsb9b",
           "accessToken": "ttzrmwsb9b",
-          "conditions": []
+          "conditions": [],
+          "inventory": [
+            {
+              "nome": "Amigos",
+              "nome_ingles": "Friends",
+              "caracteristicas": "Truque de  Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:Pessoal\nComponentes:S M (uma pequena quantidade de maquiagem aplicada a rosto enquanto esta magia é conjurada)\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Enquanto a magia durar, você tem vantagem em todos os testes de Carisma dirigidos a uma criatura, à sua escolha e que não seja hostil a você. Ao término da magia, a criatura percebe que você usou magia para influenciar o humor dela, tornando-se hostil a você. Uma criatura propensa à violência pode lhe atacar. Criaturas não violentas podem buscar outras formas de retaliação (a critério do DM), dependendo da natureza da sua interação com ela.\nLivro do Jogador (PHB), p. 212 (244)"
+            },
+            {
+              "nome": "Heroísmo",
+              "nome_ingles": "Heroism",
+              "caracteristicas": "1º Círculo, Encantamento (Bardo, Paladino)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Você toca uma criatura voluntária que torna-se imbuída de bravura. Enquanto a magia durar, o alvo está imune a ser amedrontado e ganha uma quantidade de pontos de vida temporários igual ao seu modificador do atributo de conjuração, no início de cada um dos turnos dela. Quando a magia terminar, o alvo perde quaisquer pontos de vida temporários remanescentes derivados desta magia.\nLivro do Jogador (PHB), p. 248 (250)"
+            }
+          ]
         }
       ]
     },
@@ -118,7 +155,15 @@
           "name": "jumpland44100.mp3",
           "type": "sfx",
           "url": "/audio/audio-1767971306429.mp3",
-          "volume": 0.5
+          "volume": 0.6
+        },
+        {
+          "id": "track-1769880931792",
+          "name": "The Plagues (Prince of Egypt) - Cover by Caleb Hyles and Jonathan Young-31-01-2026",
+          "url": "/audio/The Plagues (Prince of Egypt) - Cover by Caleb Hyles and Jonathan Young-31-01-2026.mp3",
+          "type": "ambiente",
+          "volume": 0.5,
+          "ambienceMode": "combat"
         }
       ],
       "players": [
@@ -137,7 +182,7 @@
           "id": "player-1769872870258",
           "playerName": "tus",
           "characterName": "ber",
-          "photo": "",
+          "photo": "/images/img-1768083732380.webp",
           "maxHp": 20,
           "currentHp": 20,
           "accessUrl": "/p/tus-ksmftnta0yk",
@@ -147,7 +192,7 @@
       ]
     }
   ],
-  "activeSceneId": "cena-1767974201000",
+  "activeSceneId": "cena-1",
   "library": {
     "mobs": [],
     "tracks": []
@@ -216,8 +261,32 @@
         "maxHp": 20,
         "currentHp": 20,
         "conditions": [],
-        "photo": "",
+        "photo": "/images/img-1768083732380.webp",
         "createdAt": "2026-01-31T15:20:45.803Z"
+      },
+      {
+        "id": "preset-player-1769883643901",
+        "characterName": "Paragon",
+        "maxHp": 50,
+        "currentHp": 34,
+        "conditions": [],
+        "photo": "",
+        "playerName": "Gustavo",
+        "createdAt": "2026-01-31T18:20:43.901Z",
+        "inventory": [
+          {
+            "nome": "Amigos",
+            "nome_ingles": "Friends",
+            "caracteristicas": "Truque de  Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:Pessoal\nComponentes:S M (uma pequena quantidade de maquiagem aplicada a rosto enquanto esta magia é conjurada)\nDuração:Concentração,\n                                         Até 1 minuto",
+            "descricao": "Enquanto a magia durar, você tem vantagem em todos os testes de Carisma dirigidos a uma criatura, à sua escolha e que não seja hostil a você. Ao término da magia, a criatura percebe que você usou magia para influenciar o humor dela, tornando-se hostil a você. Uma criatura propensa à violência pode lhe atacar. Criaturas não violentas podem buscar outras formas de retaliação (a critério do DM), dependendo da natureza da sua interação com ela.\nLivro do Jogador (PHB), p. 212 (244)"
+          },
+          {
+            "nome": "Heroísmo",
+            "nome_ingles": "Heroism",
+            "caracteristicas": "1º Círculo, Encantamento (Bardo, Paladino)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+            "descricao": "Você toca uma criatura voluntária que torna-se imbuída de bravura. Enquanto a magia durar, o alvo está imune a ser amedrontado e ganha uma quantidade de pontos de vida temporários igual ao seu modificador do atributo de conjuração, no início de cada um dos turnos dela. Quando a magia terminar, o alvo perde quaisquer pontos de vida temporários remanescentes derivados desta magia.\nLivro do Jogador (PHB), p. 248 (250)"
+          }
+        ]
       }
     ],
     "player": [

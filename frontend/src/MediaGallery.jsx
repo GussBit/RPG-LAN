@@ -1,21 +1,113 @@
-import React, { useEffect, useState } from 'react';
-import { X, Upload, Music, Trash2, Check } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { X, Upload, Music, Trash2, Check, Play, Pause } from 'lucide-react';
+import { Howl } from 'howler';
 import { useGameStore } from './store';
 import PillButton from './components/ui/PillButton';
 import { BACKEND_URL, getImageUrl } from './constants';
+
+// Componente auxiliar para item de áudio com preview e duração
+function AudioItem({ item, onSelect, onDelete, previewState }) {
+  const { playingName, setPlayingName, howlerRef } = previewState;
+  const [duration, setDuration] = useState(null);
+  const isPlaying = playingName === item.name;
+
+  useEffect(() => {
+    const audio = new Audio(getImageUrl(item.url));
+    audio.preload = 'metadata';
+    const onLoadedMetadata = () => {
+      if (audio.duration !== Infinity && !isNaN(audio.duration)) {
+        setDuration(audio.duration);
+      }
+    };
+    audio.addEventListener('loadedmetadata', onLoadedMetadata);
+    return () => {
+      audio.removeEventListener('loadedmetadata', onLoadedMetadata);
+      audio.src = '';
+    };
+  }, [item.url]);
+
+  const togglePlay = (e) => {
+    e.stopPropagation();
+    if (isPlaying) {
+      howlerRef.current?.stop();
+      setPlayingName(null);
+    } else {
+      if (howlerRef.current) howlerRef.current.stop();
+      const sound = new Howl({ 
+        src: [getImageUrl(item.url)],
+        html5: true,
+        onend: () => setPlayingName(null)
+      });
+      howlerRef.current = sound;
+      sound.play();
+      setPlayingName(item.name);
+    }
+  };
+
+  const formatTime = (secs) => {
+    if (!secs) return '--:--';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <div onClick={() => onSelect && onSelect(item.url, item.name)} className="group flex items-center gap-3 p-3 rounded-xl bg-black/20 border border-white/5 hover:bg-white/5 cursor-pointer transition">
+      <button onClick={togglePlay} className="p-2 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white rounded-lg transition shrink-0">
+        {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+      </button>
+      
+      <div className="flex-1 min-w-0">
+        <div className="text-sm font-medium text-zinc-200 truncate">{item.name}</div>
+        <div className="flex items-center gap-3 text-xs text-zinc-500">
+          <span className="font-mono text-zinc-400">{formatTime(duration)}</span>
+          <span className="truncate opacity-50">{item.url}</span>
+        </div>
+      </div>
+      
+      <button 
+        onClick={(e) => onDelete(e, item.name)}
+        className="p-2 text-zinc-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition opacity-0 group-hover:opacity-100"
+        title="Excluir Áudio"
+      >
+        <Trash2 size={16} />
+      </button>
+
+      {onSelect && <PillButton variant="neutral" className="px-2 py-1 h-8"><Check size={14} /></PillButton>}
+    </div>
+  );
+}
 
 export default function MediaGallery({ open, onClose, type = 'images', onSelect }) {
   // Adicionado deleteFromGallery aqui
   const { gallery, fetchGallery, deleteFromGallery } = useGameStore();
   const [activeTab, setActiveTab] = useState(type);
   const [uploading, setUploading] = useState(false);
+  
+  // Estado para controle de preview de áudio
+  const howlerRef = useRef(null);
+  const [playingName, setPlayingName] = useState(null);
 
   useEffect(() => { 
       if (open) {
           fetchGallery(); 
           setActiveTab(type);
       }
+      
+      // Parar áudio ao fechar ou mudar aba
+      return () => {
+        if (howlerRef.current) howlerRef.current.stop();
+        setPlayingName(null);
+      };
   }, [open, type, fetchGallery]);
+  
+  // Parar áudio ao mudar de aba
+  useEffect(() => {
+      if (howlerRef.current) {
+          howlerRef.current.stop();
+          setPlayingName(null);
+      }
+  }, [activeTab]);
 
   const handleUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -103,24 +195,13 @@ export default function MediaGallery({ open, onClose, type = 'images', onSelect 
           ) : (
             <div className="space-y-2">
               {items.map((item, idx) => (
-                <div key={item.id || idx} onClick={() => onSelect && onSelect(item.url, item.name)} className="group flex items-center gap-3 p-3 rounded-xl bg-black/20 border border-white/5 hover:bg-white/5 cursor-pointer transition">
-                  <div className="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg"><Music size={20} /></div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-zinc-200 truncate">{item.name}</div>
-                    <div className="text-xs text-zinc-500 truncate">{item.url}</div>
-                  </div>
-                  
-                  {/* Botão Deletar Áudio */}
-                  <button 
-                    onClick={(e) => handleDelete(e, item.name)}
-                    className="p-2 text-zinc-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition opacity-0 group-hover:opacity-100"
-                    title="Excluir Áudio"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-
-                  {onSelect && <PillButton variant="neutral" className="px-2 py-1 h-8"><Check size={14} /></PillButton>}
-                </div>
+                <AudioItem 
+                  key={item.id || idx}
+                  item={item}
+                  onSelect={onSelect}
+                  onDelete={handleDelete}
+                  previewState={{ playingName, setPlayingName, howlerRef }}
+                />
               ))}
             </div>
           )}

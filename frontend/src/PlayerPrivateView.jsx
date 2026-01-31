@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Heart, Shield, Loader2, AlertCircle, ArrowLeft,
   ArrowDownCircle, Link as LinkIcon, ZapOff, Skull,
-  FlaskConical, Ghost, Heart as HeartIcon, EyeOff, Cloud, Moon, Timer
+  FlaskConical, Ghost, Heart as HeartIcon, EyeOff, Cloud, Moon, Timer, BookOpen, Backpack, Scroll, Trash2
 } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Compendium from './components/Compendium';
 
 
 
@@ -32,6 +33,8 @@ export default function PlayerPrivateView() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [compendiumOpen, setCompendiumOpen] = useState(false);
+    const [viewMode, setViewMode] = useState('sheet'); // 'sheet' | 'inventory'
 
     useEffect(() => {
         fetchPlayerData();
@@ -85,6 +88,43 @@ export default function PlayerPrivateView() {
     }
   };
 
+  const handleAddToInventory = async (item) => {
+    if (!data) return;
+    const currentInventory = data.player.inventory || [];
+    
+    // Opcional: Evitar duplicatas exatas
+    if (currentInventory.some(i => i.nome === item.nome)) {
+        toast.warning('Item já está no inventário');
+        return;
+    }
+
+    const newInventory = [...currentInventory, item];
+    try {
+        await fetch(`${BACKEND_URL}/api/scenes/${data.scene.id}/players/${data.player.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ inventory: newInventory })
+        });
+        fetchPlayerData();
+        toast.success(`${item.nome} adicionado!`);
+    } catch (err) { toast.error('Erro ao salvar item'); }
+  };
+
+  const handleRemoveFromInventory = async (index) => {
+    if (!data) return;
+    if (!window.confirm('Remover este item?')) return;
+    
+    const newInventory = (data.player.inventory || []).filter((_, i) => i !== index);
+    try {
+        await fetch(`${BACKEND_URL}/api/scenes/${data.scene.id}/players/${data.player.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ inventory: newInventory })
+        });
+        fetchPlayerData();
+        toast.success('Item removido');
+    } catch (err) { toast.error('Erro ao remover item'); }
+  };
 
 
     if (loading) {
@@ -164,9 +204,20 @@ export default function PlayerPrivateView() {
                     </div>
                 </header>
 
+                {/* Navegação de Abas */}
+                <div className="flex justify-center mt-4 gap-2">
+                    <button onClick={() => setViewMode('sheet')} className={`px-4 py-2 rounded-full text-sm font-bold transition-colors flex items-center gap-2 ${viewMode === 'sheet' ? 'bg-white/10 text-white' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                        <Shield size={16} /> Ficha
+                    </button>
+                    <button onClick={() => setViewMode('inventory')} className={`px-4 py-2 rounded-full text-sm font-bold transition-colors flex items-center gap-2 ${viewMode === 'inventory' ? 'bg-white/10 text-white' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                        <Backpack size={16} /> Inventário
+                    </button>
+                </div>
+
                 {/* Conteúdo Principal */}
                 <main className="flex-1 flex items-center justify-center p-4">
-                    <div className="w-full max-w-md">
+                    {viewMode === 'sheet' ? (
+                        <div className="w-full max-w-md animate-in fade-in zoom-in duration-300">
                         {/* Card do Personagem */}
                         <div
                             className={`bg-zinc-900/60 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.7)] transition-all ${(player.conditions || []).includes('prone') ? 'transform rotate-[-2deg]' : ''
@@ -406,7 +457,37 @@ export default function PlayerPrivateView() {
                                 Esta página atualiza automaticamente a cada 5 segundos
                             </p>
                         </div>
-                    </div>
+                        </div>
+                    ) : (
+                        <div className="w-full max-w-2xl h-[70vh] flex flex-col animate-in slide-in-from-right-8 duration-300">
+                            <div className="flex items-center justify-between mb-4 px-2">
+                                <h2 className="text-xl font-bold text-zinc-100 flex items-center gap-2"><Scroll size={20} className="text-indigo-400"/> Grimório & Habilidades</h2>
+                                <button onClick={() => setCompendiumOpen(true)} className="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg transition-colors">
+                                    + Adicionar
+                                </button>
+                            </div>
+                            
+                            <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
+                                {(player.inventory || []).length === 0 && (
+                                    <div className="text-center text-zinc-600 py-10 border-2 border-dashed border-zinc-800 rounded-xl">
+                                        Seu inventário está vazio.<br/>Abra o compêndio para adicionar magias.
+                                    </div>
+                                )}
+                                {(player.inventory || []).map((item, idx) => (
+                                    <div key={idx} className="bg-zinc-900/80 border border-white/5 p-4 rounded-xl relative group hover:border-indigo-500/30 transition-colors">
+                                        <div className="pr-8">
+                                            <div className="font-bold text-zinc-200 text-lg">{item.nome}</div>
+                                            <div className="text-xs text-indigo-400 mb-2 font-mono">{item.nome_ingles}</div>
+                                            <div className="text-xs text-zinc-400 whitespace-pre-wrap leading-relaxed">{item.descricao}</div>
+                                        </div>
+                                        <button onClick={() => handleRemoveFromInventory(idx)} className="absolute top-3 right-3 text-zinc-600 hover:text-red-400 p-1 rounded transition-colors">
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Efeitos Especiais */}
                     {(player.conditions || []).includes('restrained') && (
@@ -428,6 +509,19 @@ export default function PlayerPrivateView() {
 
                 </main>
             </div>
+
+            {/* Botão Flutuante do Compêndio */}
+            <div className="fixed bottom-6 right-6 z-50">
+                <button 
+                    onClick={() => setCompendiumOpen(true)} 
+                    className="h-14 w-14 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white shadow-2xl shadow-indigo-900/50 flex items-center justify-center transition-all hover:scale-110 border-2 border-indigo-400"
+                    title="Abrir Compêndio"
+                >
+                    <BookOpen size={24} />
+                </button>
+            </div>
+
+            <Compendium open={compendiumOpen} onClose={() => setCompendiumOpen(false)} onAddItem={handleAddToInventory} />
         </div>
     );
 }

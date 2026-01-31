@@ -343,6 +343,7 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
     maxHp: globalPreset?.maxHp ?? Number(player.maxHp || 10),
     currentHp: globalPreset?.currentHp ?? Number(player.currentHp ?? player.maxHp ?? 10),
     conditions: globalPreset?.conditions ?? [],
+    inventory: globalPreset?.inventory ?? [],
     photo: globalPreset?.photo || player.photo || '',
     playerName: globalPreset?.playerName || player.playerName || 'Jogador'
   };
@@ -357,6 +358,7 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
     accessUrl: `/p/${safeName}-${token}`,
     accessToken: token,
     conditions: baseData.conditions,
+    inventory: baseData.inventory,
   };
 
   // Se não existia preset global, cria um agora
@@ -368,6 +370,7 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
        maxHp: newPlayer.maxHp,
        currentHp: newPlayer.currentHp,
        conditions: newPlayer.conditions,
+       inventory: newPlayer.inventory,
        photo: newPlayer.photo,
        createdAt: new Date().toISOString()
      });
@@ -403,6 +406,7 @@ app.patch('/api/scenes/:sceneId/players/:playerId', async (req, res) => {
           maxHp: player.maxHp,
           currentHp: player.currentHp,
           conditions: player.conditions,
+          inventory: player.inventory,
           photo: player.photo,
           playerName: player.playerName
       };

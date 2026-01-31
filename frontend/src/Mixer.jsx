@@ -1,359 +1,438 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { Howl, Howler } from 'howler';
 import {
   Volume2, Play, Pause, Square, Wind, Zap, UploadCloud,
-  Trash2, FolderOpen, Music, Clock, Repeat
+  Trash2, Music, SkipForward, SkipBack,
+  Swords, Map as MapIcon, Trophy, GripVertical, Plus, Clock
 } from 'lucide-react';
 import { useGameStore } from './store';
-import { getImageUrl, BACKEND_URL } from './constants';
+import { getImageUrl } from './constants';
 
 // --- COMPONENTES AUXILIARES ---
 
-function SliderGroup({ label, value, setValue, color }) {
+function Slider({ value, onChange, vertical = false, className = "" }) {
   return (
-    <div className="flex flex-col items-center gap-2 w-10 group h-32">
-       <div className="relative flex-1 w-2 bg-zinc-800 rounded-full flex items-end justify-center group-hover:bg-zinc-700 transition-colors">
-          <div className={`w-full rounded-full transition-all duration-75 ${color} opacity-80 group-hover:opacity-100`} style={{ height: `${value * 100}%` }} />
-          <input
-            type="range" min="0" max="1" step="0.01"
-            value={value}
-            onChange={(e) => setValue(Number(e.target.value))}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 appearance-none m-0 p-0"
-            style={{ WebkitAppearance: 'slider-vertical' }}
-            title={`${label}: ${Math.round(value * 100)}%`}
-          />
+    <div className={`relative flex items-center justify-center group ${vertical ? 'h-24 w-6 flex-col' : 'w-24 h-6'} ${className}`}>
+       <div className={`relative bg-zinc-800 rounded-full overflow-hidden ${vertical ? 'w-1.5 h-full' : 'h-1.5 w-full'}`}>
+          <div className="bg-indigo-500 absolute bottom-0 left-0 transition-all" 
+               style={vertical ? { width: '100%', height: `${value * 100}%` } : { height: '100%', width: `${value * 100}%` }} />
        </div>
-       <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider group-hover:text-zinc-300 transition-colors text-center w-full truncate">{label}</span>
+       <input
+          type="range" min="0" max="1" step="0.01"
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="absolute inset-0 opacity-0 cursor-pointer"
+          style={vertical ? { writingMode: 'bt-lr', WebkitAppearance: 'slider-vertical' } : {}}
+       />
     </div>
   );
 }
 
-function TrackTypeSelector({ type, onChange }) {
-    const [open, setOpen] = useState(false);
-    const types = [
-        { id: 'musica', label: 'Música', icon: Music, color: 'text-indigo-400' },
-        { id: 'ambiente', label: 'Ambiente', icon: Wind, color: 'text-emerald-400' },
-        { id: 'sfx', label: 'SFX', icon: Zap, color: 'text-amber-400' }
-    ];
-    const current = types.find(t => t.id === type) || types[0];
+// --- LÓGICA DE ARRASTO ROBUSTA ---
+// Verifica no clique se o alvo é a alça (handle). Se for, marca o elemento como arrastável.
+const handleMouseDown = (e) => {
+  e.currentTarget.dataset.dragEnabled = !!e.target.closest('.drag-handle');
+};
+
+const handleDragStart = (e, trackId) => {
+  if (e.currentTarget.dataset.dragEnabled !== 'true') {
+    e.preventDefault();
+    return;
+  }
+  e.dataTransfer.setData('trackId', trackId);
+};
+
+// --- AMBIENTE (LOOPS) ---
+function AmbienceTrack({ track, masterVolume, onDelete }) {
+  const soundRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+  const [localVolume, setLocalVolume] = useState(track.volume ?? 0.5);
+  
+  useEffect(() => {
+    if (!track.url) return;
+    
+    if (!soundRef.current) {
+        soundRef.current = new Howl({
+            src: [getImageUrl(track.url)],
+            html5: true,
+            loop: true,
+            volume: 0,
+            onload: () => {
+                 soundRef.current.play();
+                 soundRef.current.fade(0, localVolume * masterVolume, 1000);
+                 setPlaying(true);
+            }
+        });
+    }
+
+    if (soundRef.current && soundRef.current.playing()) {
+        soundRef.current.volume(localVolume * masterVolume);
+    }
+
+    return () => {
+        if (soundRef.current) {
+            soundRef.current.fade(soundRef.current.volume(), 0, 500);
+            setTimeout(() => soundRef.current.unload(), 500);
+        }
+    };
+  }, [track.url]);
+
+  useEffect(() => {
+      if(soundRef.current) soundRef.current.volume(localVolume * masterVolume);
+  }, [localVolume, masterVolume]);
+
+  const togglePlay = () => {
+      if (!soundRef.current) return;
+      if (playing) {
+          soundRef.current.fade(soundRef.current.volume(), 0, 500);
+          setTimeout(() => { soundRef.current.pause(); setPlaying(false); }, 500);
+      } else {
+          soundRef.current.play();
+          soundRef.current.fade(0, localVolume * masterVolume, 500);
+          setPlaying(true);
+      }
+  };
+
+  return (
+    <div 
+      draggable 
+      onMouseDown={handleMouseDown}
+      onDragStart={(e) => handleDragStart(e, track.id)} 
+      className="flex items-center gap-3 p-2 rounded-lg bg-zinc-900/60 border border-white/5 hover:border-white/10 group"
+    >
+       <div className="drag-handle cursor-grab p-1 hover:bg-white/5 rounded"><GripVertical size={14} className="text-zinc-600" /></div>
+       <button onClick={togglePlay} className={`p-2 rounded-full transition-colors ${playing ? 'bg-emerald-500/20 text-emerald-400' : 'bg-zinc-800 text-zinc-500'}`}>
+          {playing ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}
+       </button>
+       <div className="flex-1 min-w-0">
+          <div className="text-xs font-medium text-zinc-300 truncate">{track.name}</div>
+          <Slider value={localVolume} onChange={setLocalVolume} className="!w-full !h-3 mt-1" />
+       </div>
+       <button onClick={() => onDelete(track.id)} className="p-1.5 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={14} /></button>
+    </div>
+  );
+}
+
+// --- MÚSICA (PLAYLIST SEQUENCIAL) ---
+function MusicPlayer({ tracks, masterVolume, onUpdate, onDelete }) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const soundRef = useRef(null);
+    
+    const currentTrack = tracks[currentIndex];
+
+    const playTrack = (index) => {
+        if (index < 0 || index >= tracks.length) return;
+        
+        if (soundRef.current) {
+            soundRef.current.stop();
+            soundRef.current.unload();
+        }
+
+        const track = tracks[index];
+        setCurrentIndex(index);
+        setIsPlaying(true);
+
+        soundRef.current = new Howl({
+            src: [getImageUrl(track.url)],
+            html5: true,
+            volume: (track.volume ?? 0.5) * masterVolume,
+            onend: () => {
+                playTrack((index + 1) % tracks.length);
+            }
+        });
+        soundRef.current.play();
+    };
+
+    const togglePlay = () => {
+        if (!currentTrack) return;
+        if (isPlaying) {
+            soundRef.current?.pause();
+            setIsPlaying(false);
+        } else {
+            if (!soundRef.current) playTrack(currentIndex);
+            else { soundRef.current.play(); setIsPlaying(true); }
+        }
+    };
+
+    const next = () => playTrack((currentIndex + 1) % tracks.length);
+    const prev = () => playTrack((currentIndex - 1 + tracks.length) % tracks.length);
+
+    useEffect(() => {
+        if (soundRef.current) soundRef.current.volume((currentTrack?.volume ?? 0.5) * masterVolume);
+    }, [masterVolume]);
+
+    useEffect(() => {
+        return () => { if (soundRef.current) soundRef.current.unload(); };
+    }, []);
 
     return (
-        <div className="relative">
-            <button onClick={() => setOpen(!open)} className="p-1.5 rounded hover:bg-white/10 text-zinc-400 transition" title="Alterar tipo">
-                <current.icon size={14} className={current.color} />
-            </button>
-            {open && (
-                <>
-                    <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-                    <div className="absolute top-full left-0 mt-1 w-28 bg-zinc-900 border border-white/10 rounded-lg shadow-xl z-50 py-1 overflow-hidden">
-                        {types.map(t => (
-                            <button key={t.id} onClick={() => { onChange(t.id); setOpen(false); }} className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:bg-white/5 ${type === t.id ? 'bg-white/5 text-white' : 'text-zinc-400'}`}>
-                                <t.icon size={12} className={t.color} /> {t.label}
-                            </button>
-                        ))}
+        <div className="flex flex-col h-full">
+            <div className="p-3 bg-zinc-900/80 rounded-xl border border-white/5 mb-3 flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                    <div className="text-xs font-bold text-indigo-300 truncate flex-1 mr-2">
+                        {currentTrack ? currentTrack.name : "Playlist Vazia"}
                     </div>
-                </>
-            )}
+                    <div className="text-[10px] text-zinc-500">{currentIndex + 1} / {tracks.length}</div>
+                </div>
+                <div className="flex items-center justify-center gap-4">
+                    <button onClick={prev} className="text-zinc-400 hover:text-white"><SkipBack size={16} /></button>
+                    <button onClick={togglePlay} className={`h-10 w-10 rounded-full flex items-center justify-center transition-all ${isPlaying ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30' : 'bg-zinc-700 text-zinc-400'}`}>
+                        {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" ml="2px" />}
+                    </button>
+                    <button onClick={next} className="text-zinc-400 hover:text-white"><SkipForward size={16} /></button>
+                </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto custom-scrollbar space-y-1 min-h-0">
+                {tracks.map((track, idx) => (
+                    <div 
+                        key={track.id} 
+                        draggable 
+                        onMouseDown={handleMouseDown}
+                        onDragStart={(e) => handleDragStart(e, track.id)}
+                        onClick={() => playTrack(idx)}
+                        className={`flex items-center gap-2 p-2 rounded cursor-pointer group border border-transparent ${idx === currentIndex ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-200' : 'hover:bg-white/5 text-zinc-400'}`}
+                    >
+                        <div className="drag-handle cursor-grab p-1 hover:bg-white/5 rounded"><GripVertical size={12} className="text-zinc-600" /></div>
+                        <div className="flex-1 truncate text-xs">{track.name}</div>
+                        <button onClick={(e) => { e.stopPropagation(); onDelete(track.id); }} className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400"><Trash2 size={12} /></button>
+                    </div>
+                ))}
+                {tracks.length === 0 && <div className="text-xs text-zinc-600 text-center py-4 italic">Arraste músicas aqui</div>}
+            </div>
         </div>
     );
 }
 
-// Componente de Faixa de Fundo (Music/Ambience)
-function BackgroundTrack({ track, masterVolume, onUpdate, onDelete, globalCommand }) {
-  const soundRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
-  const [localVolume, setLocalVolume] = useState(track.volume ?? 0.5);
-  const finalVolume = localVolume * masterVolume;
-
-  // 1. Inicialização do Howl
-  useEffect(() => {
-    if (!track.url) return;
-    
-    // Se o SRC for diferente, recria
-    if (soundRef.current && soundRef.current._src !== getImageUrl(track.url)) {
-        soundRef.current.unload();
-        soundRef.current = null;
-    }
-
-    if (!soundRef.current) {
-        soundRef.current = new Howl({
+// --- SFX ITEM (COM PULSO) ---
+function SfxItem({ track, masterVolume, onDelete, onUpdate }) {
+    const playSfx = () => {
+        const sound = new Howl({ 
             src: [getImageUrl(track.url)], 
-            html5: true, 
-            loop: true, 
-            volume: finalVolume,
-            onloaderror: (id, err) => console.error('Erro audio:', err),
+            volume: (track.volume ?? 0.5) * masterVolume 
         });
-    }
-
-    // Atualiza volume
-    soundRef.current.volume(finalVolume);
-
-    return () => {
-        // Cleanup ao desmontar
-        if (soundRef.current) soundRef.current.unload();
+        sound.play();
     };
-  }, [track.url]); // Apenas recria se URL mudar
 
-  // 2. Listener de Comandos Globais (Play All, Pause All, Stop All)
-  useEffect(() => {
-      if (!globalCommand) return;
-
-      // O comando vem com um ID (timestamp) para garantir que execute mesmo se for o mesmo tipo repetido
-      if (globalCommand.type === 'PLAY') {
-          setPlaying(true);
-      } else if (globalCommand.type === 'PAUSE') {
-          setPlaying(false);
-      } else if (globalCommand.type === 'STOP') {
-          setPlaying(false);
-          if (soundRef.current) {
-              soundRef.current.stop(); // Stop real (reset to 0)
-          }
-      }
-  }, [globalCommand]);
-
-  // 3. Sincronia Estado React -> Howler Audio
-  useEffect(() => {
-    if (!soundRef.current) return;
-    soundRef.current.volume(finalVolume); // Garante volume atualizado
-
-    if (playing) {
-        if (!soundRef.current.playing()) {
-            soundRef.current.play();
+    // Lógica de Pulso (Loop a cada X segundos)
+    useEffect(() => {
+        let interval;
+        if (track.pulseActive && track.pulseInterval > 0) {
+            interval = setInterval(() => {
+                playSfx();
+            }, track.pulseInterval * 1000);
         }
-    } else {
-        if (soundRef.current.playing()) {
-            soundRef.current.pause(); // Pause real (mantém posição)
-        }
-    }
-  }, [playing, finalVolume]);
+        return () => clearInterval(interval);
+    }, [track.pulseActive, track.pulseInterval, track.volume, masterVolume]);
 
-  return (
-    <div className={`relative flex items-center gap-2 p-2 rounded-xl border transition-all ${playing ? 'bg-indigo-500/10 border-indigo-500/30' : 'bg-zinc-900/40 border-white/5 hover:border-white/10'}`}>
-      <button 
-        onClick={() => setPlaying(!playing)} 
-        className={`h-10 w-10 shrink-0 rounded-lg flex items-center justify-center transition-all ${playing ? 'bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'bg-zinc-800 text-zinc-500 hover:text-zinc-300'}`}
-      >
-        {playing ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
-      </button>
+    return (
+        <div 
+          draggable 
+          onMouseDown={handleMouseDown}
+          onDragStart={(e) => handleDragStart(e, track.id)} 
+          className="relative group flex flex-col gap-1"
+        >
+            <div className="drag-handle absolute top-1 left-1 p-1 cursor-grab hover:bg-black/40 rounded z-20 text-zinc-500 hover:text-zinc-200 transition-colors"><GripVertical size={12} /></div>
+            
+            <button 
+                onClick={playSfx}
+                className="w-full aspect-square rounded-xl bg-zinc-900/60 border border-white/10 hover:border-amber-500/50 hover:bg-amber-500/10 flex flex-col items-center justify-center gap-1 transition-all active:scale-95"
+            >
+                <Zap size={16} className="text-amber-600 group-hover:text-amber-400" />
+                <span className="text-[9px] text-zinc-500 group-hover:text-zinc-300 truncate w-full px-1 text-center">{track.name}</span>
+            </button>
+            
+            {/* Controles de Volume e Pulso */}
+            <div className="flex items-center gap-1 bg-zinc-900/80 p-1 rounded border border-white/10">
+                <input 
+                    type="range" min="0" max="1" step="0.1" 
+                    value={track.volume ?? 0.5}
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => onUpdate(track.id, { volume: parseFloat(e.target.value) })}
+                    className="w-full h-1.5 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                    title="Volume"
+                />
+                <button 
+                    onClick={(e) => { e.stopPropagation(); onUpdate(track.id, { pulseActive: !track.pulseActive }); }}
+                    className={`p-0.5 rounded transition-colors ${track.pulseActive ? 'bg-amber-500/20 text-amber-400' : 'text-zinc-600 hover:text-zinc-400'}`}
+                    title="Ativar Pulso (Repetição)"
+                >
+                    <Clock size={10} />
+                </button>
+            </div>
 
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1">
-          <div className="text-xs font-bold text-zinc-300 truncate">{track.name}</div>
-          <div className="text-[10px] text-zinc-500 font-mono">{Math.round(localVolume * 100)}%</div>
+            {/* Configuração de Intervalo do Pulso */}
+            {track.pulseActive && (
+                 <div className="flex items-center gap-1 px-1 animate-in slide-in-from-top-1 duration-200">
+                    <input 
+                        type="number" 
+                        min="1"
+                        value={track.pulseInterval || 5} 
+                        onChange={(e) => onUpdate(track.id, { pulseInterval: Number(e.target.value) })}
+                        className="w-full bg-black/50 border border-white/10 rounded text-[9px] text-center py-0.5 text-zinc-300 outline-none focus:border-amber-500/50"
+                        onClick={(e) => e.stopPropagation()}
+                        placeholder="Seg"
+                    />
+                    <span className="text-[8px] text-zinc-600">s</span>
+                 </div>
+            )}
+
+            <button onClick={() => onDelete(track.id)} className="absolute -top-1 -right-1 bg-zinc-950 border border-white/10 rounded-full p-1 text-zinc-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10"><Trash2 size={10} /></button>
         </div>
-        <div className="relative h-4 w-full flex items-center">
-             <div className="absolute w-full h-1 bg-zinc-700 rounded-full overflow-hidden pointer-events-none">
-                 <div className="h-full bg-zinc-400 transition-all" style={{ width: `${localVolume * 100}%` }} />
-             </div>
-             <input type="range" min="0" max="1" step="0.05" value={localVolume} onChange={(e) => { const v = Number(e.target.value); setLocalVolume(v); onUpdate(track.id, { volume: v }); }} className="w-full h-4 opacity-0 cursor-pointer z-10" />
-             <div className="absolute h-3 w-3 bg-white rounded-full shadow pointer-events-none transition-all" style={{ left: `calc(${localVolume * 100}% - 6px)` }} />
-        </div>
-      </div>
-
-      <div className="flex flex-col items-end gap-1">
-          <TrackTypeSelector type={track.type} onChange={(newType) => onUpdate(track.id, { type: newType })} />
-          <button onClick={() => onDelete(track.id)} className="p-1.5 text-zinc-600 hover:text-red-400 transition"><Trash2 size={14} /></button>
-      </div>
-    </div>
-  );
+    );
 }
 
-function SfxButton({ track, shortcutIndex, masterVolume, onUpdate, onDelete }) {
-  const [active, setActive] = useState(false);
-  const [localVolume, setLocalVolume] = useState(track.volume ?? 0.5);
-  const [intervalSec, setIntervalSec] = useState(0);
-  const [timerOpen, setTimerOpen] = useState(false);
-  const intervalRef = useRef(null);
-
-  const playSfx = () => {
-    setActive(true);
-    setTimeout(() => setActive(false), 200);
-    const sound = new Howl({ src: [getImageUrl(track.url)], volume: localVolume * masterVolume });
-    sound.play();
-  };
-
-  useEffect(() => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      if (intervalSec > 0) {
-          intervalRef.current = setInterval(playSfx, intervalSec * 1000);
-      }
-      return () => clearInterval(intervalRef.current);
-  }, [intervalSec, localVolume, masterVolume]);
-
-  useEffect(() => {
-    const handleKey = (e) => {
-        const targetCode = `Digit${shortcutIndex + 1}`;
-        if (e.shiftKey && e.code === targetCode && !e.target.matches('input, textarea')) {
-            e.preventDefault();
-            playSfx();
-        }
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [shortcutIndex, track, masterVolume, localVolume]);
-
-  return (
-    <div className="relative group w-24">
-      <button onClick={playSfx} className={`relative w-full h-20 rounded-xl border transition-all flex flex-col items-center justify-center gap-1 overflow-hidden mb-1 ${active ? 'bg-amber-500/30 border-amber-500 scale-95 shadow-[0_0_20px_rgba(245,158,11,0.5)]' : 'bg-zinc-900/60 border-white/10 hover:border-amber-500/50 hover:bg-amber-500/10'}`}>
-        <Zap size={20} className={`transition-colors ${active ? 'text-amber-300' : 'text-amber-600 opacity-80'}`} />
-        <span className="text-[10px] font-medium text-zinc-400 truncate w-full px-1 text-center leading-tight">{track.name}</span>
-        <div className="absolute top-1 right-1 text-[8px] font-black text-zinc-700 bg-white/10 px-1 rounded">Shift+{shortcutIndex + 1}</div>
-        {intervalSec > 0 && <div className="absolute top-1 left-1 flex items-center gap-0.5 text-[8px] text-amber-400 font-mono bg-black/50 px-1 rounded animate-pulse"><Clock size={8} /> {intervalSec}s</div>}
-      </button>
-
-      <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden group-hover:h-2 transition-all cursor-pointer relative">
-          <div className="h-full bg-amber-600/50 group-hover:bg-amber-500 transition-colors" style={{ width: `${localVolume * 100}%` }} />
-          <input type="range" min="0" max="1" step="0.1" value={localVolume} onChange={(e) => { const v = Number(e.target.value); setLocalVolume(v); onUpdate(track.id, { volume: v }); }} className="absolute inset-0 opacity-0 cursor-pointer" title={`Volume SFX: ${Math.round(localVolume * 100)}%`} />
-      </div>
-
-      <div className="absolute -top-2 -right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-20 bg-zinc-950 rounded-lg border border-white/10 p-1 shadow-xl">
-        <button onClick={() => setTimerOpen(!timerOpen)} className={`p-1 rounded hover:bg-white/5 ${intervalSec > 0 ? 'text-amber-400' : 'text-zinc-500 hover:text-amber-200'}`} title="Repetir a cada X segundos"><Clock size={12} /></button>
-        <TrackTypeSelector type="sfx" onChange={(newType) => onUpdate(track.id, { type: newType })} />
-        <button onClick={() => onDelete(track.id)} className="p-1 text-zinc-500 hover:text-red-400 rounded hover:bg-white/5"><Trash2 size={12} /></button>
-      </div>
-
-      {timerOpen && (
-          <div className="absolute top-full left-0 mt-2 z-30 bg-zinc-900 border border-white/10 rounded-lg p-2 shadow-xl w-32">
-              <div className="text-[10px] text-zinc-500 mb-1 uppercase font-bold">Repetir (seg)</div>
-              <input 
-                  type="number" 
-                  min="0" 
-                  value={intervalSec} 
-                  onChange={(e) => setIntervalSec(Number(e.target.value))} 
-                  className="w-full bg-black/50 border border-white/10 rounded px-2 py-1 text-xs text-white outline-none focus:border-amber-500" 
-                  placeholder="0 (Desligado)"
-                  autoFocus
-              />
-              <div className="text-[9px] text-zinc-600 mt-1">0 = Desligado</div>
-          </div>
-      )}
-    </div>
-  );
+// --- SFX GRID ---
+function SfxGrid({ tracks, masterVolume, onDelete, onUpdate }) {
+    return (
+        <div className="grid grid-cols-3 gap-2">
+            {tracks.map((track) => (
+                <SfxItem 
+                    key={track.id} 
+                    track={track} 
+                    masterVolume={masterVolume} 
+                    onDelete={onDelete} 
+                    onUpdate={onUpdate} 
+                />
+            ))}
+        </div>
+    );
 }
 
 // --- MIXER PRINCIPAL ---
 
-export default function Mixer({ playlist = [], onOpenGallery }) {
-  const { activeScene, fetchScenes } = useGameStore();
-  const sceneId = activeScene?.id;
-
-  const [masterAll, setMasterAll] = useState(1);
-  const [masterAmb, setMasterAmb] = useState(1);
-  const [masterMusic, setMasterMusic] = useState(1);
-  const [masterSfx, setMasterSfx] = useState(1);
+export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMusic, volSfx }) {
+  const { activeScene, updateTrack, addTrackToActiveScene, deleteTrack } = useGameStore();
   
-  // ESTADO DE COMANDO GLOBAL: { type: 'PLAY'|'PAUSE'|'STOP', id: Date.now() }
-  // O 'id' garante que o comando seja processado mesmo se for o mesmo tipo repetido
-  const [globalCommand, setGlobalCommand] = useState(null);
+  // Estado de Modo de Ambientação (Agora é a aba principal)
+  const [activeTab, setActiveTab] = useState('exploration'); // 'exploration' | 'combat' | 'victory'
 
-  const [isDragging, setIsDragging] = useState(false);
-  const fileInputRef = useRef(null);
-
-  const backgroundTracks = playlist.filter(t => t.type !== 'sfx');
-  const sfxTracks = playlist.filter(t => t.type === 'sfx');
-
-  const addTrack = async (file) => {
-    if (!sceneId) return;
-    const formData = new FormData(); formData.append('file', file);
-    try {
-        const res = await fetch(`${BACKEND_URL}/api/upload/audio`, { method: 'POST', body: formData });
-        if (res.ok) {
-            const { url, name } = await res.json();
-            const type = name.toLowerCase().includes('musica') ? 'musica' : (name.toLowerCase().includes('amb') ? 'ambiente' : 'sfx');
-            await fetch(`${BACKEND_URL}/api/scenes/${sceneId}/playlist`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: `track-${Date.now()}`, name, url, type, volume: 0.5 }) });
-            fetchScenes();
-        }
-    } catch (e) { console.error(e); }
-  };
-
-  const updateTrack = async (tid, data) => {
-      await fetch(`${BACKEND_URL}/api/scenes/${sceneId}/playlist/${tid}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-      if (data.type) fetchScenes();
-  };
-
-  const deleteTrack = async (tid) => {
-      if(!window.confirm('Remover faixa?')) return;
-      await fetch(`${BACKEND_URL}/api/scenes/${sceneId}/playlist/${tid}`, { method: 'DELETE' });
-      fetchScenes();
-  };
-
-  const handleAddFromGallery = async (url, name) => {
-      if (!sceneId) return;
-      await fetch(`${BACKEND_URL}/api/scenes/${sceneId}/playlist`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: `track-${Date.now()}`, name: name || 'Audio', url, type: 'sfx', volume: 0.5 }) });
-      fetchScenes();
-  };
-
-  const onDrop = (e) => { e.preventDefault(); setIsDragging(false); if (e.dataTransfer.files?.[0]) addTrack(e.dataTransfer.files[0]); };
-
-  // --- CONTROLES GLOBAIS ---
+  // Filtros
+  const musicTracks = useMemo(() => playlist.filter(t => t.type === 'musica'), [playlist]);
+  const sfxTracks = useMemo(() => playlist.filter(t => t.type === 'sfx'), [playlist]);
   
-  const triggerPlay = () => setGlobalCommand({ type: 'PLAY', id: Date.now() });
-  
-  const triggerPause = () => setGlobalCommand({ type: 'PAUSE', id: Date.now() });
+  // Filtra ambiente pelo modo ativo.
+  const currentAmbienceTracks = useMemo(() => 
+    playlist.filter(t => t.type === 'ambiente' && (t.ambienceMode === activeTab || (!t.ambienceMode && activeTab === 'exploration'))), 
+  [playlist, activeTab]);
 
-  const triggerStop = () => {
-      Howler.stop(); // Garante parada engine global
-      setGlobalCommand({ type: 'STOP', id: Date.now() });
+  // --- DRAG AND DROP HANDLERS ---
+  
+  const handleDrop = async (e, targetType, targetMode = null) => {
+      e.preventDefault();
+      const trackId = e.dataTransfer.getData('trackId');
+      
+      // Caso 1: Movendo faixa existente
+      if (trackId) {
+          const track = playlist.find(t => t.id === trackId);
+          if (track) {
+              const updates = { type: targetType };
+              if (targetType === 'ambiente') updates.ambienceMode = targetMode;
+              updateTrack(activeScene.id, trackId, updates);
+          }
+          return;
+      }
+
+      // Caso 2: Upload de novo arquivo
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          const file = e.dataTransfer.files[0];
+          const extraData = targetType === 'ambiente' ? { ambienceMode: targetMode } : {};
+          await addTrackToActiveScene(file, targetType, extraData);
+      }
+  };
+
+  const allowDrop = (e) => e.preventDefault();
+
+  // Handler para abrir a galeria interna
+  const handleAddTrack = (type, mode = null) => {
+      if (onOpenGallery) {
+          onOpenGallery(type, mode);
+      }
   };
 
   return (
-    <>
-      <input ref={fileInputRef} type="file" accept="audio/*" className="hidden" onChange={(e) => { if (e.target.files?.[0]) addTrack(e.target.files[0]); e.target.value = ''; }} />
-      
-      <div className={`h-full w-full bg-black/20 backdrop-blur-sm flex flex-col transition-all duration-300 ${isDragging ? 'bg-indigo-900/20' : ''}`} onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)} onDrop={onDrop}>
-        <div className="p-3 border-b border-white/5 bg-zinc-950/40 shrink-0">
-          <div className="flex items-center justify-between gap-4 mb-3">
-            <div className="flex items-center gap-2 text-xs font-black text-zinc-500 uppercase tracking-widest select-none">SoundRack</div>
-            <div className="flex items-center gap-1">
-                <button onClick={() => onOpenGallery && onOpenGallery(handleAddFromGallery)} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition" title="Galeria"><FolderOpen size={16} /></button>
-                <button onClick={() => fileInputRef.current?.click()} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition" title="Upload Local"><UploadCloud size={16} /></button>
-                
-                <div className="w-px h-4 bg-white/10 mx-1"></div>
-                
-                {/* BOTÕES DE CONTROLE GLOBAL */}
-                <button onClick={triggerPlay} className="p-2 text-emerald-500 hover:text-emerald-200 hover:bg-emerald-900/40 rounded-lg transition" title="Play All (Retomar)"><Play size={16} fill="currentColor" /></button>
-                <button onClick={triggerPause} className="p-2 text-amber-500 hover:text-amber-200 hover:bg-amber-900/40 rounded-lg transition" title="Pause All (Manter Posição)"><Pause size={16} fill="currentColor" /></button>
-                <button onClick={triggerStop} className="p-2 text-red-500 hover:text-red-200 hover:bg-red-900/40 rounded-lg transition" title="Stop All (Reiniciar do 0)"><Square size={16} fill="currentColor" /></button>
-            </div>
-          </div>
-
-          <div className="flex gap-2 p-3 bg-zinc-900/50 rounded-xl border border-white/5 justify-around items-center">
-            <SliderGroup label="Master" value={masterAll} setValue={setMasterAll} color="bg-red-500" />
-            <div className="w-px h-20 bg-white/5 mx-1"></div>
-            <SliderGroup label="Amb" value={masterAmb} setValue={setMasterAmb} color="bg-emerald-500" />
-            <SliderGroup label="Music" value={masterMusic} setValue={setMasterMusic} color="bg-indigo-500" />
-            <SliderGroup label="SFX" value={masterSfx} setValue={setMasterSfx} color="bg-amber-500" />
-          </div>
+    <div className="h-full flex flex-col bg-black/20 backdrop-blur-sm">
+        
+        {/* Header / Abas Principais */}
+        <div className="flex items-center p-2 gap-1 border-b border-white/5 bg-zinc-950/40 shrink-0">
+            {[
+                { id: 'exploration', icon: MapIcon, label: 'Exploração' },
+                { id: 'combat', icon: Swords, label: 'Combate' },
+                { id: 'victory', icon: Trophy, label: 'Vitória' }
+            ].map(mode => (
+                <button 
+                    key={mode.id}
+                    onClick={() => setActiveTab(mode.id)}
+                    className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-2 transition-all text-xs font-bold uppercase tracking-wide ${activeTab === mode.id ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/20' : 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300'}`}
+                >
+                    <mode.icon size={14} />
+                    <span className="hidden sm:inline">{mode.label}</span>
+                </button>
+            ))}
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto p-3 space-y-6 custom-scrollbar">
-          <div>
-            <div className="flex items-center gap-2 mb-3 text-xs font-bold text-zinc-500 uppercase select-none tracking-wider"><Wind size={14} /> Loops</div>
-            <div className="flex flex-col gap-2">
-              {backgroundTracks.map((track) => (
-                <BackgroundTrack 
-                    key={track.id} 
-                    track={track} 
-                    masterVolume={(track.type === 'musica' ? masterMusic : masterAmb) * masterAll} 
-                    onUpdate={updateTrack} 
-                    onDelete={deleteTrack} 
-                    globalCommand={globalCommand}
-                />
-              ))}
-              {backgroundTracks.length === 0 && <div className="text-xs text-zinc-700 italic text-center py-4 border border-dashed border-zinc-800 rounded-lg">Arraste arquivos aqui</div>}
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-6">
+            
+            {/* SEÇÃO 1: AMBIENTE (Filtrado pela Aba) */}
+            <div 
+                className="space-y-2"
+                onDragOver={allowDrop} 
+                onDrop={(e) => handleDrop(e, 'ambiente', activeTab)}
+            >
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-bold text-emerald-500 uppercase tracking-wider">
+                        <Wind size={14} /> Ambiente ({activeTab})
+                        <button onClick={() => handleAddTrack('ambiente', activeTab)} className="p-1 hover:bg-emerald-500/20 rounded text-emerald-400" title="Adicionar arquivo"><Plus size={14} /></button>
+                    </div>
+                </div>
+                
+                <div className="space-y-2 min-h-[60px] bg-emerald-900/5 rounded-lg p-2 border border-emerald-500/10 border-dashed">
+                    {currentAmbienceTracks.map(track => (
+                        <AmbienceTrack key={track.id} track={track} masterVolume={volAmbience} onDelete={(id) => deleteTrack(activeScene.id, id)} />
+                    ))}
+                    {currentAmbienceTracks.length === 0 && (
+                        <div className="text-center text-[10px] text-zinc-600 py-2">Arraste ou clique + para adicionar</div>
+                    )}
+                </div>
             </div>
-          </div>
-          
-          <div>
-            <div className="flex items-center gap-2 mb-3 text-xs font-bold text-zinc-500 uppercase select-none tracking-wider"><Zap size={14} /> SFX (Shift+N)</div>
-            <div className="flex gap-3 flex-wrap">
-              {sfxTracks.map((track, idx) => (
-                <SfxButton key={track.id} track={track} shortcutIndex={idx} masterVolume={masterSfx * masterAll} onUpdate={updateTrack} onDelete={deleteTrack} />
-              ))}
+
+            {/* SEÇÃO 2: MÚSICA (Global) */}
+            <div 
+                className="space-y-2"
+                onDragOver={allowDrop} 
+                onDrop={(e) => handleDrop(e, 'musica')}
+            >
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-bold text-indigo-400 uppercase tracking-wider">
+                        <Music size={14} /> Playlist
+                        <button onClick={() => handleAddTrack('musica')} className="p-1 hover:bg-indigo-500/20 rounded text-indigo-400" title="Adicionar arquivo"><Plus size={14} /></button>
+                    </div>
+                </div>
+                <div className="bg-indigo-900/5 rounded-lg p-2 border border-indigo-500/10 border-dashed min-h-[100px]">
+                    <MusicPlayer tracks={musicTracks} masterVolume={volMusic} onUpdate={updateTrack} onDelete={(id) => deleteTrack(activeScene.id, id)} />
+                </div>
             </div>
-          </div>
+
+            {/* SEÇÃO 3: SFX (Global) */}
+            <div 
+                className="space-y-2"
+                onDragOver={allowDrop} 
+                onDrop={(e) => handleDrop(e, 'sfx')}
+            >
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
+                        <Zap size={14} /> Efeitos
+                        <button onClick={() => handleAddTrack('sfx')} className="p-1 hover:bg-amber-500/20 rounded text-amber-400" title="Adicionar arquivo"><Plus size={14} /></button>
+                    </div>
+                </div>
+                <div className="bg-amber-900/5 rounded-lg p-2 border border-amber-500/10 border-dashed min-h-[100px]">
+                    <SfxGrid tracks={sfxTracks} masterVolume={volSfx} onDelete={(id) => deleteTrack(activeScene.id, id)} onUpdate={(tid, data) => updateTrack(activeScene.id, tid, data)} />
+                    {sfxTracks.length === 0 && <div className="text-center text-[10px] text-zinc-600 py-4">Arraste ou clique + para adicionar</div>}
+                </div>
+            </div>
+
         </div>
-      </div>
-    </>
+    </div>
   );
 }

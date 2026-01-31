@@ -384,7 +384,7 @@ export const useGameStore = create((set, get) => ({
 
   // --- AUDIO / TRACKS ---
 
-  addTrackToActiveScene: async (file, type = 'ambiente') => {
+  addTrackToActiveScene: async (file, type = 'ambiente', extraData = {}) => {
     const { activeScene } = get();
     if (!activeScene) return;
 
@@ -405,6 +405,7 @@ export const useGameStore = create((set, get) => ({
       url: uploaded.url,
       type, // 'ambiente', 'musica', 'sfx'
       volume: 0.5,
+      ...extraData
     };
 
     const res = await fetch(`${API_URL}/scenes/${activeScene.id}/playlist`, {
@@ -414,6 +415,34 @@ export const useGameStore = create((set, get) => ({
     });
     
     // Atualiza estado local
+    const playlist = await res.json();
+    const updatedScene = { ...activeScene, playlist };
+    
+    set((state) => ({
+       activeScene: updatedScene,
+       scenes: state.scenes.map(s => s.id === activeScene.id ? updatedScene : s)
+    }));
+  },
+
+  addTrackFromUrl: async (trackData) => {
+    const { activeScene } = get();
+    if (!activeScene) return;
+
+    const track = {
+      id: `track-${Date.now()}`,
+      name: trackData.name,
+      url: trackData.url,
+      type: trackData.type || 'ambiente',
+      volume: 0.5,
+      ...trackData.extraData
+    };
+
+    const res = await fetch(`${API_URL}/scenes/${activeScene.id}/playlist`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(track)
+    });
+    
     const playlist = await res.json();
     const updatedScene = { ...activeScene, playlist };
     
