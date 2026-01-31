@@ -5,6 +5,7 @@ import {
   Loader2, Plus, Trash2, Edit2, Upload, Map as MapIcon, Link as LinkIcon, 
   FolderOpen, Image as ImageIcon, Upload as UploadIcon, Users, Skull
 } from 'lucide-react';
+import { BookOpen } from 'lucide-react'; // Novo ícone
 
 // Hooks e Stores
 import { useGameStore } from './store';
@@ -19,6 +20,7 @@ import MobCard from './MobCard';
 import Mixer from './Mixer';
 import MediaGallery from './MediaGallery';
 import PresetsManager from './PresetsManager';
+import Compendium from './components/Compendium'; // Importar Compendium
 import { CONDITIONS, getImageUrl, BACKEND_URL } from './constants';
 
 export default function App() {
@@ -62,6 +64,9 @@ export default function App() {
   const [presetsOpen, setPresetsOpen] = useState(false);
   const [presetsType, setPresetsType] = useState('mobs');
   const [presetsCallback, setPresetsCallback] = useState(null);
+
+  // Estado do Compêndio
+  const [compendiumOpen, setCompendiumOpen] = useState(false);
 
   // Estados de loading local
   const [isCreating, setIsCreating] = useState(false);
@@ -442,6 +447,17 @@ export default function App() {
         </div>
       </div>
 
+      {/* Botão Flutuante do Compêndio */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <button 
+            onClick={() => setCompendiumOpen(true)} 
+            className="h-14 w-14 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white shadow-2xl shadow-indigo-900/50 flex items-center justify-center transition-all hover:scale-110 border-2 border-indigo-400"
+            title="Abrir Compêndio (Magias e Ações)"
+        >
+            <BookOpen size={24} />
+        </button>
+      </div>
+
       {/* --- MODAIS --- */}
       
       {/* 1. Criar Cena */}
@@ -552,6 +568,7 @@ export default function App() {
 
       <MediaGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} type={galleryType} onSelect={(url, name) => { galleryCallback?.(url, name); setGalleryOpen(false); }} />
       <PresetsManager open={presetsOpen} onClose={() => setPresetsOpen(false)} type={presetsType} onUse={(p) => { presetsCallback?.(p); setPresetsOpen(false); }} />
+      <Compendium open={compendiumOpen} onClose={() => setCompendiumOpen(false)} />
     </div>
   );
 }

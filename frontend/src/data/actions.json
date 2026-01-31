@@ -1,0 +1,80 @@
+[
+  {
+    "nome": "Impulso",
+    "nome_ingles": "Dash",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você dobra sua velocidade neste turno. Pode ser usada em movimento corpo a corpo ou à distância."
+  },
+  {
+    "nome": "Desengajar",
+    "nome_ingles": "Disengage",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você desengaja do combate. Seu movimento neste turno não provoca ataques de oportunidade de criaturas que você possa ver."
+  },
+  {
+    "nome": "Esquiva",
+    "nome_ingles": "Dodge",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você tenta evitar ataques. Ataques contra você até o início do seu próximo turno têm desvantagem, e testes de resistência contra efeitos que você vê têm vantagem."
+  },
+  {
+    "nome": "Escape",
+    "nome_ingles": "Escape",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você tenta se libertar de um agarrão ou restrição. Faz um teste de Força (Atletismo) ou Destreza (Acrobacia) oposto ao teste de Força do inimigo."
+  },
+  {
+    "nome": "Agarrar",
+    "nome_ingles": "Grapple",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você realiza um ataque corpo a corpo especial para agarrar uma criatura. Se acertar, a criatura fica agarrada até você soltá‑la ou o efeito terminar."
+  },
+  {
+    "nome": "Ajuda",
+    "nome_ingles": "Help",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você ajuda um aliado. A criatura recebe vantagem em um teste de habilidade ou em uma jogada de ataque feito antes do fim do próximo turno dela."
+  },
+  {
+    "nome": "Esconder‑se",
+    "nome_ingles": "Hide",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você tenta se esconder. Faz um teste de Destreza (Furtividade). Se tiver sucesso, você fica oculto até ser descoberto ou revelar sua posição."
+  },
+  {
+    "nome": "Pronto",
+    "nome_ingles": "Ready",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você prepara uma ação ou movimento para ocorrer como reação quando um gatilho específico acontecer. Se o gatilho ocorrer, você pode usar sua reação para realizar a ação ou mover‑se."
+  },
+  {
+    "nome": "Pesquisa",
+    "nome_ingles": "Search",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você procura por algo em uma área ou em um objeto. Faz um teste de Percepção ou Investigação, conforme o mestre decidir."
+  },
+  {
+    "nome": "Empurrão",
+    "nome_ingles": "Shove",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você faz um ataque corpo a corpo especial para empurrar uma criatura. Se acertar, você pode empurrar a criatura 1,5 m ou derrubá‑la no chão."
+  },
+  {
+    "nome": "Estabilizar",
+    "nome_ingles": "Stabilize a Dying Creature",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você tenta estabilizar uma criatura com 0 pontos de vida. Faz um teste de Medicina CD 10; se usar um kit de curandeiro, o sucesso é automático. A criatura não faz testes de morte enquanto estiver estabilizada."
+  },
+  {
+    "nome": "Usar Poção",
+    "nome_ingles": "Use a Potion",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você bebe ou administra uma poção a si mesmo ou a outra criatura. Normalmente é uma ação, a menos que o item diga o contrário."
+  },
+  {
+    "nome": "Usar Escudo",
+    "nome_ingles": "Don or Doff a Shield",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você equipa ou remove um escudo. Equipar um escudo exige uma ação, e remover também, a menos que uma habilidade ou regra específica diga o contrário."
+  }
+]
