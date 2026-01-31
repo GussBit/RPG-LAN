@@ -329,7 +329,6 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
   if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
 
   const token = Math.random().toString(36).substring(2, 15);
-  const safeName = (player.playerName || 'player').toLowerCase().replace(/\s+/g, '-');
   
   // --- GLOBAL PRESET SYNC (LOAD) ---
   // Verifica se existe um preset global para carregar o estado atual (HP, Condições)
@@ -355,7 +354,7 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
     photo: baseData.photo,
     maxHp: baseData.maxHp,
     currentHp: baseData.currentHp,
-    accessUrl: `/p/${safeName}-${token}`,
+    accessUrl: `/p/${token}`,
     accessToken: token,
     conditions: baseData.conditions,
     inventory: baseData.inventory,

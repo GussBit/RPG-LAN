@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Heart, Shield, Loader2, AlertCircle, ArrowLeft,
   ArrowDownCircle, Link as LinkIcon, ZapOff, Skull,
-  FlaskConical, Ghost, Heart as HeartIcon, EyeOff, Cloud, Moon, Timer, BookOpen, Backpack, Scroll, Trash2, User
+  FlaskConical, Ghost, Heart as HeartIcon, EyeOff, Cloud, Moon, Timer, BookOpen, Backpack, Scroll, Trash2, User, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,6 +23,109 @@ const CONDITIONS = [
     { id: 'unconscious', icon: Moon, color: 'bg-indigo-500', label: 'Inconsciente' },
     { id: 'exhausted', icon: Timer, color: 'bg-orange-500', label: 'Exausto' },
 ];
+
+// Componente de Card de Item Compacto
+function InventoryItemCard({ item, index, onRemove }) {
+    const [expanded, setExpanded] = useState(false);
+    
+    // Extrai primeira linha de características (tipo, nível, escola)
+    const firstCharLine = item.caracteristicas?.split('\n')[0] || '';
+    
+    return (
+        <div className="bg-zinc-900/80 border border-white/10 rounded-xl overflow-hidden hover:border-indigo-500/30 transition-all group">
+            {/* Header Compacto - Sempre Visível */}
+            <div className="p-3 sm:p-4">
+                <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-bold text-zinc-200 text-sm sm:text-base truncate">
+                                {item.nome}
+                            </h3>
+                            {item.nome_ingles && (
+                                <span className="text-[10px] text-indigo-400/60 font-mono hidden sm:inline">
+                                    {item.nome_ingles}
+                                </span>
+                            )}
+                        </div>
+                        
+                        {/* Tags de Características */}
+                        {firstCharLine && (
+                            <div className="flex flex-wrap gap-1 mb-2">
+                                {firstCharLine.split(',').slice(0, 3).map((tag, i) => (
+                                    <span 
+                                        key={i} 
+                                        className="text-[9px] sm:text-[10px] px-2 py-0.5 bg-indigo-500/10 text-indigo-300 rounded-full border border-indigo-500/20"
+                                    >
+                                        {tag.trim()}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    
+                    {/* Botões de Ação */}
+                    <div className="flex gap-1 shrink-0">
+                        <button
+                            onClick={() => setExpanded(!expanded)}
+                            className="p-2 text-zinc-400 hover:text-indigo-400 hover:bg-indigo-500/10 rounded-lg transition-colors"
+                            title={expanded ? 'Recolher' : 'Ver Mais'}
+                        >
+                            {expanded ? (
+                                <ChevronUp size={16} className="sm:w-[18px] sm:h-[18px]" />
+                            ) : (
+                                <ChevronDown size={16} className="sm:w-[18px] sm:h-[18px]" />
+                            )}
+                        </button>
+                        <button
+                            onClick={() => onRemove(index)}
+                            className="p-2 text-zinc-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                            title="Remover"
+                        >
+                            <Trash2 size={14} className="sm:w-4 sm:h-4" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            {/* Detalhes Expandíveis */}
+            {expanded && (
+                <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-0 border-t border-white/5 animate-in slide-in-from-top-2 duration-200">
+                    {/* Nome em Inglês (mobile) */}
+                    {item.nome_ingles && (
+                        <div className="text-[10px] text-indigo-400/80 font-mono mb-3 sm:hidden">
+                            {item.nome_ingles}
+                        </div>
+                    )}
+                    
+                    {/* Características Completas */}
+                    {item.caracteristicas && (
+                        <div className="bg-black/20 rounded-lg p-2 sm:p-3 mb-3 space-y-1">
+                            {item.caracteristicas.split('\n').slice(1).map((line, i) => {
+                                const [key, val] = line.split(':');
+                                if (!val) return null;
+                                return (
+                                    <div key={i} className="flex items-start gap-2 text-[10px] sm:text-xs">
+                                        <span className="font-bold text-zinc-500 uppercase tracking-wide min-w-[80px] shrink-0">
+                                            {key.trim()}
+                                        </span>
+                                        <span className="text-zinc-300">
+                                            {val.trim()}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                    
+                    {/* Descrição */}
+                    <div className="text-xs sm:text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-950/50 rounded-lg p-3 border-l-2 border-indigo-500/30">
+                        {item.descricao}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
 
 export default function PlayerPrivateView() {
     const { token } = useParams();
@@ -123,7 +226,8 @@ export default function PlayerPrivateView() {
 
     const handleRemoveFromInventory = async (index) => {
         if (!data) return;
-        if (!window.confirm('Remover este item?')) return;
+        const itemName = data.player.inventory[index]?.nome || 'este item';
+        if (!window.confirm(`Remover "${itemName}"?`)) return;
         
         const newInventory = (data.player.inventory || []).filter((_, i) => i !== index);
         try {
@@ -181,6 +285,8 @@ export default function PlayerPrivateView() {
     const hpPercent = (player.currentHp / player.maxHp) * 100;
     const isLowHp = hpPercent < 30;
     const isMediumHp = hpPercent >= 30 && hpPercent < 70;
+    const conditions = player.conditions || [];
+    const isDead = player.currentHp <= 0;
 
     return (
         <div className="min-h-screen bg-zinc-950 relative overflow-hidden pb-16">
@@ -213,19 +319,18 @@ export default function PlayerPrivateView() {
                             {/* Card do Personagem */}
                             <div
                                 className={`bg-zinc-900/60 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl transition-all ${
-                                    (player.conditions || []).includes('prone') ? 'transform rotate-[-2deg]' : ''
+                                    isDead ? 'grayscale brightness-50 border-red-900' : ''
                                 } ${
-                                    (player.conditions || []).includes('invisible') ? 'opacity-50' : ''
+                                    conditions.includes('prone') ? 'transform rotate-3 scale-95 opacity-90' : ''
                                 } ${
-                                    (player.conditions || []).includes('unconscious') ? 'brightness-50' : ''
+                                    conditions.includes('invisible') ? 'opacity-40 border-dashed border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.3)]' : ''
                                 } ${
-                                    (player.conditions || []).includes('paralyzed') ? 'grayscale' : ''
+                                    conditions.includes('charmed') ? 'border-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.5)]' : ''
                                 } ${
-                                    (player.conditions || []).includes('frightened') ? 'animate-pulse' : ''
+                                    conditions.includes('frightened') ? 'border-purple-500 animate-pulse' : ''
+                                } ${
+                                    conditions.includes('paralyzed') ? 'contrast-150 brightness-125 grayscale' : ''
                                 }`}
-                                style={{
-                                    filter: (player.conditions || []).includes('blinded') ? 'blur(2px)' : 'none'
-                                }}
                             >
                                 {/* Foto - Reduzida */}
                                 <div className="h-64 sm:h-80 relative bg-gradient-to-br from-indigo-500/20 via-zinc-900/50 to-purple-500/20">
@@ -233,13 +338,22 @@ export default function PlayerPrivateView() {
                                         <img
                                             src={player.photo}
                                             alt={player.characterName}
-                                            className="absolute inset-0 w-full h-full object-cover"
+                                            className={`absolute inset-0 w-full h-full object-cover ${
+                                                conditions.includes('blinded') ? 'brightness-[0.2] blur-[1px] grayscale' : ''
+                                            } ${
+                                                conditions.includes('restrained') ? 'border-4 border-dashed border-zinc-600' : ''
+                                            }`}
                                         />
                                     ) : (
                                         <div className="absolute inset-0 flex items-center justify-center">
                                             <Shield className="w-20 h-20 sm:w-24 sm:h-24 text-zinc-700" />
                                         </div>
                                     )}
+                                    
+                                    {/* Overlays de Imagem */}
+                                    {conditions.includes('poisoned') && <div className="absolute inset-0 bg-green-500/30 animate-pulse pointer-events-none" />}
+                                    {conditions.includes('charmed') && <div className="absolute inset-0 bg-pink-500/20 animate-pulse pointer-events-none" />}
+                                    
                                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
                                 </div>
 
@@ -394,68 +508,47 @@ export default function PlayerPrivateView() {
                         </div>
                     ) : (
                         <div className="w-full max-w-2xl mx-auto animate-in fade-in duration-300">
-                            <div className="flex items-center justify-between mb-3 px-1">
-                                <h2 className="text-lg sm:text-xl font-bold text-zinc-100 flex items-center gap-2">
-                                    <Scroll size={18} className="text-indigo-400 sm:w-5 sm:h-5"/> 
-                                    Grimório & Habilidades
-                                </h2>
+                            {/* Header do Inventário */}
+                            <div className="flex items-center justify-between mb-4 px-1">
+                                <div>
+                                    <h2 className="text-lg sm:text-xl font-bold text-zinc-100 flex items-center gap-2">
+                                        <Scroll size={18} className="text-indigo-400 sm:w-5 sm:h-5"/> 
+                                        Grimório & Habilidades
+                                    </h2>
+                                    <p className="text-[10px] sm:text-xs text-zinc-500 mt-0.5">
+                                        {(player.inventory || []).length} {(player.inventory || []).length === 1 ? 'item' : 'itens'}
+                                    </p>
+                                </div>
                                 <button 
                                     onClick={() => setCompendiumOpen(true)} 
-                                    className="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg transition-colors"
+                                    className="text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 rounded-lg transition-colors font-bold flex items-center gap-1.5"
                                 >
-                                    + Adicionar
+                                    <Scroll size={14} />
+                                    Adicionar
                                 </button>
                             </div>
                             
-                            <div className="space-y-2 sm:space-y-3">
+                            {/* Lista de Itens Compacta */}
+                            <div className="space-y-2">
                                 {(player.inventory || []).length === 0 && (
-                                    <div className="text-center text-zinc-600 py-8 sm:py-10 border-2 border-dashed border-zinc-800 rounded-xl text-xs sm:text-sm">
-                                        Seu inventário está vazio.<br/>Abra o compêndio para adicionar magias.
+                                    <div className="text-center text-zinc-600 py-12 sm:py-16 border-2 border-dashed border-zinc-800 rounded-xl">
+                                        <Backpack className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 opacity-20" />
+                                        <p className="text-xs sm:text-sm">Seu inventário está vazio</p>
+                                        <p className="text-[10px] sm:text-xs text-zinc-700 mt-1">
+                                            Abra o compêndio para adicionar magias
+                                        </p>
                                     </div>
                                 )}
+                                
                                 {(player.inventory || []).map((item, idx) => (
-                                    <div key={idx} className="bg-zinc-900/80 border border-white/5 p-3 sm:p-4 rounded-xl relative group hover:border-indigo-500/30 transition-colors space-y-2">
-                                        <div className="pr-7">
-                                            <div className="font-bold text-zinc-200 text-base sm:text-lg">{item.nome}</div>
-                                            <div className="text-[10px] sm:text-xs text-indigo-400 mb-1.5 font-mono">{item.nome_ingles || ''}</div>
-                                            {item.caracteristicas && (
-                                                <div className="text-[10px] sm:text-xs text-zinc-400 border-l-2 border-indigo-500/30 pl-2 sm:pl-3 mb-2 space-y-0.5">
-                                                    {item.caracteristicas.split('\n').map((line, i) => (
-                                                        <div key={i}>
-                                                            <span className="font-bold text-zinc-500">{line.split(':')[0]}:</span>
-                                                            <span className="ml-1">{line.split(':')[1]}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            <div className="text-xs sm:text-sm text-zinc-300 whitespace-pre-wrap leading-relaxed">{item.descricao}</div>
-                                        </div>
-                                        <button 
-                                            onClick={() => handleRemoveFromInventory(idx)} 
-                                            className="absolute top-2 right-2 text-zinc-600 hover:text-red-400 p-1 rounded transition-colors"
-                                        >
-                                            <Trash2 size={14} className="sm:w-4 sm:h-4" />
-                                        </button>
-                                    </div>
+                                    <InventoryItemCard
+                                        key={idx}
+                                        item={item}
+                                        index={idx}
+                                        onRemove={handleRemoveFromInventory}
+                                    />
                                 ))}
                             </div>
-                        </div>
-                    )}
-
-                    {/* Efeitos Especiais */}
-                    {(player.conditions || []).includes('restrained') && (
-                        <div className="absolute inset-0 pointer-events-none">
-                            <div className="absolute inset-0 border-4 border-dashed border-zinc-500/50 animate-spin rounded-2xl sm:rounded-3xl" style={{ animationDuration: '8s' }} />
-                        </div>
-                    )}
-
-                    {(player.conditions || []).includes('poisoned') && (
-                        <div className="absolute bottom-0 left-0 right-0 h-20 sm:h-24 bg-gradient-to-t from-green-500/40 to-transparent pointer-events-none animate-pulse rounded-b-2xl sm:rounded-b-3xl" />
-                    )}
-
-                    {(player.conditions || []).includes('charmed') && (
-                        <div className="absolute inset-0 pointer-events-none rounded-2xl sm:rounded-3xl">
-                            <div className="absolute inset-0 bg-pink-500/10 animate-pulse rounded-2xl sm:rounded-3xl" />
                         </div>
                     )}
                 </main>
@@ -475,12 +568,17 @@ export default function PlayerPrivateView() {
                     </button>
                     <button 
                         onClick={() => setViewMode('inventory')} 
-                        className={`flex flex-col items-center justify-center gap-0.5 sm:gap-1 transition-colors w-full h-full ${
+                        className={`flex flex-col items-center justify-center gap-0.5 sm:gap-1 transition-colors w-full h-full relative ${
                             viewMode === 'inventory' ? 'text-indigo-400' : 'text-zinc-500 hover:text-zinc-300'
                         }`}
                     >
                         <Backpack size={18} className="sm:w-5 sm:h-5" />
                         <span className="text-[9px] sm:text-[10px] font-bold">Inventário</span>
+                        {(player.inventory || []).length > 0 && (
+                            <span className="absolute top-1 right-1/4 h-4 w-4 bg-indigo-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center">
+                                {(player.inventory || []).length}
+                            </span>
+                        )}
                     </button>
                     <button 
                         onClick={() => setCompendiumOpen(true)} 

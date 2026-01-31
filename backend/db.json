@@ -5,60 +5,42 @@
       "background": "/images/img-1768083732380.webp",
       "mobs": [
         {
-          "id": "mob-1768088699588",
-          "name": "asdsa",
-          "color": "red",
-          "maxHp": 10,
-          "currentHp": 5,
-          "damageDice": "1d6",
-          "toHit": 0,
-          "image": "/images/img-1768088706074.webp",
-          "conditions": [
-            "invisible"
-          ]
-        },
-        {
-          "id": "mob-1769871068630",
-          "name": "teste",
+          "id": "mob-1769897187038",
+          "name": "Testesws",
           "color": "red",
           "maxHp": 10,
           "currentHp": 10,
           "damageDice": "1d6",
           "toHit": 0,
-          "image": "/images/img-1768083732380.webp",
-          "conditions": []
+          "image": null,
+          "conditions": [
+            "incapacitated",
+            "prone",
+            "unconscious"
+          ]
         }
       ],
       "playlist": [
         {
-          "id": "track-1769871831305",
-          "name": "powerful-cannon-shot-352459-31-01-2026.mp3",
-          "url": "/audio/powerful-cannon-shot-352459-31-01-2026.mp3",
-          "type": "sfx",
-          "volume": 0.7,
-          "ambienceMode": "exploration",
-          "pulseActive": false,
-          "pulseInterval": 3
-        },
-        {
-          "id": "track-1769871927427",
-          "name": "Final Fantasy 13 OST Orphan Phase 1 Theme ( Born Anew ).mp3",
-          "url": "/audio/Final Fantasy 13 OST Orphan Phase 1 Theme ( Born Anew ).mp3",
+          "id": "track-1769898276023",
+          "name": "Epiphany.mp3",
+          "url": "/audio/Epiphany.mp3",
           "type": "ambiente",
-          "volume": 0.15,
+          "volume": 0.5,
           "ambienceMode": "exploration"
         },
         {
-          "id": "track-1769882618804",
-          "name": "Bloodborne Soundtrack OST - Lady Maria (The Old Hunters).mp3",
-          "url": "/audio/Bloodborne Soundtrack OST - Lady Maria (The Old Hunters).mp3",
-          "type": "musica",
-          "volume": 0.5
+          "id": "track-1769898278957",
+          "name": "powerful-cannon-shot-352459.mp3",
+          "url": "/audio/powerful-cannon-shot-352459.mp3",
+          "type": "sfx",
+          "volume": 0.5,
+          "ambienceMode": "exploration"
         },
         {
-          "id": "track-1769883287702",
-          "name": "The Plagues (Prince of Egypt) - Cover by Caleb Hyles and Jonathan Young.mp3",
-          "url": "/audio/The Plagues (Prince of Egypt) - Cover by Caleb Hyles and Jonathan Young.mp3",
+          "id": "track-1769899045822",
+          "name": "Carl Orff - O Fortuna ~ Carmina Burana.mp3",
+          "url": "/audio/Carl Orff - O Fortuna ~ Carmina Burana.mp3",
           "type": "musica",
           "volume": 0.5
         }
@@ -70,15 +52,10 @@
           "characterName": "Paragon",
           "photo": "",
           "maxHp": 50,
-          "currentHp": 46,
+          "currentHp": 10,
           "accessUrl": "/p/gustavo-ttzrmwsb9b",
           "accessToken": "ttzrmwsb9b",
-          "conditions": [
-            "poisoned",
-            "frightened",
-            "incapacitated",
-            "restrained"
-          ],
+          "conditions": [],
           "inventory": [
             {
               "nome": "Amigos",
@@ -91,6 +68,41 @@
               "nome_ingles": "Heroism",
               "caracteristicas": "1º Círculo, Encantamento (Bardo, Paladino)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
               "descricao": "Você toca uma criatura voluntária que torna-se imbuída de bravura. Enquanto a magia durar, o alvo está imune a ser amedrontado e ganha uma quantidade de pontos de vida temporários igual ao seu modificador do atributo de conjuração, no início de cada um dos turnos dela. Quando a magia terminar, o alvo perde quaisquer pontos de vida temporários remanescentes derivados desta magia.\nLivro do Jogador (PHB), p. 248 (250)"
+            }
+          ]
+        },
+        {
+          "id": "player-1769897182081",
+          "playerName": "tuss",
+          "characterName": "bers",
+          "photo": "/images/img-1768083732380.webp",
+          "maxHp": 20,
+          "currentHp": 15,
+          "accessUrl": "/p/tus-7imp87475e2",
+          "accessToken": "7imp87475e2",
+          "conditions": [],
+          "inventory": []
+        },
+        {
+          "id": "player-1769900254094",
+          "playerName": "ohj",
+          "characterName": "asd",
+          "photo": "",
+          "maxHp": 20,
+          "currentHp": 20,
+          "accessUrl": "/p/0urk5fhp6wjg",
+          "accessToken": "0urk5fhp6wjg",
+          "conditions": [],
+          "inventory": [
+            {
+              "nome": "Cura Completa",
+              "nome_ingles": "Heal",
+              "caracteristicas": "6º Círculo, Evocação (Clérigo, Druida)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Instantânea",
+              "descricao": "Escolha uma criatura à sua vista e no alcance da magia. Uma onda de energia positiva a preenche, fazendo com que recupere 70 pontos de vida. Esta magia também põe fim a cegueira, surdez ou a qualquer doença que afete o alvo. Esta magia não tem efeito sobre constructos ou mortos-vivos.\nLivro do Jogador (PHB), p. 233 (250)"
+            },
+            {
+              "nome": "AÇÃO ARDILOSA",
+              "descricao": "A partir do 2º nível, seu pensamento rápido e agilidade faz você se mover e agir rapidamente. Você pode usar uma ação bônus durante cada um de seus turnos em combate. Esta ação pode ser usada somente para Disparada, Desengajar ou Esconder."
             }
           ]
         }
@@ -171,14 +183,15 @@
         },
         {
           "id": "player-1769872870258",
-          "playerName": "tus",
+          "playerName": "tuss",
           "characterName": "ber",
           "photo": "/images/img-1768083732380.webp",
           "maxHp": 20,
           "currentHp": 20,
           "accessUrl": "/p/tus-ksmftnta0yk",
           "accessToken": "ksmftnta0yk",
-          "conditions": []
+          "conditions": [],
+          "inventory": []
         }
       ]
     }
@@ -248,24 +261,20 @@
       {
         "id": "preset-player-1769872845803",
         "characterName": "ber",
-        "playerName": "tus",
+        "playerName": "tuss",
         "maxHp": 20,
         "currentHp": 20,
         "conditions": [],
         "photo": "/images/img-1768083732380.webp",
-        "createdAt": "2026-01-31T15:20:45.803Z"
+        "createdAt": "2026-01-31T15:20:45.803Z",
+        "inventory": []
       },
       {
         "id": "preset-player-1769883643901",
         "characterName": "Paragon",
         "maxHp": 50,
-        "currentHp": 46,
-        "conditions": [
-          "poisoned",
-          "frightened",
-          "incapacitated",
-          "restrained"
-        ],
+        "currentHp": 10,
+        "conditions": [],
         "photo": "",
         "playerName": "Gustavo",
         "createdAt": "2026-01-31T18:20:43.901Z",
@@ -283,6 +292,39 @@
             "descricao": "Você toca uma criatura voluntária que torna-se imbuída de bravura. Enquanto a magia durar, o alvo está imune a ser amedrontado e ganha uma quantidade de pontos de vida temporários igual ao seu modificador do atributo de conjuração, no início de cada um dos turnos dela. Quando a magia terminar, o alvo perde quaisquer pontos de vida temporários remanescentes derivados desta magia.\nLivro do Jogador (PHB), p. 248 (250)"
           }
         ]
+      },
+      {
+        "id": "preset-player-1769897208367",
+        "characterName": "bers",
+        "maxHp": 20,
+        "currentHp": 15,
+        "conditions": [],
+        "inventory": [],
+        "photo": "/images/img-1768083732380.webp",
+        "playerName": "tuss",
+        "createdAt": "2026-01-31T22:06:48.367Z"
+      },
+      {
+        "id": "preset-player-1769900254094",
+        "characterName": "asd",
+        "playerName": "ohj",
+        "maxHp": 20,
+        "currentHp": 20,
+        "conditions": [],
+        "inventory": [
+          {
+            "nome": "Cura Completa",
+            "nome_ingles": "Heal",
+            "caracteristicas": "6º Círculo, Evocação (Clérigo, Druida)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Instantânea",
+            "descricao": "Escolha uma criatura à sua vista e no alcance da magia. Uma onda de energia positiva a preenche, fazendo com que recupere 70 pontos de vida. Esta magia também põe fim a cegueira, surdez ou a qualquer doença que afete o alvo. Esta magia não tem efeito sobre constructos ou mortos-vivos.\nLivro do Jogador (PHB), p. 233 (250)"
+          },
+          {
+            "nome": "AÇÃO ARDILOSA",
+            "descricao": "A partir do 2º nível, seu pensamento rápido e agilidade faz você se mover e agir rapidamente. Você pode usar uma ação bônus durante cada um de seus turnos em combate. Esta ação pode ser usada somente para Disparada, Desengajar ou Esconder."
+          }
+        ],
+        "photo": "",
+        "createdAt": "2026-01-31T22:57:34.094Z"
       }
     ],
     "player": [
