@@ -1,0 +1,249 @@
+{
+  "scenes": [
+    {
+      "id": "cena-1",
+      "background": "/images/img-1768083732380.webp",
+      "mobs": [
+        {
+          "id": "mob-1768088273141",
+          "name": "as",
+          "color": "red",
+          "maxHp": 10,
+          "currentHp": 10,
+          "damageDice": "1d6",
+          "toHit": 0,
+          "image": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
+          "conditions": []
+        },
+        {
+          "id": "mob-1768088699588",
+          "name": "asdsa",
+          "color": "red",
+          "maxHp": 10,
+          "currentHp": 10,
+          "damageDice": "1d6",
+          "toHit": 0,
+          "image": "/images/img-1768088706074.webp",
+          "conditions": []
+        },
+        {
+          "id": "mob-1769871068630",
+          "name": "teste",
+          "color": "red",
+          "maxHp": 10,
+          "currentHp": 10,
+          "damageDice": "1d6",
+          "toHit": 0,
+          "image": "/images/img-1768083732380.webp",
+          "conditions": []
+        }
+      ],
+      "playlist": [
+        {
+          "id": "track-1769871831305",
+          "name": "powerful-cannon-shot-352459-31-01-2026.mp3",
+          "url": "/audio/powerful-cannon-shot-352459-31-01-2026.mp3",
+          "type": "sfx",
+          "volume": 0.5
+        },
+        {
+          "id": "track-1769871927427",
+          "name": "Final Fantasy 13 OST Orphan Phase 1 Theme ( Born Anew ).mp3",
+          "url": "/audio/Final Fantasy 13 OST Orphan Phase 1 Theme ( Born Anew ).mp3",
+          "type": "musica",
+          "volume": 0.15
+        }
+      ],
+      "players": [
+        {
+          "id": "player-1768018492588",
+          "playerName": "Gustavo",
+          "characterName": "Paragon",
+          "photo": "",
+          "maxHp": 50,
+          "currentHp": 0,
+          "accessUrl": "/p/gustavo-ttzrmwsb9b",
+          "accessToken": "ttzrmwsb9b",
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "cena-1767974201000",
+      "name": "Floresta Sombrias (cópia)",
+      "background": "",
+      "mobs": [
+        {
+          "id": "mob-1767974201000-72527368e4a99",
+          "name": "Aranha Gigante",
+          "color": "red",
+          "maxHp": 30,
+          "currentHp": 20,
+          "damageDice": "1d8+2",
+          "toHit": 4,
+          "image": ""
+        },
+        {
+          "id": "mob-1767974201000-db3d073eec9b3",
+          "name": "Esquilo",
+          "color": "fuchsia",
+          "maxHp": 10,
+          "currentHp": 10,
+          "damageDice": "1d6",
+          "toHit": 4,
+          "image": ""
+        },
+        {
+          "id": "mob-1769872889870",
+          "name": "Teste",
+          "color": "red",
+          "maxHp": 10,
+          "currentHp": 10,
+          "damageDice": "1d6",
+          "toHit": 0,
+          "image": "",
+          "conditions": []
+        }
+      ],
+      "playlist": [
+        {
+          "id": "track-1767974201000-21194b987a43c8",
+          "name": "Vento na Floresta",
+          "type": "ambiente",
+          "url": "/audio/wind.mp3",
+          "volume": 0.5
+        },
+        {
+          "id": "track-1767974201000-3aeedb8195d478",
+          "name": "jumpland44100.mp3",
+          "type": "sfx",
+          "url": "/audio/audio-1767971306429.mp3",
+          "volume": 0.5
+        }
+      ],
+      "players": [
+        {
+          "id": "player-1769872345662",
+          "playerName": "teste",
+          "characterName": "Grog",
+          "photo": "/images/img-1768083732380.webp",
+          "maxHp": 20,
+          "currentHp": 5,
+          "accessUrl": "/p/teste-1q91f9konb1",
+          "accessToken": "1q91f9konb1",
+          "conditions": []
+        },
+        {
+          "id": "player-1769872870258",
+          "playerName": "tus",
+          "characterName": "ber",
+          "photo": "",
+          "maxHp": 20,
+          "currentHp": 20,
+          "accessUrl": "/p/tus-ksmftnta0yk",
+          "accessToken": "ksmftnta0yk",
+          "conditions": []
+        }
+      ]
+    }
+  ],
+  "activeSceneId": "cena-1767974201000",
+  "library": {
+    "mobs": [],
+    "tracks": []
+  },
+  "gallery": {
+    "images": [
+      {
+        "id": "gallery-1768087265581",
+        "url": "/images/img-1768087265438.webp",
+        "name": "3a.webp",
+        "uploadedAt": "2026-01-10T23:21:05.581Z"
+      },
+      {
+        "id": "gallery-1768088659058",
+        "url": "/images/img-1768088658951.webp",
+        "name": "2149365813.jpg",
+        "uploadedAt": "2026-01-10T23:44:19.058Z"
+      },
+      {
+        "id": "gallery-1768088706209",
+        "url": "/images/img-1768088706074.webp",
+        "name": "gussbit_patient_looking_confused_at_medication_bottles_versus_86f18450-f50a-44c8-8a3e-34570244c450_1.png",
+        "uploadedAt": "2026-01-10T23:45:06.209Z"
+      },
+      {
+        "id": "gallery-1768134362078",
+        "url": "/images/img-1768134361912.webp",
+        "name": "mythicalproduction_35248_A_breathtaking_mythical_enchanted_fore_68bc5483-6e2b-4630-83f4-f760da68abe5.png",
+        "uploadedAt": "2026-01-11T12:26:02.078Z"
+      },
+      {
+        "id": "img-1768140904946",
+        "url": "/images/img-1768140904862.webp",
+        "name": "3a.webp",
+        "uploadedAt": "2026-01-11T14:15:04.946Z"
+      }
+    ],
+    "audio": [
+      {
+        "id": "audio-1768140911453",
+        "url": "/audio/audio-1768140911453.mp3",
+        "name": "sound-effect-1904.mp3",
+        "type": "sfx",
+        "uploadedAt": "2026-01-11T14:15:11.454Z"
+      }
+    ]
+  },
+  "presets": {
+    "mobs": [
+      {
+        "id": "preset-1769872885337",
+        "name": "Teste",
+        "color": "red",
+        "maxHp": 10,
+        "damageDice": "1d6",
+        "toHit": 0,
+        "image": "",
+        "createdAt": "2026-01-31T15:21:25.337Z"
+      }
+    ],
+    "players": [
+      {
+        "id": "preset-player-1769872845803",
+        "characterName": "ber",
+        "playerName": "tus",
+        "maxHp": 20,
+        "currentHp": 20,
+        "conditions": [],
+        "photo": "",
+        "createdAt": "2026-01-31T15:20:45.803Z"
+      }
+    ],
+    "player": [
+      {
+        "id": "preset-player-1769872261483",
+        "characterName": "Pafis",
+        "maxHp": 20,
+        "currentHp": 5,
+        "conditions": [
+          "paralyzed",
+          "poisoned"
+        ],
+        "photo": "/images/img-1768083732380.webp",
+        "playerName": "Martur",
+        "createdAt": "2026-01-31T15:11:01.483Z"
+      },
+      {
+        "id": "preset-player-1769872336295",
+        "characterName": "Grog",
+        "playerName": "teste",
+        "maxHp": 20,
+        "currentHp": 5,
+        "conditions": [],
+        "photo": "/images/img-1768083732380.webp",
+        "createdAt": "2026-01-31T15:12:16.295Z"
+      }
+    ]
+  }
+}
