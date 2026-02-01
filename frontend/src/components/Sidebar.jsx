@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Map as MapIcon, Users, Skull, Plus, Trash2, Image as ImageIcon, Swords, Heart, Settings, MapPin } from 'lucide-react';
+import { Map as MapIcon, Users, Skull, Plus, Trash2, Image as ImageIcon, Swords, Heart, Settings, MapPin, Copy, Edit2 } from 'lucide-react';
 import { getImageUrl } from '../constants';
 
 export default function Sidebar({
@@ -119,13 +119,30 @@ export default function Sidebar({
                     </div>
                   </div>
 
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); onEditScene(scene); }}
-                    className="p-2 rounded-lg text-zinc-500 hover:text-indigo-300 hover:bg-indigo-500/20 transition-colors"
-                    title="Detalhes e Configurações"
-                  >
-                    <Settings size={16} />
-                  </button>
+                  {/* Ações da Cena (Hover) */}
+                  <div className="flex items-center gap-1 opacity-100 xl:opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); onEditScene(scene); }}
+                      className="p-1.5 rounded-lg text-zinc-400 hover:text-indigo-300 hover:bg-white/10 transition-colors"
+                      title="Editar / Detalhes"
+                    >
+                      <Edit2 size={14} />
+                    </button>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); onDuplicateScene(scene.id); }}
+                      className="p-1.5 rounded-lg text-zinc-400 hover:text-emerald-300 hover:bg-white/10 transition-colors"
+                      title="Duplicar"
+                    >
+                      <Copy size={14} />
+                    </button>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); onDeleteScene(scene.id); }}
+                      className="p-1.5 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-white/10 transition-colors"
+                      title="Excluir"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
                 </div>
               ))}
               

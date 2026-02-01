@@ -78,7 +78,7 @@ export default function SceneModals({
       onCloseEdit();
     } catch (error) {
       console.error('Erro ao duplicar:', error);
-      alert('Erro ao duplicar a cena. Tente novamente.');
+      // O erro já é tratado com Toast no App.jsx
     } finally {
       setIsDuplicating(false);
     }
@@ -101,7 +101,7 @@ export default function SceneModals({
       onCloseEdit();
     } catch (error) {
       console.error('Erro ao excluir:', error);
-      alert('Erro ao excluir a cena. Tente novamente.');
+      // O erro já é tratado com Toast no App.jsx
       setIsDeleting(false); // Só reseta se der erro (se sucesso, modal fecha)
     }
   };

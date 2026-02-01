@@ -27,45 +27,14 @@
       ],
       "players": [],
       "playlist": [],
-      "notes": "teste",
+      "notes": "teste oidfsdfs",
       "images": [
         "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
         "/images/img-1768083732380.webp"
       ]
-    },
-    {
-      "id": "cena-1769974982812",
-      "name": "oisd",
-      "background": "",
-      "mobs": [],
-      "players": [
-        {
-          "id": "player-1769976386509",
-          "playerName": "tuss",
-          "characterName": "ber",
-          "photo": "/images/img-1768083732380.webp",
-          "maxHp": 20,
-          "currentHp": 20,
-          "accessUrl": "/p/f8fozyuityf",
-          "accessToken": "f8fozyuityf",
-          "conditions": [],
-          "inventory": []
-        }
-      ],
-      "playlist": [],
-      "notes": "",
-      "images": []
-    },
-    {
-      "id": "cena-1769977555270",
-      "name": "oi",
-      "background": "",
-      "mobs": [],
-      "players": [],
-      "playlist": []
     }
   ],
-  "activeSceneId": "cena-1769977555270",
+  "activeSceneId": "cena-1769974156276",
   "library": {
     "mobs": [],
     "tracks": []

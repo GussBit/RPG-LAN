@@ -372,14 +372,24 @@ export default function App() {
             onEdit={handleEditScene}
             onDuplicate={async (id) => {
               if (!id) return;
-              await duplicateScene(id);
-              toast.success("Cena duplicada!");
+              try {
+                await duplicateScene(id);
+                toast.success("Cena duplicada!");
+              } catch (err) {
+                toast.error("Erro ao duplicar cena.");
+                throw err; // Repassa o erro para o modal não fechar
+              }
             }}
             onDelete={async (id) => {
               if (!id) return;
-              await deleteScene(id);
-              setEditingScene(null);
-              toast.success("Cena excluída.");
+              try {
+                await deleteScene(id);
+                setEditingScene(null);
+                toast.success("Cena excluída.");
+              } catch (err) {
+                toast.error("Erro ao excluir cena.");
+                throw err;
+              }
             }}
             onUploadBg={handleUploadBg}
             onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
@@ -433,8 +443,17 @@ export default function App() {
           <Sidebar 
             scenes={scenes} activeScene={activeScene}
             onSelectScene={setActiveScene}
-            onDuplicateScene={(id) => { setBusyScene(true); duplicateScene(id).finally(() => setBusyScene(false)); }}
-            onDeleteScene={(id) => window.confirm('Excluir cena?') && deleteScene(id)} // Nota: setBusyScene removido pois não é usado aqui
+            onDuplicateScene={async (id) => { 
+              if (!id) return;
+              await duplicateScene(id);
+              toast.success("Cena duplicada!");
+            }}
+            onDeleteScene={async (id) => { 
+              if (window.confirm('Tem certeza que deseja excluir esta cena?')) {
+                await deleteScene(id);
+                toast.success("Cena excluída.");
+              }
+            }}
             onEditScene={(scene) => { setEditingScene(scene); setEditSceneModalOpen(true); }}
             onOpenMap={(id) => { setMapSceneId(id); setMapOpen(true); }}
             onAddScene={() => setSceneModalOpen(true)}
