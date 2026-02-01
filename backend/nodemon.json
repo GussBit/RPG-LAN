@@ -1,0 +1,22 @@
+{
+  "watch": [
+    "server.js",
+    "*.js"
+  ],
+  "ext": "js,json",
+  "ignore": [
+    "db.json",
+    "public/**/*",
+    "node_modules/**/*",
+    "*.log",
+    "*.txt"
+  ],
+  "exec": "node server.js",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": 1000,
+  "verbose": true,
+  "restartable": "rs",
+  "colours": true
+}

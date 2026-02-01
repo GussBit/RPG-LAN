@@ -52,7 +52,7 @@ export default function Compendium({ open, onClose, onAddItem }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200">
       <div className="bg-zinc-900 w-full max-w-5xl h-[100vh] sm:h-[90vh] sm:rounded-2xl border-0 sm:border border-white/10 flex flex-col overflow-hidden shadow-2xl">
         
         {/* Header com Busca e Botão Voltar */}

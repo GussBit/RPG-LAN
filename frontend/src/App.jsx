@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { 
-  Loader2, BookOpen, Image as ImageIcon, Upload as UploadIcon
+  Loader2, BookOpen, Plus, WifiOff, RefreshCw
 } from 'lucide-react';
 import { Howler } from 'howler';
 
@@ -10,9 +10,6 @@ import { Howler } from 'howler';
 import { useGameStore } from './store';
 
 // Componentes Extraídos
-import Modal from './components/ui/Modal';
-import Field from './components/ui/Field';
-import PillButton from './components/ui/PillButton';
 import Mixer from './Mixer';
 import MediaGallery from './MediaGallery';
 import PresetsManager from './PresetsManager';
@@ -22,14 +19,21 @@ import Compendium from './components/Compendium';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Arena from './components/Arena';
-import { CONDITIONS, getImageUrl, BACKEND_URL } from './constants';
+// Novos Modais Componentizados
+import SceneModals from './components/modals/SceneModals';
+import MobModals from './components/modals/MobModals';
+import PlayerModals from './components/modals/PlayerModals';
+import Modal from './components/ui/Modal'; // Ainda usado para o Mapa
+import { CONDITIONS, getImageUrl } from './constants';
+import { API_URL } from './api';
+import PillButton from './components/ui/PillButton';
 
 export default function App() {
   const {
-    scenes, activeScene, fetchScenes, isLoading,
+    scenes, activeScene, fetchScenes, isLoading, error,
     updateMobHp, deleteMob, createMob, setActiveScene, createScene, duplicateScene, deleteScene,
     createPlayer, updatePlayerHp, deletePlayer, updatePlayer, togglePlayerCondition, toggleMobCondition, syncPlayers,
-    updateSceneBackground, updateMob, presets, fetchPresets, deletePreset, createPreset, addTrackFromUrl, updatePlayer: updatePlayerStore
+    updateSceneBackground, updateScene, updateMob, presets, fetchPresets, deletePreset, createPreset, addTrackFromUrl, updatePlayer: updatePlayerStore
   } = useGameStore();
 
   // --- ESTADOS DE UI E FORMULÁRIOS ---
@@ -40,11 +44,7 @@ export default function App() {
   const [editMobModalOpen, setEditMobModalOpen] = useState(false);
   const [editPlayerModalOpen, setEditPlayerModalOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
-  const [sidebarMode, setSidebarMode] = useState('scenes');
 
-  const [sceneName, setSceneName] = useState('');
-  const [mobForm, setMobForm] = useState({ name: '', color: 'red', maxHp: 10, damageDice: '1d6', toHit: 0, image: '' });
-  const [playerForm, setPlayerForm] = useState({ playerName: '', characterName: '', photo: '', maxHp: 20 });
   
   const [editingScene, setEditingScene] = useState(null);
   const [editingMob, setEditingMob] = useState(null);
@@ -63,12 +63,10 @@ export default function App() {
   
   // Estados para Inventário e QR Code
   const [inventoryPlayerId, setInventoryPlayerId] = useState(null);
+  const [inventoryMobId, setInventoryMobId] = useState(null);
   const [qrCodeData, setQrCodeData] = useState(null); // { url, title }
 
-  const [isCreating, setIsCreating] = useState(false);
-  const [isCreatingPlayer, setIsCreatingPlayer] = useState(false);
   const [busyScene, setBusyScene] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [tensionMaxMultiplier, setTensionMaxMultiplier] = useState(1.5);
 
@@ -174,95 +172,57 @@ export default function App() {
     setGalleryOpen(true);
   };
 
-  const submitMob = async (e) => {
-    e.preventDefault();
-    if (!mobForm.name?.trim()) return;
+  // --- HANDLERS DE MODAIS (Simplificados) ---
+
+  const handleCreateMob = async (data) => {
+    if (!data.name?.trim()) return;
     try {
-      setIsCreating(true);
-      await createMob(mobForm);
-      setMobForm({ name: '', color: 'red', maxHp: 10, damageDice: '1d6', toHit: 0, image: '' });
+      await createMob(data);
       setMobModalOpen(false);
       toast.success(`Mob criado!`);
-    } catch (err) { toast.error(err?.message || 'Erro'); } 
-    finally { setIsCreating(false); }
+    } catch (err) { toast.error(err?.message || 'Erro'); }
   };
 
-  const submitEditMob = async (e) => {
-    e.preventDefault();
-    if (!editingMob?.name?.trim()) return;
+  const handleEditMob = async (id, data) => {
     try {
-      await updateMob(activeScene.id, editingMob.id, {
-        name: editingMob.name, color: editingMob.color, maxHp: Number(editingMob.maxHp),
-        damageDice: editingMob.damageDice, toHit: Number(editingMob.toHit), image: editingMob.image || null,
-      });
+      await updateMob(activeScene.id, id, data);
       toast.success('Mob atualizado!');
       setEditMobModalOpen(false); setEditingMob(null);
     } catch (err) { toast.error('Erro ao atualizar mob'); }
   };
 
-  const submitPlayer = async (e) => {
-    e.preventDefault();
-    if (!playerForm.playerName?.trim()) return;
+  const handleCreatePlayer = async (data) => {
+    if (!data.playerName?.trim()) return;
     try {
-      setIsCreatingPlayer(true);
-      await createPlayer(playerForm);
-      setPlayerForm({ playerName: '', characterName: '', photo: '', maxHp: 20 });
+      await createPlayer(data);
       setPlayerModalOpen(false);
       toast.success(`Jogador adicionado!`);
-    } catch (err) { toast.error(err.message); } 
-    finally { setIsCreatingPlayer(false); }
+    } catch (err) { toast.error(err.message); }
   };
 
-  const submitEditPlayer = async (e) => {
-    e.preventDefault();
-    if (!editingPlayer?.playerName?.trim()) return;
+  const handleEditPlayer = async (id, data) => {
     try {
-      await updatePlayer(activeScene.id, editingPlayer.id, {
-        playerName: editingPlayer.playerName, characterName: editingPlayer.characterName,
-        photo: editingPlayer.photo, maxHp: Number(editingPlayer.maxHp),
-      });
+      await updatePlayer(activeScene.id, id, data);
       setEditPlayerModalOpen(false); setEditingPlayer(null);
       toast.success('Jogador atualizado!');
     } catch (err) { toast.error('Erro ao atualizar jogador'); }
   };
 
-  const submitScene = async (e) => {
-    e.preventDefault();
-    if (!sceneName.trim()) return;
+  const handleCreateScene = async (name) => {
+    if (!name.trim()) return;
     try {
-      setBusyScene(true);
-      await createScene({ name: sceneName.trim() });
-      setSceneName(''); setSceneModalOpen(false);
+      await createScene({ name: name.trim() });
+      setSceneModalOpen(false);
       toast.success('Cena criada!');
-    } catch (err) { toast.error(err?.message); } 
-    finally { setBusyScene(false); }
+    } catch (err) { toast.error(err?.message); }
   };
   
-  const submitEditScene = async (e) => {
-    e.preventDefault();
-    if (!editingScene) return;
+  const handleEditScene = async (id, updates) => {
     try {
-        await updateSceneBackground(editingScene.id, editingScene.background);
+        await updateScene(id, updates);
         toast.success('Cena atualizada!');
-        setEditSceneModalOpen(false);
-    } catch (err) {
-        toast.error('Erro ao salvar cena');
-    }
-  };
-
-  const handleUploadSceneImage = async (file) => {
-    if (!editingScene) return;
-    try {
-      setUploadingImage(true);
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await fetch(`${BACKEND_URL}/api/upload/image`, { method: 'POST', body: formData });
-      if (!res.ok) throw new Error('Falha no upload');
-      const { url } = await res.json();
-      setEditingScene({ ...editingScene, background: url });
-      toast.success('Imagem enviada! Clique em Salvar para confirmar.');
-    } catch (err) { toast.error('Erro ao fazer upload'); } 
-    finally { setUploadingImage(false); }
+        setEditSceneModalOpen(false); setEditingScene(null);
+    } catch (err) { toast.error('Erro ao salvar cena'); }
   };
 
   const handleToggleCondition = (playerId, conditionId) => {
@@ -297,10 +257,23 @@ export default function App() {
     } catch (err) { toast.error('Erro ao adicionar preset'); }
   };
 
-  const handleSaveMobPreset = async () => {
-    if (!mobForm.name) return toast.error('Nome é obrigatório para salvar preset');
-    await createPreset('mobs', mobForm);
+  const handleSaveMobPreset = async (data) => {
+    if (!data.name) return toast.error('Nome é obrigatório para salvar preset');
+    await createPreset('mobs', data);
     toast.success('Preset de mob salvo!');
+  };
+
+  const handleUploadBg = async (file, onSuccess) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch(`${API_URL}/api/upload/image`, { method: 'POST', body: formData });
+      if (res.ok) {
+          const { url } = await res.json();
+          onSuccess(url);
+          toast.success('Imagem enviada!');
+      } else {
+          toast.error('Erro no upload');
+      }
   };
 
   // Handlers de Inventário
@@ -329,10 +302,92 @@ export default function App() {
     await updatePlayerStore(activeScene.id, player.id, { inventory: newInventory });
   };
 
+  const handleAddItemToMob = async (item) => {
+    if (!inventoryMobId || !activeScene) return;
+    const mob = activeScene.mobs.find(m => m.id === inventoryMobId);
+    if (!mob) return;
+
+    const currentInventory = mob.inventory || [];
+    const newInventory = [...currentInventory, item];
+    await updateMob(activeScene.id, mob.id, { inventory: newInventory });
+    toast.success(`Item adicionado para ${mob.name}`);
+  };
+
+  const handleRemoveItemFromMob = async (index) => {
+    if (!inventoryMobId || !activeScene) return;
+    const mob = activeScene.mobs.find(m => m.id === inventoryMobId);
+    if (!mob) return;
+
+    const newInventory = [...(mob.inventory || [])];
+    newInventory.splice(index, 1);
+
+    await updateMob(activeScene.id, mob.id, { inventory: newInventory });
+  };
+
   // --- RENDERIZADORES ---
 
   if (isLoading) return <div className="h-screen flex items-center justify-center bg-zinc-950 text-indigo-500"><Loader2 className="animate-spin w-12 h-12" /></div>;
-  if (!activeScene) return <div className="h-screen flex flex-col items-center justify-center bg-zinc-950 text-zinc-500"><h2 className="text-xl">Nenhuma cena encontrada</h2><p className="text-sm mt-2">Verifique se o backend está rodando.</p></div>;
+  
+  // Tela de Erro de Conexão
+  if (error) return (
+    <div className="h-screen flex flex-col items-center justify-center bg-zinc-950 text-zinc-400 p-4">
+        <div className="bg-zinc-900/50 p-8 rounded-2xl border border-red-500/20 flex flex-col items-center text-center max-w-md shadow-2xl">
+            <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
+                <WifiOff className="w-8 h-8 text-red-500" />
+            </div>
+            <h2 className="text-xl font-bold text-zinc-200 mb-2">Erro de Conexão</h2>
+            <p className="text-sm mb-6">
+                Não foi possível conectar ao servidor. Verifique se o backend está rodando.
+            </p>
+            <div className="bg-black/50 p-3 rounded-lg border border-white/5 w-full mb-6">
+                <code className="text-xs text-red-400 font-mono break-all">{error}</code>
+            </div>
+            <PillButton variant="neutral" onClick={() => window.location.reload()}>
+                <RefreshCw size={16} className="mr-2" /> Tentar Novamente
+            </PillButton>
+        </div>
+    </div>
+  );
+
+  // Tela de "Nenhuma Cena" (com botão de criar)
+  if (!activeScene) return (
+    <div className="h-screen flex flex-col items-center justify-center bg-zinc-950 text-zinc-500">
+        <div className="text-center space-y-4 animate-in fade-in zoom-in duration-300">
+            <h2 className="text-2xl font-bold text-zinc-200">Nenhuma cena encontrada</h2>
+            <p className="text-zinc-400">Crie sua primeira cena para começar a aventura.</p>
+            <div className="flex justify-center">
+                <PillButton variant="primary" onClick={() => setSceneModalOpen(true)} className="px-6 py-3">
+                    <Plus size={20} />
+                    <span className="ml-2 text-base">Criar Nova Cena</span>
+                </PillButton>
+            </div>
+        </div>
+
+        {/* Modais necessários para criar a cena */}
+        <SceneModals 
+            createOpen={sceneModalOpen} onCloseCreate={() => setSceneModalOpen(false)}
+            editOpen={editSceneModalOpen} onCloseEdit={() => { setEditSceneModalOpen(false); setEditingScene(null); }}
+            editingScene={editingScene}
+            onCreate={handleCreateScene}
+            onEdit={handleEditScene}
+            onDuplicate={async (id) => {
+              if (!id) return;
+              await duplicateScene(id);
+              toast.success("Cena duplicada!");
+            }}
+            onDelete={async (id) => {
+              if (!id) return;
+              await deleteScene(id);
+              setEditingScene(null);
+              toast.success("Cena excluída.");
+            }}
+            onUploadBg={handleUploadBg}
+            onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
+        />
+        
+        <MediaGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} type={galleryType} onSelect={(url, name) => { galleryCallback?.(url, name); setGalleryOpen(false); }} />
+    </div>
+  );
 
   // Estilos da Scrollbar
   const scrollbarStyles = `
@@ -369,18 +424,17 @@ export default function App() {
 
         {/* LAYOUT PRINCIPAL COM GRID DINÂMICO DE 5 COLUNAS */}
         <div 
-          className="h-full grid transition-all duration-300 ease-in-out"
+          className="h-full grid overflow-hidden transition-all duration-300 ease-in-out"
           style={{ 
             gridTemplateColumns: `${showLeftSidebar ? leftSidebarWidth : 0}px ${showLeftSidebar ? 4 : 0}px minmax(0, 1fr) ${showRightSidebar ? 4 : 0}px ${showRightSidebar ? mixerWidth : 0}px` 
           }}
         >
           {/* 1. Esquerda: Cenas e Presets */}
           <Sidebar 
-            mode={sidebarMode} setMode={setSidebarMode}
             scenes={scenes} activeScene={activeScene}
             onSelectScene={setActiveScene}
             onDuplicateScene={(id) => { setBusyScene(true); duplicateScene(id).finally(() => setBusyScene(false)); }}
-            onDeleteScene={(id) => window.confirm('Excluir cena?') && deleteScene(id)}
+            onDeleteScene={(id) => window.confirm('Excluir cena?') && deleteScene(id)} // Nota: setBusyScene removido pois não é usado aqui
             onEditScene={(scene) => { setEditingScene(scene); setEditSceneModalOpen(true); }}
             onOpenMap={(id) => { setMapSceneId(id); setMapOpen(true); }}
             onAddScene={() => setSceneModalOpen(true)}
@@ -396,7 +450,7 @@ export default function App() {
           />
 
           {/* 3. Centro: Arena (Conteúdo Principal) */}
-          <main className="overflow-y-auto custom-scrollbar min-h-0">
+          <main className="overflow-y-auto custom-scrollbar min-h-0 h-full">
             <Arena 
               activeScene={activeScene}
               updatePlayerHp={updatePlayerHp}
@@ -410,6 +464,7 @@ export default function App() {
               onAddPlayer={() => setPlayerModalOpen(true)}
               onAddMob={() => setMobModalOpen(true)}
               onOpenInventory={(p) => setInventoryPlayerId(p.id)}
+              onOpenMobInventory={(m) => setInventoryMobId(m.id)}
               onOpenQRCode={(url, title) => setQrCodeData({ url, title })}
             />
           </main>
@@ -421,7 +476,7 @@ export default function App() {
           />
 
           {/* 5. Direita: Mixer (Redimensionável) */}
-          <aside className="border-l border-white/5 bg-zinc-900/25 backdrop-blur-md overflow-hidden flex flex-col">
+          <aside className="border-l border-white/5 bg-zinc-900/25 backdrop-blur-md overflow-hidden flex flex-col min-h-0 h-full">
              <Mixer 
                playlist={activeScene.playlist} 
                // Passando volumes para o Mixer usar
@@ -445,97 +500,37 @@ export default function App() {
         </button>
       </div>
 
-      {/* --- MODAIS (Igual ao original) --- */}
-      <Modal open={sceneModalOpen} title="Criar cena" onClose={() => setSceneModalOpen(false)}>
-        <form onSubmit={submitScene} className="space-y-4">
-          <Field label="Nome da cena"><input value={sceneName} onChange={(e) => setSceneName(e.target.value)} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" autoFocus /></Field>
-          <div className="flex justify-end gap-2"><PillButton onClick={() => setSceneModalOpen(false)} variant="neutral">Cancelar</PillButton><PillButton type="submit" disabled={busyScene} variant="success">{busyScene ? '...' : 'Criar'}</PillButton></div>
-        </form>
-      </Modal>
-
-      <Modal open={editSceneModalOpen} title="Editar cena" onClose={() => { setEditSceneModalOpen(false); setEditingScene(null); }}>
-        <form onSubmit={submitEditScene} className="space-y-4">
-          <Field label="Nome da cena"><input value={editingScene?.name || ''} onChange={(e) => setEditingScene({ ...editingScene, name: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-          <Field label="Imagem de fundo">
-            <div className="space-y-2">
-              {editingScene?.background && <div className="relative w-full h-48 rounded-xl overflow-hidden border border-white/10"><img src={getImageUrl(editingScene.background)} className="w-full h-full object-cover" /></div>}
-              <div className="flex gap-2">
-                 <input value={editingScene?.background || ''} readOnly className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-500 outline-none" placeholder="Selecione..." />
-                 <button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setEditingScene({ ...editingScene, background: url })); setGalleryOpen(true); }} className="px-4 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 text-indigo-300" title="Abrir Galeria">
-                    <ImageIcon size={20} />
-                 </button>
-                 <label className="px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 flex items-center justify-center cursor-pointer" title="Upload Rápido">
-                    <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleUploadSceneImage(e.target.files[0])} />
-                    <UploadIcon size={20} />
-                 </label>
-              </div>
-            </div>
-          </Field>
-          <div className="flex justify-end gap-2"><PillButton type="submit" variant="primary">Salvar</PillButton></div>
-        </form>
-      </Modal>
-
-      <Modal open={mobModalOpen} title="Novo mob" onClose={() => setMobModalOpen(false)}>
-        <form onSubmit={submitMob} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Nome"><input value={mobForm.name} onChange={(e) => setMobForm({ ...mobForm, name: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" autoFocus /></Field>
-            <Field label="Cor"><select value={mobForm.color} onChange={(e) => setMobForm({ ...mobForm, color: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none">{['red', 'yellow', 'green', 'blue', 'orange', 'fuchsia', 'black', 'white'].map(c => <option key={c} value={c}>{c}</option>)}</select></Field>
-            <Field label="HP"><input type="number" value={mobForm.maxHp} onChange={(e) => setMobForm({ ...mobForm, maxHp: Number(e.target.value) })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-            <Field label="Dano"><input value={mobForm.damageDice} onChange={(e) => setMobForm({ ...mobForm, damageDice: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-            <Field label="Imagem">
-              <div className="flex gap-2">
-                <input value={mobForm.image} onChange={(e) => setMobForm({ ...mobForm, image: e.target.value })} className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" placeholder="URL ou..." />
-                <button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setMobForm({ ...mobForm, image: url })); setGalleryOpen(true); }} className="px-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400">📁</button>
-              </div>
-            </Field>
-          </div>
-          <div className="flex justify-end gap-2">
-            <button type="button" onClick={handleSaveMobPreset} className="px-3 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20 text-sm transition-colors">Salvar Preset</button>
-            <button type="button" onClick={() => { setPresetsType('mobs'); setPresetsCallback(() => (p) => setMobForm({ name: p.name, color: p.color, maxHp: p.maxHp, damageDice: p.damageDice, toHit: p.toHit, image: p.image || '' })); setPresetsOpen(true); }} className="px-3 py-2 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-sm hover:bg-white/10">📋 Carregar</button>
-            <PillButton type="submit" disabled={isCreating} variant="primary">Criar</PillButton>
-          </div>
-        </form>
-      </Modal>
-
-      <Modal open={editMobModalOpen} title="Editar mob" onClose={() => { setEditMobModalOpen(false); setEditingMob(null); }}>
-        <form onSubmit={submitEditMob} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Nome"><input value={editingMob?.name || ''} onChange={(e) => setEditingMob({ ...editingMob, name: e.target.value })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-            <Field label="HP"><input type="number" value={editingMob?.maxHp || 10} onChange={(e) => setEditingMob({ ...editingMob, maxHp: Number(e.target.value) })} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-            <Field label="Imagem">
-              <div className="flex gap-2">
-                <input value={editingMob?.image || ''} onChange={(e) => setEditingMob({ ...editingMob, image: e.target.value })} className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" />
-                <button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setEditingMob({ ...editingMob, image: url })); setGalleryOpen(true); }} className="px-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400">📁</button>
-              </div>
-            </Field>
-          </div>
-          <div className="flex justify-end gap-2"><PillButton type="submit" variant="primary">Salvar</PillButton></div>
-        </form>
-      </Modal>
-
-      <Modal open={playerModalOpen} title="Novo Jogador" onClose={() => setPlayerModalOpen(false)}>
-        <form onSubmit={submitPlayer} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-             <Field label="Nome"><input value={playerForm.playerName} onChange={e => setPlayerForm({...playerForm, playerName: e.target.value})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-             <Field label="Personagem"><input value={playerForm.characterName} onChange={e => setPlayerForm({...playerForm, characterName: e.target.value})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-             <Field label="Foto"><div className="flex gap-2"><input value={playerForm.photo} onChange={e => setPlayerForm({...playerForm, photo: e.target.value})} className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /><button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setPlayerForm({ ...playerForm, photo: url })); setGalleryOpen(true); }} className="px-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400">📁</button></div></Field>
-             <Field label="HP"><input type="number" value={playerForm.maxHp} onChange={e => setPlayerForm({...playerForm, maxHp: Number(e.target.value)})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-          </div>
-          <div className="flex justify-end gap-2"><PillButton type="submit" disabled={isCreatingPlayer} variant="primary">Criar</PillButton></div>
-        </form>
-      </Modal>
+      {/* --- MODAIS COMPONENTIZADOS --- */}
       
-      <Modal open={editPlayerModalOpen} title="Editar Jogador" onClose={() => { setEditPlayerModalOpen(false); setEditingPlayer(null); }}>
-        <form onSubmit={submitEditPlayer} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Nome"><input value={editingPlayer?.playerName || ''} onChange={e => setEditingPlayer({...editingPlayer, playerName: e.target.value})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-            <Field label="Personagem"><input value={editingPlayer?.characterName || ''} onChange={e => setEditingPlayer({...editingPlayer, characterName: e.target.value})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-            <Field label="Foto"><div className="flex gap-2"><input value={editingPlayer?.photo || ''} onChange={e => setEditingPlayer({...editingPlayer, photo: e.target.value})} className="flex-1 px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /><button type="button" onClick={() => { setGalleryType('images'); setGalleryCallback(() => (url) => setEditingPlayer({ ...editingPlayer, photo: url })); setGalleryOpen(true); }} className="px-3 rounded-xl bg-white/5 border border-white/10 text-zinc-400">📁</button></div></Field>
-            <Field label="HP"><input type="number" value={editingPlayer?.maxHp || 20} onChange={e => setEditingPlayer({...editingPlayer, maxHp: Number(e.target.value)})} className="w-full px-3 py-3 rounded-xl bg-black/30 border border-white/10 text-zinc-100 outline-none" /></Field>
-          </div>
-          <div className="flex justify-end gap-2"><PillButton type="submit" variant="primary">Salvar</PillButton></div>
-        </form>
-      </Modal>
+      <SceneModals 
+        createOpen={sceneModalOpen} onCloseCreate={() => setSceneModalOpen(false)}
+        editOpen={editSceneModalOpen} onCloseEdit={() => { setEditSceneModalOpen(false); setEditingScene(null); }}
+        editingScene={editingScene}
+        onCreate={handleCreateScene}
+        onEdit={handleEditScene}
+        onUploadBg={handleUploadBg}
+        onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
+      />
+
+      <MobModals 
+        createOpen={mobModalOpen} onCloseCreate={() => setMobModalOpen(false)}
+        editOpen={editMobModalOpen} onCloseEdit={() => { setEditMobModalOpen(false); setEditingMob(null); }}
+        editingMob={editingMob}
+        onCreate={handleCreateMob}
+        onEdit={handleEditMob}
+        onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
+        onOpenPresets={(cb) => { setPresetsType('mobs'); setPresetsCallback(() => cb); setPresetsOpen(true); }}
+        onSavePreset={handleSaveMobPreset}
+      />
+
+      <PlayerModals 
+        createOpen={playerModalOpen} onCloseCreate={() => setPlayerModalOpen(false)}
+        editOpen={editPlayerModalOpen} onCloseEdit={() => { setEditPlayerModalOpen(false); setEditingPlayer(null); }}
+        editingPlayer={editingPlayer}
+        onCreate={handleCreatePlayer}
+        onEdit={handleEditPlayer}
+        onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
+      />
 
       <Modal open={mapOpen} title="Mapa da cena" onClose={() => setMapOpen(false)} widthClass="max-w-5xl">
         <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
@@ -548,18 +543,29 @@ export default function App() {
       <MediaGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} type={galleryType} onSelect={(url, name) => { galleryCallback?.(url, name); setGalleryOpen(false); }} />
       <PresetsManager open={presetsOpen} onClose={() => setPresetsOpen(false)} type={presetsType} onUse={(p) => { presetsCallback?.(p); setPresetsOpen(false); }} />
       
-      <Compendium 
-        open={compendiumOpen} 
-        onClose={() => setCompendiumOpen(false)} 
-        onAddItem={inventoryPlayerId ? handleAddItemToPlayer : null}
-      />
-
       <InventoryModal 
         open={!!inventoryPlayerId} 
         onClose={() => setInventoryPlayerId(null)}
         player={activeScene?.players?.find(p => p.id === inventoryPlayerId)}
         onRemoveItem={handleRemoveItemFromPlayer}
         onOpenCompendium={() => setCompendiumOpen(true)}
+      />
+
+      <InventoryModal 
+        open={!!inventoryMobId} 
+        onClose={() => setInventoryMobId(null)}
+        player={(() => {
+           const m = activeScene?.mobs?.find(m => m.id === inventoryMobId);
+           return m ? { ...m, characterName: m.name, playerName: 'Mob' } : null;
+        })()}
+        onRemoveItem={handleRemoveItemFromMob}
+        onOpenCompendium={() => setCompendiumOpen(true)}
+      />
+
+      <Compendium 
+        open={compendiumOpen} 
+        onClose={() => setCompendiumOpen(false)} 
+        onAddItem={inventoryPlayerId ? handleAddItemToPlayer : (inventoryMobId ? handleAddItemToMob : null)}
       />
 
       <QRCodeModal 

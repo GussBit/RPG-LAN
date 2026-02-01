@@ -1,3 +1,4 @@
+import { API_URL } from './api'; // Importe a constante
 import { 
   ArrowDownCircle, Link as LinkIcon, ZapOff, Skull, 
   FlaskConical, Ghost, Heart, EyeOff, Cloud, Moon, Timer 
@@ -17,6 +18,6 @@ export const CONDITIONS = [
   { id: 'exhausted', label: 'Exausto', icon: Timer, color: 'text-orange-500' },
 ];
 
-export const BACKEND_URL = `http://${window.location.hostname}:3333`;
+export const BACKEND_URL = API_URL;
 
 export const getImageUrl = (path) => path ? `${BACKEND_URL}${path}` : '';

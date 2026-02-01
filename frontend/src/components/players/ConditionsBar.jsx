@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { CONDITIONS } from '../../constants';
 
-export default function ConditionsBar({ conditions = [], onToggle }) {
+export default function ConditionsBar({ conditions = [], onToggle, direction = 'down' }) {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
@@ -34,7 +34,12 @@ export default function ConditionsBar({ conditions = [], onToggle }) {
       {showMenu && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-          <div className="absolute z-50 mt-1 left-0 bg-zinc-900 border border-white/10 rounded-lg shadow-xl p-2 min-w-[180px] max-h-[300px] overflow-y-auto">
+          
+          {/* Lógica de Direção aqui */}
+          <div className={`
+            absolute z-50 left-0 bg-zinc-900 border border-white/10 rounded-lg shadow-xl p-2 min-w-[180px] max-h-[300px] overflow-y-auto
+            ${direction === 'up' ? 'bottom-full mb-1' : 'mt-1 top-full'}
+          `}>
             {CONDITIONS.map(condition => {
               const Icon = condition.icon;
               const isActive = conditions.includes(condition.id);

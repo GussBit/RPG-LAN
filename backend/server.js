@@ -5,6 +5,7 @@ import fs from 'fs';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { JSONFilePreset } from 'lowdb/node';
+import os from 'os';
 
 // --- CONFIGURAÇÃO INICIAL ---
 
@@ -232,6 +233,8 @@ app.patch('/api/scenes/:id', async (req, res) => {
   if (scene) {
     if (req.body.name) scene.name = req.body.name;
     if (req.body.background !== undefined) scene.background = req.body.background;
+    if (req.body.notes !== undefined) scene.notes = req.body.notes;
+    if (req.body.images !== undefined) scene.images = req.body.images;
     await db.write();
     res.json(scene);
   } else {
@@ -561,5 +564,16 @@ const PORT = 3333;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Backend RPG rodando na porta ${PORT}`);
   console.log(`Sistema de Arquivos Ativo em: ${publicDir}`);
+  
+  // Mostra os IPs de rede disponíveis para facilitar a conexão
+  const interfaces = os.networkInterfaces();
+  Object.keys(interfaces).forEach((ifname) => {
+    interfaces[ifname].forEach((iface) => {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        console.log(`📡 Acessível na rede em: http://${iface.address}:${PORT}`);
+      }
+    });
+  });
+
   console.log(`[${new Date().toLocaleTimeString()}] Servidor pronto/reiniciado.`);
 });

@@ -1,11 +1,13 @@
 import { create } from 'zustand';
+import { API_URL as BASE_URL } from './api';
 
-const API_URL = 'http://localhost:3333/api';
+const API_URL = `${BASE_URL}/api`;
 
 export const useGameStore = create((set, get) => ({
   scenes: [],
   activeScene: null,
   isLoading: false,
+  error: null,
   
   // Estado inicial da galeria
   gallery: { images: [], audio: [] },
@@ -14,15 +16,17 @@ export const useGameStore = create((set, get) => ({
   // --- CENAS (SCENES) ---
 
   fetchScenes: async () => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
     try {
       const res = await fetch(`${API_URL}/state`);
+      if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
       const state = await res.json();
       const scenes = state.scenes || [];
       const active = scenes.find((s) => s.id === state.activeSceneId) || scenes[0] || null;
       set({ scenes, activeScene: active });
     } catch (error) {
       console.error('Erro ao buscar cenas:', error);
+      set({ error: error.message });
     } finally {
       set({ isLoading: false });
     }
@@ -60,6 +64,7 @@ export const useGameStore = create((set, get) => ({
 
   duplicateScene: async (sceneId) => {
     const res = await fetch(`${API_URL}/scenes/${sceneId}/duplicate`, { method: 'POST' });
+    if (!res.ok) throw new Error('Falha ao duplicar');
     const newScene = await res.json();
     set((state) => ({
       scenes: [...state.scenes, newScene],
@@ -100,8 +105,20 @@ export const useGameStore = create((set, get) => ({
   },
 
   deleteScene: async (sceneId) => {
-    await fetch(`${API_URL}/scenes/${sceneId}`, { method: 'DELETE' });
-    get().fetchScenes();
+    // Atualização Otimista: Remove da lista imediatamente
+    const { scenes, activeScene } = get();
+    const updatedScenes = scenes.filter(s => s.id !== sceneId);
+    
+    // Se a cena ativa foi a deletada, muda para a primeira disponível ou null
+    let newActive = activeScene;
+    if (activeScene?.id === sceneId) {
+        newActive = updatedScenes[0] || null;
+    }
+    
+    set({ scenes: updatedScenes, activeScene: newActive });
+
+    // Envia para o servidor (sem recarregar tudo com fetchScenes)
+    await fetch(`${API_URL}/scenes/${sceneId}`, { method: 'DELETE' }).catch(err => console.error("Erro ao deletar no servidor:", err));
   },
 
   // --- MOBS ---

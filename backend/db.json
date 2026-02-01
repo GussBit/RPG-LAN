@@ -1,140 +1,12 @@
 {
   "scenes": [
     {
-      "id": "cena-1",
+      "id": "cena-1769974156276",
+      "name": "Testes",
       "background": "/images/img-1768083732380.webp",
       "mobs": [
         {
-          "id": "mob-1769897187038",
-          "name": "Testesws",
-          "color": "red",
-          "maxHp": 10,
-          "currentHp": 10,
-          "damageDice": "1d6",
-          "toHit": 0,
-          "image": null,
-          "conditions": [
-            "incapacitated",
-            "prone",
-            "unconscious"
-          ]
-        }
-      ],
-      "playlist": [
-        {
-          "id": "track-1769898276023",
-          "name": "Epiphany.mp3",
-          "url": "/audio/Epiphany.mp3",
-          "type": "ambiente",
-          "volume": 0.5,
-          "ambienceMode": "exploration"
-        },
-        {
-          "id": "track-1769898278957",
-          "name": "powerful-cannon-shot-352459.mp3",
-          "url": "/audio/powerful-cannon-shot-352459.mp3",
-          "type": "sfx",
-          "volume": 0.5,
-          "ambienceMode": "exploration"
-        },
-        {
-          "id": "track-1769899045822",
-          "name": "Carl Orff - O Fortuna ~ Carmina Burana.mp3",
-          "url": "/audio/Carl Orff - O Fortuna ~ Carmina Burana.mp3",
-          "type": "musica",
-          "volume": 0.5
-        }
-      ],
-      "players": [
-        {
-          "id": "player-1768018492588",
-          "playerName": "Gustavo",
-          "characterName": "Paragon",
-          "photo": "",
-          "maxHp": 50,
-          "currentHp": 10,
-          "accessUrl": "/p/gustavo-ttzrmwsb9b",
-          "accessToken": "ttzrmwsb9b",
-          "conditions": [],
-          "inventory": [
-            {
-              "nome": "Amigos",
-              "nome_ingles": "Friends",
-              "caracteristicas": "Truque de  Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:Pessoal\nComponentes:S M (uma pequena quantidade de maquiagem aplicada a rosto enquanto esta magia é conjurada)\nDuração:Concentração,\n                                         Até 1 minuto",
-              "descricao": "Enquanto a magia durar, você tem vantagem em todos os testes de Carisma dirigidos a uma criatura, à sua escolha e que não seja hostil a você. Ao término da magia, a criatura percebe que você usou magia para influenciar o humor dela, tornando-se hostil a você. Uma criatura propensa à violência pode lhe atacar. Criaturas não violentas podem buscar outras formas de retaliação (a critério do DM), dependendo da natureza da sua interação com ela.\nLivro do Jogador (PHB), p. 212 (244)"
-            },
-            {
-              "nome": "Heroísmo",
-              "nome_ingles": "Heroism",
-              "caracteristicas": "1º Círculo, Encantamento (Bardo, Paladino)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
-              "descricao": "Você toca uma criatura voluntária que torna-se imbuída de bravura. Enquanto a magia durar, o alvo está imune a ser amedrontado e ganha uma quantidade de pontos de vida temporários igual ao seu modificador do atributo de conjuração, no início de cada um dos turnos dela. Quando a magia terminar, o alvo perde quaisquer pontos de vida temporários remanescentes derivados desta magia.\nLivro do Jogador (PHB), p. 248 (250)"
-            }
-          ]
-        },
-        {
-          "id": "player-1769897182081",
-          "playerName": "tuss",
-          "characterName": "bers",
-          "photo": "/images/img-1768083732380.webp",
-          "maxHp": 20,
-          "currentHp": 15,
-          "accessUrl": "/p/tus-7imp87475e2",
-          "accessToken": "7imp87475e2",
-          "conditions": [],
-          "inventory": []
-        },
-        {
-          "id": "player-1769900254094",
-          "playerName": "ohj",
-          "characterName": "asd",
-          "photo": "",
-          "maxHp": 20,
-          "currentHp": 20,
-          "accessUrl": "/p/0urk5fhp6wjg",
-          "accessToken": "0urk5fhp6wjg",
-          "conditions": [],
-          "inventory": [
-            {
-              "nome": "Cura Completa",
-              "nome_ingles": "Heal",
-              "caracteristicas": "6º Círculo, Evocação (Clérigo, Druida)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Instantânea",
-              "descricao": "Escolha uma criatura à sua vista e no alcance da magia. Uma onda de energia positiva a preenche, fazendo com que recupere 70 pontos de vida. Esta magia também põe fim a cegueira, surdez ou a qualquer doença que afete o alvo. Esta magia não tem efeito sobre constructos ou mortos-vivos.\nLivro do Jogador (PHB), p. 233 (250)"
-            },
-            {
-              "nome": "AÇÃO ARDILOSA",
-              "descricao": "A partir do 2º nível, seu pensamento rápido e agilidade faz você se mover e agir rapidamente. Você pode usar uma ação bônus durante cada um de seus turnos em combate. Esta ação pode ser usada somente para Disparada, Desengajar ou Esconder."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "cena-1767974201000",
-      "name": "Floresta Sombrias (cópia)",
-      "background": "",
-      "mobs": [
-        {
-          "id": "mob-1767974201000-72527368e4a99",
-          "name": "Aranha Gigante",
-          "color": "red",
-          "maxHp": 30,
-          "currentHp": 20,
-          "damageDice": "1d8+2",
-          "toHit": 4,
-          "image": ""
-        },
-        {
-          "id": "mob-1767974201000-db3d073eec9b3",
-          "name": "Esquilo",
-          "color": "fuchsia",
-          "maxHp": 10,
-          "currentHp": 10,
-          "damageDice": "1d6",
-          "toHit": 4,
-          "image": ""
-        },
-        {
-          "id": "mob-1769872889870",
+          "id": "mob-1769976978809",
           "name": "Teste",
           "color": "red",
           "maxHp": 10,
@@ -142,61 +14,58 @@
           "damageDice": "1d6",
           "toHit": 0,
           "image": "",
-          "conditions": []
+          "conditions": [],
+          "inventory": [
+            {
+              "nome": "Acalmar Emoções",
+              "nome_ingles": "Calm Emotions",
+              "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)"
+            }
+          ]
         }
       ],
-      "playlist": [
-        {
-          "id": "track-1767974201000-21194b987a43c8",
-          "name": "Vento na Floresta",
-          "type": "ambiente",
-          "url": "/audio/wind.mp3",
-          "volume": 0.5
-        },
-        {
-          "id": "track-1767974201000-3aeedb8195d478",
-          "name": "jumpland44100.mp3",
-          "type": "sfx",
-          "url": "/audio/audio-1767971306429.mp3",
-          "volume": 0.6
-        },
-        {
-          "id": "track-1769880931792",
-          "name": "The Plagues (Prince of Egypt) - Cover by Caleb Hyles and Jonathan Young-31-01-2026",
-          "url": "/audio/The Plagues (Prince of Egypt) - Cover by Caleb Hyles and Jonathan Young-31-01-2026.mp3",
-          "type": "ambiente",
-          "volume": 0.5,
-          "ambienceMode": "combat"
-        }
-      ],
+      "players": [],
+      "playlist": [],
+      "notes": "teste",
+      "images": [
+        "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
+        "/images/img-1768083732380.webp"
+      ]
+    },
+    {
+      "id": "cena-1769974982812",
+      "name": "oisd",
+      "background": "",
+      "mobs": [],
       "players": [
         {
-          "id": "player-1769872345662",
-          "playerName": "teste",
-          "characterName": "Grog",
-          "photo": "/images/img-1768083732380.webp",
-          "maxHp": 20,
-          "currentHp": 5,
-          "accessUrl": "/p/teste-1q91f9konb1",
-          "accessToken": "1q91f9konb1",
-          "conditions": []
-        },
-        {
-          "id": "player-1769872870258",
+          "id": "player-1769976386509",
           "playerName": "tuss",
           "characterName": "ber",
           "photo": "/images/img-1768083732380.webp",
           "maxHp": 20,
           "currentHp": 20,
-          "accessUrl": "/p/tus-ksmftnta0yk",
-          "accessToken": "ksmftnta0yk",
+          "accessUrl": "/p/f8fozyuityf",
+          "accessToken": "f8fozyuityf",
           "conditions": [],
           "inventory": []
         }
-      ]
+      ],
+      "playlist": [],
+      "notes": "",
+      "images": []
+    },
+    {
+      "id": "cena-1769977555270",
+      "name": "oi",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": []
     }
   ],
-  "activeSceneId": "cena-1",
+  "activeSceneId": "cena-1769977555270",
   "library": {
     "mobs": [],
     "tracks": []
@@ -259,21 +128,10 @@
     ],
     "players": [
       {
-        "id": "preset-player-1769872845803",
-        "characterName": "ber",
-        "playerName": "tuss",
-        "maxHp": 20,
-        "currentHp": 20,
-        "conditions": [],
-        "photo": "/images/img-1768083732380.webp",
-        "createdAt": "2026-01-31T15:20:45.803Z",
-        "inventory": []
-      },
-      {
         "id": "preset-player-1769883643901",
         "characterName": "Paragon",
         "maxHp": 50,
-        "currentHp": 10,
+        "currentHp": 5,
         "conditions": [],
         "photo": "",
         "playerName": "Gustavo",
@@ -297,7 +155,7 @@
         "id": "preset-player-1769897208367",
         "characterName": "bers",
         "maxHp": 20,
-        "currentHp": 15,
+        "currentHp": 5,
         "conditions": [],
         "inventory": [],
         "photo": "/images/img-1768083732380.webp",
@@ -309,7 +167,7 @@
         "characterName": "asd",
         "playerName": "ohj",
         "maxHp": 20,
-        "currentHp": 20,
+        "currentHp": 0,
         "conditions": [],
         "inventory": [
           {
@@ -321,10 +179,38 @@
           {
             "nome": "AÇÃO ARDILOSA",
             "descricao": "A partir do 2º nível, seu pensamento rápido e agilidade faz você se mover e agir rapidamente. Você pode usar uma ação bônus durante cada um de seus turnos em combate. Esta ação pode ser usada somente para Disparada, Desengajar ou Esconder."
+          },
+          {
+            "nome": "Alterar-se",
+            "nome_ingles": "Alter Self",
+            "caracteristicas": "2º Círculo, Transmutação (Artífice, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:Pessoal\nComponentes:V S\nDuração:Concentração,\n                                         Até uma hora",
+            "descricao": "Você assume uma forma diferente. Quando conjurar a magia, escolha uma das opções a seguir, cujos efeitos persistem enquanto a magia durar. Dentro desse período, você pode usar uma ação para finalizar uma das opções escolhidas, e obter os benefícios de outra.Adaptação Aquática. Você adapta seu corpo para o ambiente aquático, com guelras crescendo e membranas nascendo entre seus dedos. Você pode respirar debaixo d'água e ganha deslocamento de natação com valor igual ao seu deslocamento de caminhada.Mudar Aparência. Você transforma sua aparência conforme desejar, alterando sua altura, peso, características raciais, som da voz, comprimento do cabelo, cor da pele e características peculiares, se existirem. Você pode adquirir a aparência de outra raça, embora nenhuma de suas estatísticas mude. Você não pode parecer com uma criatura de tamanho diferente do seu, e sua forma básica permanece a mesma; por exemplo, se você é bípede, você não pode usar a magia para se tornar quadrúpede. A qualquer momento, enquanto a magia durar, você pode usar sua ação para trocar de aparência novamente.Armas Naturais. Crescem em seu corpo garras, presas, espinhos, chifres ou uma arma natural diferente, à sua escolha. Seu ataque desarmado causa 1d6 pontos de dano contundente, cortante ou perfurante, conforme a arma natural escolhida, e você é proficiente com seus ataques desarmados. Por fim, sua arma natural é mágica e você tem um bônus de +1 em suas jogadas de ataque e dano quando usá-la.\nLivro do Jogador (PHB), p. 212 (211)"
           }
         ],
         "photo": "",
         "createdAt": "2026-01-31T22:57:34.094Z"
+      },
+      {
+        "id": "preset-player-1769963752160",
+        "characterName": "d2",
+        "playerName": "teste",
+        "maxHp": 20,
+        "currentHp": 20,
+        "conditions": [],
+        "inventory": [
+          {
+            "nome": "Bola de Fogo",
+            "nome_ingles": "Fireball",
+            "caracteristicas": "3º Círculo, Evocação (Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:45m [150 ft.]\nComponentes:V S M (uma pequena bola de guano de morcego e enxofre)\nDuração:Instantânea",
+            "descricao": "Um rastro brilhante lampeja do seu dedo apontado para um local à sua escolha e no alcance da magia, onde desabrocha com um estrondo grave em uma explosão de chamas. Cada criatura em uma esfera com raio de 6 metros [20-foot-radius sphere], centrada naquele ponto, deve fazer uma salvaguarda de Destreza. Se falhar, sofre 8d6 pontos de dano ígneo, ou metade do dano em caso de sucesso.O fogo se alastra, contornando os cantos. Ele incendeia objetos inflamáveis na área que não estejam sendo usados ou carregados.\nLivro do Jogador (PHB), p. 220 (241)"
+          },
+          {
+            "nome": "FÚRIA",
+            "descricao": "A partir do 2° nível, você pode desistir de toda Em batalha, você luta com uma ferocidade primitiva. No preocupação com sua defesa para atacar com um seu turno, você pode entrar em fúria com uma ação desespero feroz. Quando você fizer o seu primeiro ataque bônus.\nno turno, você pode decidir atacar descuidadamente.\nEnquanto estiver em fúria, você recebe os seguintes Fazer isso lhe concede vantagem nas jogadas de ataque benefícios se você não estiver vestindo uma armadura com armas corpo-a-corpo usando Força durante seu turno, pesada:\nporém, as jogadas de ataques feitas contra você possuem  Você tem vantagem em testes de Força e testes de vantagem até o início do seu próximo turno.\nresistência de Força  Quando você desferir um ataque com arma corpo-a-"
+          }
+        ],
+        "photo": "",
+        "createdAt": "2026-02-01T16:35:52.160Z"
       }
     ],
     "player": [
