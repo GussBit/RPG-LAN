@@ -213,6 +213,7 @@ app.post('/api/scenes', async (req, res) => {
     background: '',
     mobs: [],
     players: [],
+    ships: [],
     playlist: []
   };
   db.data.scenes.push(newScene);
@@ -253,6 +254,7 @@ app.post('/api/scenes/:id/duplicate', async (req, res) => {
   // Regenera IDs internos para evitar duplicatas
   newScene.mobs = (newScene.mobs || []).map(m => ({ ...m, id: `mob-${Date.now()}-${Math.random().toString(16).slice(2)}` }));
   newScene.playlist = (newScene.playlist || []).map(t => ({ ...t, id: `track-${Date.now()}-${Math.random().toString(16).slice(2)}` }));
+  newScene.ships = (newScene.ships || []).map(s => ({ ...s, id: `ship-${Date.now()}-${Math.random().toString(16).slice(2)}` }));
 
   db.data.scenes.push(newScene);
   db.data.activeSceneId = newScene.id;
@@ -452,6 +454,81 @@ app.delete('/api/scenes/:sceneId/players/:playerId', async (req, res) => {
   res.status(204).send();
 });
 
+// --- SHIPS (BATALHA NAVAL) ---
+
+app.post('/api/scenes/:sceneId/ships', async (req, res) => {
+  const { sceneId } = req.params;
+  const shipData = req.body;
+  const scene = db.data.scenes.find((s) => s.id === sceneId);
+  if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
+
+  // Sincronização de Preset (Similar aos Players)
+  if (!db.data.presets) db.data.presets = { mobs: [], players: [], ships: [] };
+  if (!db.data.presets.ships) db.data.presets.ships = [];
+
+  let globalPreset = null;
+  // Tenta achar preset existente pelo nome
+  globalPreset = db.data.presets.ships.find(s => s.name === shipData.name);
+
+  const newShip = {
+    id: `ship-${Date.now()}`,
+    name: shipData.name,
+    type: shipData.type || 'mob', // 'player' ou 'mob'
+    maxHp: Number(globalPreset?.maxHp ?? shipData.maxHp ?? 100),
+    currentHp: Number(globalPreset?.currentHp ?? shipData.currentHp ?? shipData.maxHp ?? 100),
+    maxMorale: Number(globalPreset?.maxMorale ?? shipData.maxMorale ?? 10),
+    currentMorale: Number(globalPreset?.currentMorale ?? shipData.currentMorale ?? shipData.maxMorale ?? 10),
+    image: globalPreset?.image || shipData.image || '',
+    conditions: globalPreset?.conditions || [],
+    inventory: globalPreset?.inventory || shipData.inventory || [],
+  };
+
+  // Salva Preset automaticamente para todos os navios (se não existir)
+  if (!globalPreset) {
+      db.data.presets.ships.push({
+          id: `preset-ship-${Date.now()}`,
+          ...newShip,
+          createdAt: new Date().toISOString()
+      });
+  }
+
+  scene.ships = scene.ships || [];
+  scene.ships.push(newShip);
+  await db.write();
+  res.status(201).json(newShip);
+});
+
+app.patch('/api/scenes/:sceneId/ships/:shipId', async (req, res) => {
+  const { sceneId, shipId } = req.params;
+  const updates = req.body;
+  const scene = db.data.scenes.find((s) => s.id === sceneId);
+  if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
+
+  const ship = (scene.ships || []).find((s) => s.id === shipId);
+  if (!ship) return res.status(404).json({ error: 'Navio não encontrado' });
+
+  Object.assign(ship, updates);
+  
+  // Atualiza Preset correspondente
+  if (db.data.presets?.ships) {
+      const preset = db.data.presets.ships.find(p => p.name === ship.name);
+      if (preset) Object.assign(preset, updates);
+  }
+
+  await db.write();
+  res.json(ship);
+});
+
+app.delete('/api/scenes/:sceneId/ships/:shipId', async (req, res) => {
+  const { sceneId, shipId } = req.params;
+  const scene = db.data.scenes.find((s) => s.id === sceneId);
+  if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
+
+  scene.ships = (scene.ships || []).filter((s) => s.id !== shipId);
+  await db.write();
+  res.status(204).send();
+});
+
 // Buscar Player por Token (Para a página pública do jogador)
 app.get('/api/players/token/:token', (req, res) => {
   const { token } = req.params;
@@ -464,7 +541,8 @@ app.get('/api/players/token/:token', (req, res) => {
         scene: {
           id: scene.id,
           name: scene.name,
-          background: scene.background
+          background: scene.background,
+          ships: scene.ships || [] // Adicionado: Envia os navios para o jogador
         }
       });
     }
@@ -524,7 +602,8 @@ app.delete('/api/scenes/:sceneId/playlist/:trackId', async (req, res) => {
 
 app.get('/api/presets/:type', (req, res) => {
   const { type } = req.params; // 'mobs' ou 'players'
-  if (!db.data.presets) db.data.presets = { mobs: [], players: [] }; // Garante plural
+  if (!db.data.presets) db.data.presets = { mobs: [], players: [], ships: [] }; // Garante estrutura
+  if (type === 'ships' && !db.data.presets.ships) db.data.presets.ships = []; // Garante array de navios
   res.json(db.data.presets[type] || []);
 });
 

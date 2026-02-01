@@ -23,14 +23,95 @@
               "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)"
             }
           ]
+        },
+        {
+          "id": "mob-1769980222129",
+          "name": "Teste",
+          "color": "red",
+          "maxHp": 10,
+          "currentHp": 10,
+          "damageDice": "1d6",
+          "toHit": 0,
+          "image": "",
+          "conditions": []
         }
       ],
-      "players": [],
+      "players": [
+        {
+          "id": "player-1769980109935",
+          "playerName": "ois",
+          "characterName": "oi",
+          "photo": "",
+          "maxHp": 20,
+          "currentHp": 5,
+          "accessUrl": "/p/2vq0pdxsxbz",
+          "accessToken": "2vq0pdxsxbz",
+          "conditions": [],
+          "inventory": [
+            {
+              "nome": "Acudir os Moribundos",
+              "nome_ingles": "Spare the Dying",
+              "caracteristicas": "Truque de  Necromancia (Artífice, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Instantânea",
+              "descricao": "Você toca uma criatura viva que tenha 0 pontos de vida. A criatura se torna estável. Essa magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 211 (277)"
+            }
+          ],
+          "currentMorale": 7
+        },
+        {
+          "id": "player-1769980168098",
+          "playerName": "teste",
+          "characterName": "d2",
+          "photo": "",
+          "maxHp": 20,
+          "currentHp": 20,
+          "accessUrl": "/p/a7euzx05m2u",
+          "accessToken": "a7euzx05m2u",
+          "conditions": [],
+          "inventory": [
+            {
+              "nome": "Bola de Fogo",
+              "nome_ingles": "Fireball",
+              "caracteristicas": "3º Círculo, Evocação (Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:45m [150 ft.]\nComponentes:V S M (uma pequena bola de guano de morcego e enxofre)\nDuração:Instantânea",
+              "descricao": "Um rastro brilhante lampeja do seu dedo apontado para um local à sua escolha e no alcance da magia, onde desabrocha com um estrondo grave em uma explosão de chamas. Cada criatura em uma esfera com raio de 6 metros [20-foot-radius sphere], centrada naquele ponto, deve fazer uma salvaguarda de Destreza. Se falhar, sofre 8d6 pontos de dano ígneo, ou metade do dano em caso de sucesso.O fogo se alastra, contornando os cantos. Ele incendeia objetos inflamáveis na área que não estejam sendo usados ou carregados.\nLivro do Jogador (PHB), p. 220 (241)"
+            },
+            {
+              "nome": "FÚRIA",
+              "descricao": "A partir do 2° nível, você pode desistir de toda Em batalha, você luta com uma ferocidade primitiva. No preocupação com sua defesa para atacar com um seu turno, você pode entrar em fúria com uma ação desespero feroz. Quando você fizer o seu primeiro ataque bônus.\nno turno, você pode decidir atacar descuidadamente.\nEnquanto estiver em fúria, você recebe os seguintes Fazer isso lhe concede vantagem nas jogadas de ataque benefícios se você não estiver vestindo uma armadura com armas corpo-a-corpo usando Força durante seu turno, pesada:\nporém, as jogadas de ataques feitas contra você possuem  Você tem vantagem em testes de Força e testes de vantagem até o início do seu próximo turno.\nresistência de Força  Quando você desferir um ataque com arma corpo-a-"
+            }
+          ]
+        }
+      ],
       "playlist": [],
       "notes": "teste oidfsdfs",
       "images": [
         "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
         "/images/img-1768083732380.webp"
+      ],
+      "ships": [
+        {
+          "id": "ship-1769982081687",
+          "name": "o serio",
+          "type": "player",
+          "maxHp": 150,
+          "currentHp": 95,
+          "maxMorale": 120,
+          "currentMorale": 70,
+          "image": "/images/img-1768083732380.webp",
+          "conditions": [],
+          "inventory": []
+        },
+        {
+          "id": "ship-1769982158841",
+          "name": "a trita",
+          "type": "mob",
+          "maxHp": 100,
+          "currentHp": 100,
+          "maxMorale": 10,
+          "currentMorale": 10,
+          "image": "",
+          "conditions": [],
+          "inventory": []
+        }
       ]
     }
   ],
@@ -180,6 +261,24 @@
         ],
         "photo": "",
         "createdAt": "2026-02-01T16:35:52.160Z"
+      },
+      {
+        "id": "preset-player-1769980109935",
+        "characterName": "oi",
+        "playerName": "ois",
+        "maxHp": 20,
+        "currentHp": 5,
+        "conditions": [],
+        "inventory": [
+          {
+            "nome": "Acudir os Moribundos",
+            "nome_ingles": "Spare the Dying",
+            "caracteristicas": "Truque de  Necromancia (Artífice, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Instantânea",
+            "descricao": "Você toca uma criatura viva que tenha 0 pontos de vida. A criatura se torna estável. Essa magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 211 (277)"
+          }
+        ],
+        "photo": "",
+        "createdAt": "2026-02-01T21:08:29.935Z"
       }
     ],
     "player": [
@@ -205,6 +304,34 @@
         "conditions": [],
         "photo": "/images/img-1768083732380.webp",
         "createdAt": "2026-01-31T15:12:16.295Z"
+      }
+    ],
+    "ships": [
+      {
+        "id": "ship-1769982081687",
+        "name": "o serio",
+        "type": "player",
+        "maxHp": 150,
+        "currentHp": 95,
+        "maxMorale": 120,
+        "currentMorale": 70,
+        "image": "/images/img-1768083732380.webp",
+        "conditions": [],
+        "inventory": [],
+        "createdAt": "2026-02-01T21:41:21.687Z"
+      },
+      {
+        "id": "ship-1769982158841",
+        "name": "a trita",
+        "type": "mob",
+        "maxHp": 100,
+        "currentHp": 100,
+        "maxMorale": 10,
+        "currentMorale": 10,
+        "image": "",
+        "conditions": [],
+        "inventory": [],
+        "createdAt": "2026-02-01T21:42:38.841Z"
       }
     ]
   }

@@ -11,7 +11,7 @@ export const useGameStore = create((set, get) => ({
   
   // Estado inicial da galeria
   gallery: { images: [], audio: [] },
-  presets: { mobs: [], players: [] },
+  presets: { mobs: [], players: [], ships: [] },
 
   // --- CENAS (SCENES) ---
 
@@ -376,6 +376,67 @@ export const useGameStore = create((set, get) => ({
     get().fetchPresets('players'); // Atualiza lista de presets
   },
 
+  // --- SHIPS (BATALHA NAVAL) ---
+
+  createShip: async (shipData) => {
+    const { activeScene, scenes } = get();
+    const res = await fetch(`${API_URL}/scenes/${activeScene.id}/ships`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(shipData),
+    });
+    const newShip = await res.json();
+    
+    const updatedScene = { ...activeScene, ships: [...(activeScene.ships || []), newShip] };
+    set({
+      activeScene: updatedScene,
+      scenes: scenes.map(s => s.id === activeScene.id ? updatedScene : s)
+    });
+    get().fetchPresets('ships'); // Atualiza sempre, pois agora todos geram presets
+  },
+
+  updateShip: async (sceneId, shipId, updates) => {
+    const { scenes, activeScene } = get();
+    const scene = scenes.find(s => s.id === sceneId);
+    if (!scene) return;
+
+    const updatedShips = (scene.ships || []).map(s => s.id === shipId ? { ...s, ...updates } : s);
+    const updatedScene = { ...scene, ships: updatedShips };
+
+    set({
+      scenes: scenes.map(s => s.id === sceneId ? updatedScene : s),
+      activeScene: activeScene?.id === sceneId ? updatedScene : activeScene
+    });
+
+    await fetch(`${API_URL}/scenes/${sceneId}/ships/${shipId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    });
+  },
+
+  deleteShip: async (sceneId, shipId) => {
+    const { scenes, activeScene } = get();
+    const updatedShips = (activeScene.ships || []).filter(s => s.id !== shipId);
+    const updatedScene = { ...activeScene, ships: updatedShips };
+
+    set({
+      scenes: scenes.map(s => s.id === sceneId ? updatedScene : s),
+      activeScene: activeScene?.id === sceneId ? updatedScene : activeScene
+    });
+
+    await fetch(`${API_URL}/scenes/${sceneId}/ships/${shipId}`, { method: 'DELETE' });
+  },
+
+  toggleShipCondition: async (sceneId, shipId, condition) => {
+    const { activeScene } = get();
+    const ship = (activeScene.ships || []).find(s => s.id === shipId);
+    if (!ship) return;
+    const conditions = ship.conditions || [];
+    const newConditions = conditions.includes(condition) ? conditions.filter(c => c !== condition) : [...conditions, condition];
+    get().updateShip(sceneId, shipId, { conditions: newConditions });
+  },
+
   // Sincroniza apenas os players sem recarregar tudo
   syncPlayers: async () => {
     const { activeScene, scenes } = get();
@@ -514,7 +575,7 @@ export const useGameStore = create((set, get) => ({
   
   fetchPresets: async (type) => {
     try {
-      const res = await fetch(`${API_URL}/presets/${type}`);
+      const res = await fetch(`${API_URL}/presets/${type || 'mobs'}`);
       const data = await res.json();
       set(state => ({
         presets: { ...state.presets, [type]: data }

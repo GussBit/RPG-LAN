@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Map as MapIcon, Users, Skull, Plus, Trash2, Image as ImageIcon, Swords, Heart, Settings, MapPin, Copy, Edit2 } from 'lucide-react';
+import { Map as MapIcon, Users, Skull, Plus, Trash2, Image as ImageIcon, Swords, Heart, Settings, MapPin, Copy, Edit2, Ship } from 'lucide-react';
 import { getImageUrl } from '../constants';
 
 export default function Sidebar({
@@ -61,6 +61,18 @@ export default function Sidebar({
           >
             <Skull size={16} className="xl:w-[18px] xl:h-[18px]" />
             <span className="hidden lg:inline text-[10px] xl:text-xs font-bold uppercase tracking-wide">Mobs</span>
+          </button>
+
+          <button 
+            onClick={() => setMode('ships')} 
+            className={`group flex-1 py-2 px-2 xl:py-2.5 xl:px-3 rounded-lg xl:rounded-xl flex items-center justify-center gap-1.5 xl:gap-2 transition-all duration-300 ${
+              mode === 'ships' 
+                ? 'bg-cyan-500/30 text-cyan-200 shadow-lg shadow-cyan-500/20 scale-105' 
+                : 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300 hover:scale-105'
+            }`}
+          >
+            <Ship size={16} className="xl:w-[18px] xl:h-[18px]" />
+            <span className="hidden lg:inline text-[10px] xl:text-xs font-bold uppercase tracking-wide">Navios</span>
           </button>
         </div>
       </div>
@@ -336,6 +348,55 @@ export default function Sidebar({
                   <Skull size={40} className="xl:w-12 xl:h-12 mx-auto text-zinc-700 mb-3" />
                   <p className="text-xs xl:text-sm text-zinc-500 mb-1">Bestiário vazio</p>
                   <p className="text-[10px] xl:text-xs text-zinc-600">Salve presets ao criar mobs</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* MODO: NAVIOS */}
+        {mode === 'ships' && (
+          <div className="px-3 pt-4 pb-4 xl:px-4 xl:pt-5 xl:pb-5">
+            <div className="flex items-center justify-between mb-4 xl:mb-5">
+              <div className="flex items-center gap-2 xl:gap-2.5">
+                <div className="w-1 h-6 xl:h-7 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full" />
+                <div>
+                  <div className="text-base xl:text-lg font-black tracking-tight text-zinc-100 uppercase leading-none mb-1">
+                    Estaleiro
+                  </div>
+                  <div className="text-[9px] xl:text-[10px] text-cyan-400 leading-none">
+                    Navios salvos
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2 xl:space-y-2.5">
+              {(presets.ships || []).map((s) => (
+                <div 
+                  key={s.id} 
+                  onClick={() => onAddPreset('ships', s)} 
+                  className="group relative flex items-center gap-3 p-2.5 rounded-xl bg-gradient-to-br from-emerald-900/60 to-emerald-900/40 border border-emerald-500/30 hover:border-emerald-400/50 cursor-pointer transition-all hover:scale-[1.02]"
+                >
+                  <div className="relative h-10 w-10 rounded-lg bg-black/50 overflow-hidden shrink-0 border border-emerald-500/30">
+                    {s.image ? <img src={getImageUrl(s.image)} className="w-full h-full object-cover" /> : <Ship size={20} className="m-auto text-emerald-500" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-emerald-100 text-xs truncate">{s.name}</div>
+                    <div className="text-[10px] text-emerald-400/70">HP: {s.maxHp} • Moral: {s.maxMorale}</div>
+                  </div>
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); onDeletePreset('ships', s.id); }} 
+                    className="p-1.5 text-emerald-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+              {(presets.ships || []).length === 0 && (
+                <div className="text-center py-10 text-zinc-600 text-xs">
+                  <Ship size={32} className="mx-auto mb-2 opacity-20" />
+                  Nenhum navio salvo.
                 </div>
               )}
             </div>

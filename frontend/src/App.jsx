@@ -23,6 +23,7 @@ import Arena from './components/Arena';
 import SceneModals from './components/modals/SceneModals';
 import MobModals from './components/modals/MobModals';
 import PlayerModals from './components/modals/PlayerModals';
+import ShipModals from './components/modals/ShipModals';
 import Modal from './components/ui/Modal'; // Ainda usado para o Mapa
 import { CONDITIONS, getImageUrl } from './constants';
 import { API_URL } from './api';
@@ -33,22 +34,26 @@ export default function App() {
     scenes, activeScene, fetchScenes, isLoading, error,
     updateMobHp, deleteMob, createMob, setActiveScene, createScene, duplicateScene, deleteScene,
     createPlayer, updatePlayerHp, deletePlayer, updatePlayer, togglePlayerCondition, toggleMobCondition, syncPlayers,
-    updateSceneBackground, updateScene, updateMob, presets, fetchPresets, deletePreset, createPreset, addTrackFromUrl, updatePlayer: updatePlayerStore
+    updateSceneBackground, updateScene, updateMob, presets, fetchPresets, deletePreset, createPreset, addTrackFromUrl, updatePlayer: updatePlayerStore,
+    createShip, updateShip, deleteShip, toggleShipCondition
   } = useGameStore();
 
   // --- ESTADOS DE UI E FORMULÁRIOS ---
   const [mobModalOpen, setMobModalOpen] = useState(false);
   const [playerModalOpen, setPlayerModalOpen] = useState(false);
+  const [shipModalOpen, setShipModalOpen] = useState(false);
   const [sceneModalOpen, setSceneModalOpen] = useState(false);
   const [editSceneModalOpen, setEditSceneModalOpen] = useState(false);
   const [editMobModalOpen, setEditMobModalOpen] = useState(false);
   const [editPlayerModalOpen, setEditPlayerModalOpen] = useState(false);
+  const [editShipModalOpen, setEditShipModalOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
 
   
   const [editingScene, setEditingScene] = useState(null);
   const [editingMob, setEditingMob] = useState(null);
   const [editingPlayer, setEditingPlayer] = useState(null);
+  const [editingShip, setEditingShip] = useState(null);
   const [mapSceneId, setMapSceneId] = useState(null);
 
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -64,6 +69,7 @@ export default function App() {
   // Estados para Inventário e QR Code
   const [inventoryPlayerId, setInventoryPlayerId] = useState(null);
   const [inventoryMobId, setInventoryMobId] = useState(null);
+  const [inventoryShipId, setInventoryShipId] = useState(null);
   const [qrCodeData, setQrCodeData] = useState(null); // { url, title }
 
   const [busyScene, setBusyScene] = useState(false);
@@ -92,6 +98,7 @@ export default function App() {
   useEffect(() => { 
     fetchPresets('mobs'); 
     fetchPresets('players'); 
+    fetchPresets('ships');
   }, [fetchPresets]);
   
   useEffect(() => {
@@ -208,6 +215,20 @@ export default function App() {
     } catch (err) { toast.error('Erro ao atualizar jogador'); }
   };
 
+  const handleCreateShip = async (data) => {
+    if (!data.name?.trim()) return;
+    try {
+      await createShip(data);
+      setShipModalOpen(false);
+      toast.success(`Navio lançado!`);
+    } catch (err) { toast.error(err.message); }
+  };
+
+  const handleEditShip = async (id, data) => {
+    await updateShip(activeScene.id, id, data);
+    setEditShipModalOpen(false); setEditingShip(null);
+  };
+
   const handleCreateScene = async (name) => {
     if (!name.trim()) return;
     try {
@@ -253,6 +274,11 @@ export default function App() {
                 photo: preset.photo, maxHp: preset.maxHp,
             });
             toast.success(`${preset.characterName} entrou na cena!`);
+        } else if (type === 'ships') {
+            await createShip({
+                name: preset.name, type: preset.type, maxHp: preset.maxHp, maxMorale: preset.maxMorale, image: preset.image
+            });
+            toast.success(`Navio ${preset.name} lançado!`);
         }
     } catch (err) { toast.error('Erro ao adicionar preset'); }
   };
@@ -322,6 +348,28 @@ export default function App() {
     newInventory.splice(index, 1);
 
     await updateMob(activeScene.id, mob.id, { inventory: newInventory });
+  };
+
+  const handleRemoveItemFromShip = async (index) => {
+    if (!inventoryShipId || !activeScene) return;
+    const ship = activeScene.ships.find(s => s.id === inventoryShipId);
+    if (!ship) return;
+
+    const newInventory = [...(ship.inventory || [])];
+    newInventory.splice(index, 1);
+
+    await updateShip(activeScene.id, ship.id, { inventory: newInventory });
+  };
+
+  const handleAddItemToShip = async (item) => {
+    if (!inventoryShipId || !activeScene) return;
+    const ship = activeScene.ships.find(s => s.id === inventoryShipId);
+    if (!ship) return;
+
+    const currentInventory = ship.inventory || [];
+    const newInventory = [...currentInventory, item];
+    await updateShip(activeScene.id, ship.id, { inventory: newInventory });
+    toast.success(`Item adicionado ao navio ${ship.name}`);
   };
 
   // --- RENDERIZADORES ---
@@ -473,6 +521,8 @@ export default function App() {
             <Arena 
               activeScene={activeScene}
               updatePlayerHp={updatePlayerHp}
+              updatePlayer={updatePlayer} // Adicionado
+              updateMob={updateMob}       // Adicionado
               deletePlayer={deletePlayer}
               onEditPlayer={(p) => { setEditingPlayer(p); setEditPlayerModalOpen(true); }}
               onTogglePlayerCondition={handleToggleCondition}
@@ -484,7 +534,14 @@ export default function App() {
               onAddMob={() => setMobModalOpen(true)}
               onOpenInventory={(p) => setInventoryPlayerId(p.id)}
               onOpenMobInventory={(m) => setInventoryMobId(m.id)}
+              onOpenShipInventory={(s) => setInventoryShipId(s.id)}
               onOpenQRCode={(url, title) => setQrCodeData({ url, title })}
+              // Props de Navio
+              onAddShip={() => setShipModalOpen(true)}
+              updateShip={updateShip}
+              deleteShip={deleteShip}
+              onEditShip={(s) => { setEditingShip(s); setEditShipModalOpen(true); }}
+              onToggleShipCondition={toggleShipCondition}
             />
           </main>
 
@@ -551,6 +608,16 @@ export default function App() {
         onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
       />
 
+      <ShipModals 
+        createOpen={shipModalOpen} onCloseCreate={() => setShipModalOpen(false)}
+        editOpen={editShipModalOpen} onCloseEdit={() => { setEditShipModalOpen(false); setEditingShip(null); }}
+        editingShip={editingShip}
+        onCreate={handleCreateShip}
+        onEdit={handleEditShip}
+        onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
+        onOpenPresets={(cb) => { setPresetsType('ships'); setPresetsCallback(() => cb); setPresetsOpen(true); }}
+      />
+
       <Modal open={mapOpen} title="Mapa da cena" onClose={() => setMapOpen(false)} widthClass="max-w-5xl">
         <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
           <div className="aspect-[16/9] relative">
@@ -581,10 +648,21 @@ export default function App() {
         onOpenCompendium={() => setCompendiumOpen(true)}
       />
 
+      <InventoryModal 
+        open={!!inventoryShipId} 
+        onClose={() => setInventoryShipId(null)}
+        player={(() => {
+           const s = activeScene?.ships?.find(s => s.id === inventoryShipId);
+           return s ? { ...s, characterName: s.name, playerName: 'Carga do Navio' } : null;
+        })()}
+        onRemoveItem={handleRemoveItemFromShip}
+        onOpenCompendium={() => setCompendiumOpen(true)}
+      />
+
       <Compendium 
         open={compendiumOpen} 
         onClose={() => setCompendiumOpen(false)} 
-        onAddItem={inventoryPlayerId ? handleAddItemToPlayer : (inventoryMobId ? handleAddItemToMob : null)}
+        onAddItem={inventoryPlayerId ? handleAddItemToPlayer : (inventoryMobId ? handleAddItemToMob : (inventoryShipId ? handleAddItemToShip : null))}
       />
 
       <QRCodeModal 

@@ -1,17 +1,42 @@
-import React from 'react';
-import { Plus, Edit2, Trash2, Backpack, QrCode, Heart, User } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Edit2, Trash2, Backpack, QrCode, Heart, User, Ship, Swords } from 'lucide-react';
 import ConditionsBar from './players/ConditionsBar';
 import MobCard from '../MobCard';
+import ShipCard from '../ShipCard'; // Importar o novo card
 import { getImageUrl } from '../constants';
 import { toast } from 'react-toastify';
 import { clsx } from 'clsx';
 
 export default function Arena({
   activeScene,
-  updatePlayerHp, deletePlayer, onEditPlayer, onTogglePlayerCondition,
-  updateMobHp, deleteMob, onEditMob, onToggleMobCondition,
-  onAddPlayer, onAddMob, onOpenInventory, onOpenQRCode, onOpenMobInventory
+  updatePlayerHp, updatePlayer, deletePlayer, onEditPlayer, onTogglePlayerCondition,
+  updateMobHp, updateMob, deleteMob, onEditMob, onToggleMobCondition,
+  onAddPlayer, onAddMob, onOpenInventory, onOpenQRCode, onOpenMobInventory, onOpenShipInventory,
+  onAddShip, updateShip, deleteShip, onEditShip, onToggleShipCondition
 }) {
+  const [battleMode, setBattleMode] = useState('normal'); // 'normal' | 'naval'
+
+  // Helpers para atualizar Moral (usando as funções genéricas de update)
+  const handleUpdatePlayerMorale = (id, delta) => {
+    const player = activeScene.players.find(p => p.id === id);
+    if (!player) return;
+    const current = player.currentMorale ?? player.maxMorale ?? 10;
+    updatePlayer(activeScene.id, id, { currentMorale: Math.max(0, current + delta) });
+  };
+
+  const handleUpdateMobMorale = (id, delta) => {
+    const mob = activeScene.mobs.find(m => m.id === id);
+    if (!mob) return;
+    const current = mob.currentMorale ?? mob.maxMorale ?? 10;
+    updateMob(activeScene.id, id, { currentMorale: Math.max(0, current + delta) });
+  };
+
+  const handleUpdateShipMorale = (id, delta) => {
+    const ship = (activeScene.ships || []).find(s => s.id === id);
+    if (!ship) return;
+    updateShip(activeScene.id, id, { currentMorale: Math.max(0, (ship.currentMorale || 0) + delta) });
+  };
+
   return (
     <div className="px-3 py-4 xl:px-4 xl:py-5 space-y-6 xl:space-y-8">
       
@@ -24,14 +49,43 @@ export default function Arena({
               Jogadores
             </h2>
             <p className="text-xs xl:text-sm text-zinc-500">
-              {activeScene?.players?.length || 0} jogador{activeScene?.players?.length !== 1 ? 'es' : ''} na cena
+              {battleMode === 'naval' ? (activeScene?.ships?.filter(s => s.type === 'player').length || 0) : (activeScene?.players?.length || 0)} na cena
             </p>
+          </div>
+
+          {/* SWAP BUTTON: Batalha Normal vs Naval */}
+          <div className="flex bg-black/40 p-1 rounded-lg border border-white/10">
+            <button 
+              onClick={() => setBattleMode('normal')}
+              className={clsx(
+                "flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-bold uppercase transition-all",
+                battleMode === 'normal' ? "bg-indigo-600 text-white shadow-lg" : "text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
+              )}
+            >
+              <Swords size={14} /> Normal
+            </button>
+            <button 
+              onClick={() => setBattleMode('naval')}
+              className={clsx(
+                "flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-bold uppercase transition-all",
+                battleMode === 'naval' ? "bg-blue-600 text-white shadow-lg" : "text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
+              )}
+            >
+              <Ship size={14} /> Naval
+            </button>
           </div>
         </div>
 
         {/* Grid de Jogadores - BREAKPOINTS AJUSTADOS */}
         <div className="grid grid-cols-1 min-[800px]:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 xl:gap-4">
           {(activeScene?.players || []).map((p) => {
+            
+            // --- MODO NAVAL: Renderiza ShipCard ---
+            if (battleMode === 'naval') {
+              return null; // Não renderiza players normais no modo naval
+            }
+
+            // --- MODO NORMAL: Renderiza Card Padrão ---
             const conditions = p.conditions || [];
             const isDead = p.currentHp <= 0;
             const hpPercent = Math.min(100, Math.max(0, (p.currentHp / p.maxHp) * 100));
@@ -347,13 +401,30 @@ export default function Arena({
             );
           })}
 
-          {/* Botão Adicionar Jogador */}
+          {/* Renderiza Navios de Jogadores no Modo Naval */}
+          {battleMode === 'naval' && (activeScene?.ships || []).filter(s => s.type === 'player').map(ship => (
+             <ShipCard 
+                key={ship.id}
+                type="player"
+                data={ship}
+                onUpdate={(id, delta) => updateShip(activeScene.id, id, { currentHp: Math.max(0, Math.min(ship.maxHp, (ship.currentHp || 0) + delta)) })}
+                onUpdateMorale={handleUpdateShipMorale}
+                onEdit={() => onEditShip(ship)}
+                onDelete={() => window.confirm('Afundar navio?') && deleteShip(activeScene.id, ship.id)}
+                onToggleCondition={(id, cid) => onToggleShipCondition(activeScene.id, id, cid)}
+                onOpenInventory={() => onOpenShipInventory(ship)}
+             />
+          ))}
+
+          {/* Botão Adicionar */}
           <button 
-            onClick={onAddPlayer}
+            onClick={battleMode === 'naval' ? onAddShip : onAddPlayer}
             className="w-full min-h-[180px] lg:min-h-[200px] border-2 border-dashed border-white/10 hover:border-white/20 rounded-xl flex flex-col items-center justify-center text-zinc-500 hover:text-zinc-300 transition-all hover:bg-white/5 gap-2 xl:gap-3"
           >
             <Plus size={32} className="xl:w-10 xl:h-10" />
-            <span className="text-xs xl:text-sm uppercase font-bold tracking-widest">Novo Jogador</span>
+            <span className="text-xs xl:text-sm uppercase font-bold tracking-widest">
+              {battleMode === 'naval' ? 'Novo Navio' : 'Novo Jogador'}
+            </span>
           </button>
         </div>
       </section>
@@ -367,11 +438,11 @@ export default function Arena({
               Arena
             </h2>
             <p className="text-xs xl:text-sm text-zinc-500">
-              {activeScene?.mobs?.length || 0} mob{activeScene?.mobs?.length !== 1 ? 's' : ''} na cena
+              {battleMode === 'naval' ? (activeScene?.ships?.filter(s => s.type === 'mob').length || 0) : (activeScene?.mobs?.length || 0)} na cena
             </p>
           </div>
           <button 
-            onClick={onAddMob}
+            onClick={battleMode === 'naval' ? onAddShip : onAddMob}
             className="h-9 xl:h-10 w-9 xl:w-10 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 hover:from-red-500/30 hover:to-orange-500/30 border border-red-400/30 text-red-200 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg shadow-red-500/20"
           >
             <Plus size={18} className="xl:w-5 xl:h-5" />
@@ -381,15 +452,32 @@ export default function Arena({
         {/* Grid de Mobs - BREAKPOINTS AJUSTADOS */}
         <div className="grid grid-cols-1 min-[800px]:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 xl:gap-4">
           {(activeScene?.mobs || []).map((mob) => (
-            <MobCard 
-              key={mob.id}
-              mob={mob} 
-              onUpdate={(mobId, delta) => updateMobHp(activeScene.id, mobId, delta)} 
-              onDelete={(mobId) => window.confirm(`Remover ${mob.name}?`) && deleteMob(activeScene.id, mobId)}
-              onEdit={(mob) => onEditMob(mob)}
-              onToggleCondition={(mobId, cId) => onToggleMobCondition(mobId, cId)}
-              onOpenInventory={() => onOpenMobInventory(mob)}
-            />
+            battleMode !== 'naval' && (
+              <MobCard 
+                key={mob.id}
+                mob={mob} 
+                onUpdate={(mobId, delta) => updateMobHp(activeScene.id, mobId, delta)} 
+                onDelete={(mobId) => window.confirm(`Remover ${mob.name}?`) && deleteMob(activeScene.id, mobId)}
+                onEdit={(mob) => onEditMob(mob)}
+                onToggleCondition={(mobId, cId) => onToggleMobCondition(mobId, cId)}
+                onOpenInventory={() => onOpenMobInventory(mob)}
+              />
+            )
+          ))}
+
+          {/* Renderiza Navios Inimigos no Modo Naval */}
+          {battleMode === 'naval' && (activeScene?.ships || []).filter(s => s.type === 'mob').map(ship => (
+             <ShipCard 
+                key={ship.id}
+                type="mob"
+                data={ship}
+                onUpdate={(id, delta) => updateShip(activeScene.id, id, { currentHp: Math.max(0, Math.min(ship.maxHp, (ship.currentHp || 0) + delta)) })}
+                onUpdateMorale={handleUpdateShipMorale}
+                onEdit={() => onEditShip(ship)}
+                onDelete={() => window.confirm(`Afundar ${ship.name}?`) && deleteShip(activeScene.id, ship.id)}
+                onToggleCondition={(id, cid) => onToggleShipCondition(activeScene.id, id, cid)}
+                onOpenInventory={() => onOpenShipInventory(ship)}
+             />
           ))}
         </div>
       </section>
