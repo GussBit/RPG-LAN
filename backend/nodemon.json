@@ -3,7 +3,7 @@
     "server.js",
     "*.js"
   ],
-  "ext": "js,json",
+  "ext": "js",
   "ignore": [
     "db.json",
     "public/**/*",

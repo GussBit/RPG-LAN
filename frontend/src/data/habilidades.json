@@ -453,8 +453,13 @@
   },
   {
     "nome": "ATAQUE FURTIVO",
-    "descricao": "dragão vermelho ou uma magia tempestade de gelo.\nQuando você for alvo de um efeito que exige um teste de A partir do 1º nível, você sabe como atacar sutilmente e resistência de Destreza para sofrer metade do dano, você explorar a distração de seus inimigos. Uma vez por turno, não sofre dano algum se passar, e somente metade do você pode adicionar 1d6 nas jogadas de dano contra dano se falhar.\nqualquer criatura que acertar, desde que tenha vantagem nas jogadas de ataque. O ataque deve ser com uma arma"
+    "descricao": "A partir do 1º nível, você sabe como atacar sutilmente e explorar a distração de seus inimigos. Uma vez por turno, você pode adicionar 1d6 nas jogadas de dano contra qualquer criatura que acertar, desde que tenha vantagem nas jogadas de ataque. O ataque deve ser com uma arma de acuidade ou à distância.\n\nVocê não precisa ter vantagem nas jogadas de ataque se outro inimigo do seu alvo estiver a 1,5 metro de distância dele, desde que este inimigo não esteja incapacitado e você não tenha desvantagem nas jogadas de ataque.\n\nA quantidade de dano extra aumenta conforme você ganha níveis nessa classe, como mostrado na coluna Ataque Furtivo da tabela O Ladino."
   },
+
+  {
+  "nome": "ESPECIALIZAÇÃO",
+  "descricao": "No 1º nível, você escolhe duas de suas perícias nas quais seja proficiente, ou uma perícia na qual seja proficiente e ferramentas de ladrão. Seu bônus de proficiência é dobrado em qualquer teste de habilidade que você fizer usando qualquer uma dessas proficiências escolhidas.\n\nNo 6º nível, você pode escolher outras duas de suas proficiências (em perícias ou ferramentas de ladrão) para ganhar esse mesmo benefício."
+},
   {
     "nome": "TALENTO CONFIÁVEL",
     "descricao": "de acuidade ou à distância.\nVocê não precisa ter vantagem nas jogadas de ataque No 11º nível, você refinou suas perícias beirando à se outro inimigo do seu alvo estiver a 1,5 metro de perfeição. Toda vez que você fizer um teste de habilidade distância dele, desde que este inimigo não esteja no qual possa adicionar seu bônus de proficiência, você incapacitado e você não tenha desvantagem nas jogadas trata um resultado no d20 de 9 ou menor como um 10.\nde ataque."

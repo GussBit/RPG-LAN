@@ -1,140 +1,50 @@
 {
   "scenes": [
     {
-      "id": "cena-1769974156276",
-      "name": "Testes",
-      "background": "/images/img-1768083732380.webp",
+      "id": "cena-prologo",
+      "name": "0. Prólogo",
+      "background": "",
       "mobs": [
         {
-          "id": "mob-1769976978809",
-          "name": "Teste",
-          "color": "red",
-          "maxHp": 10,
-          "currentHp": 10,
-          "damageDice": "1d6",
-          "toHit": 0,
+          "id": "mob-1769997427626",
+          "name": "Tubarão de Recife",
+          "color": "#5F9EA0",
+          "maxHp": 22,
+          "currentHp": 22,
+          "damageDice": "2d6",
+          "toHit": 4,
           "image": "",
-          "conditions": [],
-          "inventory": [
-            {
-              "nome": "Acalmar Emoções",
-              "nome_ingles": "Calm Emotions",
-              "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
-              "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)"
-            }
-          ]
-        },
-        {
-          "id": "mob-1769980222129",
-          "name": "Teste",
-          "color": "red",
-          "maxHp": 10,
-          "currentHp": 10,
-          "damageDice": "1d6",
-          "toHit": 0,
-          "image": "",
-          "conditions": [],
-          "inventory": [
-            {
-              "nome": "Abraço Terrestre de Maximilian",
-              "nome_ingles": "Maximilian's Earthen Grasp",
-              "caracteristicas": "2º Círculo, Transmutação (Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V S M (uma mão em miniatura esculpida em barro)\nDuração:Concentração,\n                                         Até 1 minuto",
-              "descricao": "Você escolhe espaço desocupado de 1,5 metro quadrado [5-foot-square] no solo que você possa ver, dentro do alcance. Uma mão Média feita de solo compacto se ergue ali e alcança uma criatura que você posa ver a até 1,5 metro [5 ft.] dela. O alvo deve realizar salvaguarda de Força. Se falhar, o alvo sofre 2d6 de dano contundente e fica impedido pela duração da magia. Com uma ação, você pode fazer com que a mão esmague o alvo impedido, que deve realizar salvaguarda de Força. Ele sofre 2d6 de dano contundente se falhar, ou metade desse dano se obtiver sucesso. Para se libertar, o alvo impedido pode realizar um teste de Força contra a CD de resistência da sua magia. Se obtiver sucesso, o alvo escapa e não estará mais impedido pela mão. Com uma ação bônus, você pode fazer a mão alcançar uma criatura diferente ou se mover para um espaço desocupado diferente, dentro do alcance. A mão solta um alvo impedido se você fizer isso.\nXanathar's Guide to Everything, p. 161",
-              "visible": true,
-              "quantity": 1
-            }
-          ]
-        }
-      ],
-      "players": [
-        {
-          "id": "player-1769980109935",
-          "playerName": "ois",
-          "characterName": "oi",
-          "photo": "",
-          "maxHp": 20,
-          "currentHp": 5,
-          "accessUrl": "/p/2vq0pdxsxbz",
-          "accessToken": "2vq0pdxsxbz",
-          "conditions": [],
-          "inventory": [],
-          "currentMorale": 7
-        },
-        {
-          "id": "player-1769980168098",
-          "playerName": "teste",
-          "characterName": "d2",
-          "photo": "",
-          "maxHp": 20,
-          "currentHp": 20,
-          "accessUrl": "/p/a7euzx05m2u",
-          "accessToken": "a7euzx05m2u",
-          "conditions": [],
-          "inventory": [
-            {
-              "nome": "Bola de Fogo",
-              "nome_ingles": "Fireball",
-              "caracteristicas": "3º Círculo, Evocação (Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:45m [150 ft.]\nComponentes:V S M (uma pequena bola de guano de morcego e enxofre)\nDuração:Instantânea",
-              "descricao": "Um rastro brilhante lampeja do seu dedo apontado para um local à sua escolha e no alcance da magia, onde desabrocha com um estrondo grave em uma explosão de chamas. Cada criatura em uma esfera com raio de 6 metros [20-foot-radius sphere], centrada naquele ponto, deve fazer uma salvaguarda de Destreza. Se falhar, sofre 8d6 pontos de dano ígneo, ou metade do dano em caso de sucesso.O fogo se alastra, contornando os cantos. Ele incendeia objetos inflamáveis na área que não estejam sendo usados ou carregados.\nLivro do Jogador (PHB), p. 220 (241)"
-            },
-            {
-              "nome": "FÚRIA",
-              "descricao": "A partir do 2° nível, você pode desistir de toda Em batalha, você luta com uma ferocidade primitiva. No preocupação com sua defesa para atacar com um seu turno, você pode entrar em fúria com uma ação desespero feroz. Quando você fizer o seu primeiro ataque bônus.\nno turno, você pode decidir atacar descuidadamente.\nEnquanto estiver em fúria, você recebe os seguintes Fazer isso lhe concede vantagem nas jogadas de ataque benefícios se você não estiver vestindo uma armadura com armas corpo-a-corpo usando Força durante seu turno, pesada:\nporém, as jogadas de ataques feitas contra você possuem  Você tem vantagem em testes de Força e testes de vantagem até o início do seu próximo turno.\nresistência de Força  Quando você desferir um ataque com arma corpo-a-"
-            }
-          ]
-        }
-      ],
-      "playlist": [],
-      "notes": "teste oidfsdfs",
-      "images": [
-        "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
-        "/images/img-1768083732380.webp"
-      ],
-      "ships": [
-        {
-          "id": "ship-1769982081687",
-          "name": "o serio",
-          "type": "player",
-          "maxHp": 150,
-          "currentHp": 95,
-          "maxMorale": 120,
-          "currentMorale": 70,
-          "image": "/images/img-1768083732380.webp",
           "conditions": [],
           "inventory": [
             {
               "tipo": "arma",
               "grupo": "Arma",
-              "nome": "Besta Pesada",
+              "nome": "Espada Grande",
               "custo": {
                 "quant": 50,
                 "moeda": "po"
               },
-              "dano": "1d10 perfurante",
-              "peso_kg": 4.5,
+              "dano": "2d6 cortante",
+              "peso_kg": 3,
               "propriedades": [
-                "munição (distância 30/120)",
                 "pesada",
-                "recarga",
                 "duas mãos"
               ],
-              "propriedades_texto": "munição (distância 30/120), pesada, recarga, duas mãos",
+              "propriedades_texto": "pesada, duas mãos",
               "renderData": {
                 "tags": [
                   "Arma",
-                  "munição (distância 30/120)",
                   "pesada",
-                  "recarga",
                   "duas mãos"
                 ],
                 "stats": [
                   {
                     "label": "Dano",
-                    "value": "1d10 perfurante"
+                    "value": "2d6 cortante"
                   },
                   {
                     "label": "Peso",
-                    "value": "4.5 kg"
+                    "value": "3 kg"
                   },
                   {
                     "label": "Custo",
@@ -142,75 +52,517 @@
                   }
                 ]
               },
-              "quantity": 2
+              "visible": true,
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "players": [],
+      "playlist": [],
+      "notes": "Os jogadores sobrevivem a um naufrágio na costa oeste de Skaug. Procurando abrigo, encontram a caverna do Santuário Esquecido e Nhal'zar, o último Eshar'kai livre. Ao final, são resgatados pelo Capitão Torvald.",
+      "images": [],
+      "ships": [
+        {
+          "id": "ship-1769996144638",
+          "name": "Sereia de Murann",
+          "type": "player",
+          "maxHp": 150,
+          "currentHp": 145,
+          "maxMorale": 100,
+          "currentMorale": 100,
+          "image": "",
+          "conditions": [],
+          "inventory": []
+        }
+      ]
+    },
+    {
+      "id": "cena-herois-viloes",
+      "name": "1. Heróis ou vilões",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Decisão crucial: motim no Sereia de Murann ou desembarque pacífico em Skaug para obter primeiro navio.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-saque-arauto",
+      "name": "2. Saque do Arauto da Maré",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Interceptação de navio dos Devotos de Umberlee para roubar mapas dos altares.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-hook-isle",
+      "name": "3. Guardiãs de Hook Isle",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Destruição do primeiro altar em Hook Isle durante maré alta.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-singing-rocks",
+      "name": "4. Vozes das Singing Rocks",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Recuperação da Harpa de Sélina na Gruta da Rainha Afogada.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-mar-negra",
+      "name": "5. Infiltração na Ilha da Mar Negra",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Invasão à base dos Filhos do Kraken para roubar a Coleira do Leviatã.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-ioma",
+      "name": "6. Mergulho em Ioma",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Mergulho profundo para destruir segundo altar em enseada submersa.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-aboleth",
+      "name": "7. Olhos do Aboleth",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Exploração de caverna em Thordentor habitada por Aboleth ancestral.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-plano-prisao",
+      "name": "8. Plano-Prisão de Thal'thorak",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Viagem ao Abismo das Águas Mortas para coletar Água Prisional.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-colar-profanado",
+      "name": "9. O Colar Profanado",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Roubo da Lágrima de Umberlee do Grande Templo em Skaug.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-fragmento",
+      "name": "10. Fragmento do Guardião",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Ritual em Hook Isle durante eclipse parcial para quebrar defesas de Thordentor.",
+      "images": [],
+      "ships": []
+    },
+    {
+      "id": "cena-guerra-mares",
+      "name": "11. Guerra das Marés",
+      "background": "",
+      "mobs": [],
+      "players": [],
+      "playlist": [],
+      "notes": "Batalha naval épica contra bloqueio dos Devotos de Umberlee.",
+      "images": [],
+      "ships": [
+        {
+          "id": "ship-1769996098865",
+          "name": "Sereia de Murann",
+          "type": "player",
+          "maxHp": 150,
+          "currentHp": 135,
+          "maxMorale": 100,
+          "currentMorale": 100,
+          "image": "",
+          "conditions": [],
+          "inventory": []
+        }
+      ]
+    },
+    {
+      "id": "cena-despertar",
+      "name": "12. O Despertar de Thordentor",
+      "background": "",
+      "mobs": [],
+      "players": [
+        {
+          "id": "player-1769996062689",
+          "playerName": "Felsky",
+          "characterName": "Barril",
+          "photo": "",
+          "maxHp": 27,
+          "currentHp": 27,
+          "accessUrl": "/p/ok8emeqfty",
+          "accessToken": "ok8emeqfty",
+          "conditions": [],
+          "inventory": [
+            {
+              "nome": "INSPIRAÇÃO DE BARDO",
+              "descricao": "que você tenha acesso, como mostrado na tabela. Por Você pode inspirar os outros através de palavras exemplo, quando você alcança o 3° nível da classe, você animadoras ou música. Para tanto, você usa uma ação pode aprender uma nova magia de 1° ou 2° nível.\nbônus no seu turno para escolher uma outra criatura, que Além disso, quando você adquire um nível nessa não seja você mesmo, a até 18 metros de você que possa classe, você pode escolher uma magia de bardo que você ouvi-lo. Essa criatura ganha um dado de Inspiração de conheça e substituí-la por outra magia da lista de magias Bardo, um d6.\nde bardo, que também deve ser de um nível ao qual você Uma vez, nos próximos 10 minutos, a criatura poderá tenha espaços de magia.\nrolar o dado e adicionar o valor rolado a um teste de habilidade, jogada de ataque ou teste de resistência que HABILIDADE DE CONJURAÇÃO ela fizer. A criatura pode esperar até rolar o d20 antes de Sua habilidade de conjuração é Carisma para suas decidir usar o dado de Inspiração de Bardo, mas deve magias de bardo, portanto, você usa seu Carisma sempre decidir antes do Mestre dizer se a rolagem foi bem ou mal que alguma magia se referir à sua habilidade de conjurar sucedida. Quando o dado de Inspiração de Bardo for magias. Além disso, você usa o seu modificador de rolado, ele é gasto. Uma criatura pode ter apenas um Carisma para definir a CD dos testes de resistência para dado de Inspiração de Bardo por vez.\nVocê pode usar essa característica um número de",
+              "visible": true,
+              "quantity": 1
             },
             {
-              "nome": "Acalmar Emoções",
-              "nome_ingles": "Calm Emotions",
-              "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
-              "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)"
+              "nome": "Zombaria Perversa",
+              "nome_ingles": "Vicious Mockery",
+              "caracteristicas": "Truque de  Encantamento (Bardo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V\nDuração:Instantânea",
+              "descricao": "Você lança uma série de insultos carregados com sutis encantamentos contra uma criatura à sua vista e no alcance da magia. Se o alvo puder ouvir você (embora ele não precise lhe entender), ele deve ser bem-sucedido em uma salvaguarda de Sabedoria. Se falhar, sofre 1d4 pontos de dano psíquico e terá desvantagem na próxima jogada de ataque que ele fizer antes do fim do próximo turno dele.\nLivro do Jogador (PHB), p. 289 (285)",
+              "visible": true,
+              "quantity": 1
             },
             {
-              "tipo": "municao",
-              "nome": "Balas de Canhão (Caixa)",
-              "unidade": "caixa",
-              "variantes_por_categoria_navio": [
-                {
-                  "categoria_navio": "Grande",
-                  "custo": {
-                    "quant": 20,
-                    "moeda": "po"
-                  },
-                  "equivalencia": "1 combate para navio Grande"
-                },
-                {
-                  "categoria_navio": "Imenso",
-                  "custo": {
-                    "quant": 40,
-                    "moeda": "po"
-                  },
-                  "equivalencia": "1 combate para navio Imenso"
-                },
-                {
-                  "categoria_navio": "Colossal",
-                  "custo": {
-                    "quant": 80,
-                    "moeda": "po"
-                  },
-                  "equivalencia": "1 combate para navio Colossal"
-                }
-              ],
-              "estoque_inicial": {
-                "min": 3,
-                "max": 10,
-                "unidade": "caixas",
-                "regra": "depende_da_categoria"
+              "nome": "Mãos Mágicas",
+              "nome_ingles": "Mage Hand",
+              "caracteristicas": "Truque de  Invocação (Artífice, Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V S\nDuração:1 minuto",
+              "descricao": "Uma mão flutuante e espectral aparece em um ponto à sua escolha e no alcance da magia. A mão permanece enquanto a magia durar ou até você dispensá-la com uma ação. A mão desaparece caso se distancie mais de 9 metros [30 ft.] de você ou se você conjurar a magia novamente.Você pode usar sua ação para controlar a mão. Você pode fazer com que ela manipule objetos, abra portas ou recipientes destrancados, guarde ou pegue itens de recipientes abertos, ou derrame o conteúdo de frascos. Você pode movê-la até 9 metros [30 ft.] a cada vez que a usa. Ela não pode atacar, ativar itens mágicos ou carregar mais de 4,5 quilos [10 pounds].\nLivro do Jogador (PHB), p. 256 (256)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Palavra Curativa",
+              "nome_ingles": "Healing Word",
+              "caracteristicas": "1º Círculo, Evocação (Bardo, Clérigo, Druida)\nTempo de Conjuração:Uma ação bônus\nAlcance:18m [60 ft.]\nComponentes:V\nDuração:Instantânea",
+              "descricao": "Escolha uma criatura à sua vista e no alcance da magia. Ela recupera uma quantidade de pontos de vida igual a 1d4 + seu modificador de atributo de conjuração. Esta magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 264 (250)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Fogo das Fadas",
+              "nome_ingles": "Faerie Fire",
+              "caracteristicas": "1º Círculo, Evocação (Artífice, Bardo, Druida)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Todos os objetos em um cubo de 6 metros [20-foot cube] no alcance da magia se tornam delineados por uma luz azul, verde ou violeta (à sua escolha). Qualquer criatura que esteja na área quando a magia for conjurada também é delineada pela luz, caso falhe em uma salvaguarda de Destreza. Enquanto a magia durar, objetos e criaturas afetadas por ela emitem uma luz tênue, criando meia-luz em um raio de 3 metros [10-foot radius].Qualquer jogada de ataque contra uma criatura ou objeto afetado tem vantagem, caso o atacante possa vê-los.Objetos e criaturas afetados não podem se beneficiar por estarem invisíveis.\nLivro do Jogador (PHB), p. 244 (239)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Detectar Magia",
+              "nome_ingles": "Detect Magic",
+              "caracteristicas": "1º Círculo, Adivinhação (Artífice, Bardo, Clérigo, Druida, Feiticeiro, Guardião, Mago, Paladino)\nTempo de Conjuração:Uma ação  ou Ritual\nAlcance:Pessoal\nComponentes:V S\nDuração:Concentração,\n                                         Até 10 minutos",
+              "descricao": "Enquanto a magia durar, você pode sentir a presença de energia mágica a até 9 metros [30 ft.]. Caso seja bem-sucedido ao fazê-lo, você pode usar sua ação para ver uma tênue aura ao redor de qualquer criatura ou objeto que possuam energia mágica e que estejam visíveis na área, distinguindo, inclusive, a escola da magia, caso ela pertença a alguma.A magia pode atravessar a maioria das barreiras, sendo bloqueada, no entanto, por 30 centímetros [1 foot] de pedra, 2,5 centímetros [1 inch] de metal comum, uma folha fina de chumbo ou 1 metro [3 ft.] de madeira ou terra.\nLivro do Jogador (PHB), p. 236 (231)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Compreender Idiomas",
+              "nome_ingles": "Comprehend Languages",
+              "caracteristicas": "1º Círculo, Adivinhação (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação  ou Ritual\nAlcance:Pessoal\nComponentes:V S M (um pitada de fuligem e sal)\nDuração:Uma hora",
+              "descricao": "Enquanto a magia durar, você entende o significado literal de qualquer idioma falado que ouvir. Você tambem entende qualquer idioma escrito que veja, mas deve tocar a superfície sobre a qual as palavras estão escritas. Demora cerca de 1 minuto para ler uma página de texto.Esta magia não decodifica mensagens secretas em um texto ou um glifo, como um selo arcano, que não faça parte de um idioma escrito.\nLivro do Jogador (PHB), p. 225 (224)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Sugestão",
+              "nome_ingles": "Suggestion",
+              "caracteristicas": "2º Círculo, Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V M (uma língua de uma cobra e um pouco de favo de mel ou uma gota de óleo adocicado)\nDuração:Concentração,\n                                         Até 8 horas",
+              "descricao": "Você sugere um curso de ação (limitado a uma sentença ou duas) e influencia magicamente uma criatura à sua vista no alcance da magia e que possa lhe ouvir e compreender. Criaturas que não podem ser enfeitiçadas são imunes a este efeito. A sugestão precisa ser dita de uma forma que faça o curso de ação parecer razoável. Pedir à criatura que se esfaqueie, jogue-se contra uma lança, imole-se ou faça algum outro ato evidentemente danoso, automaticamente cancela o efeito da magia.O alvo deve fazer uma salvaguarda de Sabedoria. Se falhar, ele segue os atos sugeridos da melhor forma possível, segundo suas habilidades. A continuidade dos atos será feita enquanto a magia durar. Se a atividade sugerida pode ser completada em um período menor, a magia se encerra quando o sujeito termina aquilo que lhe foi sugerido.Também podem ser especificadas condições que disparam uma atividade especial enquanto estiver dentro da duração da magia. Por exemplo, pode ser sugerido que uma cavaleira dê sua montaria ao primeiro mendigo que ela encontrar. Se a condição não for preenchida antes do fim dos efeitos, a atividade não é concluída.Se você ou qualquer de seus companheiros causarem dano ao alvo, a magia se encerra.\nLivro do Jogador (PHB), p. 282 (279)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "INCREMENTO NO VALOR DE HABILIDADE",
+              "descricao": "bardo prefere ser honesto que político.\nQuando você atinge o 4° nível e novamente no 8°, 12°, 16° Os membros do colégio se reúnem em bibliotecas e, as e 19° nível, você pode aumentar um valor de habilidade, à vezes, em faculdades de verdade, completas com salas de sua escolha, em 2 ou você pode aumentar dois valores de aula e dormitórios, para partilhar seu conhecimento uns habilidade, à sua escolha, em 1. Como padrão, você não com os outros. Eles também se encontram em festivais ou pode elevar um valor de habilidade acima de 20 com essa em assuntos de estado, onde eles podem expor corrupção, característica.\ndesvendar mentiras e zombar da superestima de figuras de autoridade.",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Adaga",
+              "custo": {
+                "quant": 2,
+                "moeda": "po"
               },
-              "notas": [],
-              "grupo": "Munição",
+              "dano": "1d4 perfurante",
+              "peso_kg": 0.5,
+              "propriedades": [
+                "acuidade",
+                "leve",
+                "arremesso (distância 6/18)"
+              ],
+              "propriedades_texto": "acuidade, leve, arremesso (distância 6/18)",
               "renderData": {
                 "tags": [
-                  "Munição",
-                  "caixa"
+                  "Arma",
+                  "acuidade",
+                  "leve",
+                  "arremesso (distância 6/18)"
                 ],
                 "stats": [
                   {
-                    "label": "Estoque",
-                    "value": "3-10 caixas"
+                    "label": "Dano",
+                    "value": "1d4 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "2 po"
                   }
                 ]
-              }
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "armadura",
+              "categoria": "leve",
+              "nome": "Couro",
+              "custo": {
+                "quant": 10,
+                "moeda": "po"
+              },
+              "ca": "11 + modificador de Des",
+              "forca_min": null,
+              "furtividade": null,
+              "peso_kg": 5,
+              "grupo": "Armadura",
+              "renderData": {
+                "tags": [
+                  "Armadura leve"
+                ],
+                "stats": [
+                  {
+                    "label": "CA",
+                    "value": "11 + modificador de Des"
+                  },
+                  {
+                    "label": "Força Mín.",
+                    "value": "-"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "10 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
             }
           ]
         },
         {
-          "id": "ship-1769982158841",
-          "name": "a trita",
-          "type": "mob",
-          "maxHp": 100,
-          "currentHp": 100,
-          "maxMorale": 10,
-          "currentMorale": 10,
+          "id": "player-1769996063165",
+          "playerName": "Lucas",
+          "characterName": "Silvaré",
+          "photo": "",
+          "maxHp": 27,
+          "currentHp": 27,
+          "accessUrl": "/p/oj3qhf3z6jp",
+          "accessToken": "oj3qhf3z6jp",
+          "conditions": [],
+          "inventory": [
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Rapieira",
+              "custo": {
+                "quant": 25,
+                "moeda": "po"
+              },
+              "dano": "1d8 perfurante",
+              "peso_kg": 1,
+              "propriedades": [
+                "acuidade"
+              ],
+              "propriedades_texto": "acuidade",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "acuidade"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d8 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "1 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "25 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Adaga",
+              "custo": {
+                "quant": 2,
+                "moeda": "po"
+              },
+              "dano": "1d4 perfurante",
+              "peso_kg": 0.5,
+              "propriedades": [
+                "acuidade",
+                "leve",
+                "arremesso (distância 6/18)"
+              ],
+              "propriedades_texto": "acuidade, leve, arremesso (distância 6/18)",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "acuidade",
+                  "leve",
+                  "arremesso (distância 6/18)"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d4 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "2 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Arco Curto",
+              "custo": {
+                "quant": 25,
+                "moeda": "po"
+              },
+              "dano": "1d6 perfurante",
+              "peso_kg": 1,
+              "propriedades": [
+                "munição (distância 24/96)",
+                "duas mãos"
+              ],
+              "propriedades_texto": "munição (distância 24/96), duas mãos",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "munição (distância 24/96)",
+                  "duas mãos"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d6 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "1 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "25 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "ATAQUE FURTIVO",
+              "descricao": "A partir do 1º nível, você sabe como atacar sutilmente e explorar a distração de seus inimigos. Uma vez por turno, você pode adicionar 1d6 nas jogadas de dano contra qualquer criatura que acertar, desde que tenha vantagem nas jogadas de ataque. O ataque deve ser com uma arma de acuidade ou à distância.\n\nVocê não precisa ter vantagem nas jogadas de ataque se outro inimigo do seu alvo estiver a 1,5 metro de distância dele, desde que este inimigo não esteja incapacitado e você não tenha desvantagem nas jogadas de ataque.\n\nA quantidade de dano extra aumenta conforme você ganha níveis nessa classe, como mostrado na coluna Ataque Furtivo da tabela O Ladino.",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "ESPECIALIZAÇÃO",
+              "descricao": "No 1º nível, você escolhe duas de suas perícias nas quais seja proficiente, ou uma perícia na qual seja proficiente e ferramentas de ladrão. Seu bônus de proficiência é dobrado em qualquer teste de habilidade que você fizer usando qualquer uma dessas proficiências escolhidas.\n\nNo 6º nível, você pode escolher outras duas de suas proficiências (em perícias ou ferramentas de ladrão) para ganhar esse mesmo benefício.",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "TRAPACEIRO ARCANO",
+              "descricao": "escrita e comportamento de outra pessoa, infalivelmente.\nVocê deve gastar pelo menos três horas estudando esses Alguns ladinos aprimoram suas finas perícias de três componentes do comportamento de uma pessoa, furtividade e agilidade com magia, aprendendo truques ouvindo sua articulação, examinando sua escrita e de encantamento e ilusão. Esses ladinos incluem não observando seus maneirismos.\nsomente batedores de carteira e assaltantes, mas também Habilidade de Conjuração. Sua habilidade de trapaceiros, enganadores e um número significativo de conjuração é Inteligência para suas magias de mago, aventureiros.\nportanto, você usa sua Inteligência sempre que alguma magia se referir à sua habilidade de conjurar magias.\nCONJURAÇÃO Além disso, você usa o seu modificador de Inteligência Quando você alcançar o 3° nível, você adquire a para definir a CD dos testes de resistência para as magias habilidade de conjurar magias. Veja o capítulo 10 para as de mago que você conjura e quando você realiza uma regras gerais de conjuração e o capítulo 11 para a lista de jogada de ataque com uma magia.\nmagias de mago.\nTruques. Você aprende três truques: mãos mágicas e CD para suas magias = 8 + bônus de proficiência + outros dois truques, à sua escolha, da lista de magias de seu modificador de Inteligência mago. Você aprende um truque de mago adicional, à sua escolha, no 10° nível.\nModificador de ataque de magia = seu bônus de Espaços de Magia. A tabela Conjuração de proficiência + seu modificador de Inteligência Trapaceiro Arcano mostra quantos espaços de magia de 1° nível e superiores você possui disponíveis para MÃOS MÁGICAS MALABARISTAS conjuração. Para conjurar uma dessas magias, você deve A partir do 3° nível, quando você conjurar mãos mágicas, gastar uma espaço de magia do nível da magia ou você pode fazer a mão espectral ficar invisível e poderá superior. Você recobra todos os espaços de magia gastos realizar as seguintes tarefas adicionais:\nquando você completa um descanso longo.\n Você pode guardar um objeto que a mão estiver Por exemplo, se você quiser conjurar a magia de 1° segurando em um recipiente vestido ou carregado por nível enfeitiçar pessoa e você tiver um espaço de magia de outra criatura.\n1° nível e um de 2° nível disponíveis, você poderá conjurar  Você pode recuperar um objeto guardado em um enfeitiçar pessoa usando qualquer dos dois espaços.\nrecipiente vestido ou carregado por outra criatura.\nMagias Conhecidas de 1° Nível e Superiores. Você  Você pode usar ferramentas de ladrão para abrir conhece três magias de 1° nível, à sua escolha, as quais fechaduras ou desarmar armadilhas à distância.\nduas delas você deve escolher das magias de encantamento e ilusão da lista de magias de mago.\nVocê pode realizar qualquer dessas tarefas sem ser A coluna Magias Conhecidas na tabela Conjuração do notado por uma criatura se for bem sucedido num teste de Trapaceiro Arcano mostra quando você aprende mais Destreza (Prestidigitação) resistido por um teste de magias de mago, de 1° nível ou superior. Cada uma Sabedoria (Percepção) da criatura.\ndessas magias deve ser uma magia de encantamento ou Além disso, você pode usar a ação bônus concedida por ilusão, à sua escolha, de um nível a que você tenha sua Ação Ardilosa para controlar a mão.\nacesso, como mostrado na tabela. Por exemplo, quando você alcança o 7° nível da classe, você pode aprender uma EMBOSCADA MÁGICA nova magia de 1° ou 2° nível.\nA partir do 9° nível, se você estiver escondido de uma As magias que você aprende no 8°, 14° e 20° nível criatura quando conjurar uma magia nela, a criatura terá podem vir de qualquer escola de magia.\nAlém disso, quando você adquire um nível nessa desvantagem em qualquer teste de resistência que ela classe, você pode escolher uma magia de mago que você fizer contra a magia nesse turno.\nconheça e substituí-la por outra magia da lista de magias de mago, que também deve ser de um nível ao qual você TRAPACEIRO VERSÁTIL tenha espaços de magia e deve ser uma magia de No 13° nível, você ganha a habilidade de distrair alvos encantamento ou ilusão, exceto as magias substituídas no com suas mãos mágicas. Com uma ação bônus, no seu 8°, 14° e 20º nível.\nturno, você pode designar uma criatura a até 1,5 metro da mão espectral criada por essa magia. Fazer isso, lhe CONJURAÇÃO DE TRAPACEIRO ARCANO concede vantagem nas jogadas de ataque contra essa Nível de Truques Magias Espaços de Magia por Nível criatura até o final do turno.\nLadino Conhecidos Conhecidas LADRÃO DE MAGIA No 17° nível, você ganha a habilidade de, magicamente, roubar o conhecimento de como conjurar uma magia de outro conjurador.\nImediatamente depois de uma criatura conjurar uma magia que tenha você como alvo ou inclua você na sua área de efeito, você pode usar sua reação para forçar a criatura a realizar um teste de resistência com o 10° modificador de habilidade de conjuração dele. A CD é 11° igual a CD das suas magias. Numa falha, você ignora o 12° efeito da magia sobre você e rouba o conhecimento da 13° magia, se ela for de, pelo menos, 1° nível e de um nível 14° que você possa conjurar (não precisa ser uma magia de 15° mago). Pelas próximas 8 horas, você conhece a magia e 16° pode conjurá-la usando seus espaços de magia. A criatura 17° não pode conjurar a magia até que 8 horas tenham se 18° passado.\n19° Uma vez que você tenha usado essa característica, 20° você não pode usá-la novamente até ter terminado um descanso longo.",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Mãos Mágicas",
+              "nome_ingles": "Mage Hand",
+              "caracteristicas": "Truque de  Invocação (Artífice, Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V S\nDuração:1 minuto",
+              "descricao": "Uma mão flutuante e espectral aparece em um ponto à sua escolha e no alcance da magia. A mão permanece enquanto a magia durar ou até você dispensá-la com uma ação. A mão desaparece caso se distancie mais de 9 metros [30 ft.] de você ou se você conjurar a magia novamente.Você pode usar sua ação para controlar a mão. Você pode fazer com que ela manipule objetos, abra portas ou recipientes destrancados, guarde ou pegue itens de recipientes abertos, ou derrame o conteúdo de frascos. Você pode movê-la até 9 metros [30 ft.] a cada vez que a usa. Ela não pode atacar, ativar itens mágicos ou carregar mais de 4,5 quilos [10 pounds].\nLivro do Jogador (PHB), p. 256 (256)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Ilusão Menor",
+              "nome_ingles": "Minor Illusion",
+              "caracteristicas": "Truque de  Ilusão (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:S M (um pouco de lã)\nDuração:1 minuto",
+              "descricao": "Você cria um som ou uma imagem de um objeto ao alcanceda magia, que permanece enquanto esta durar. A ilusão termina se você a dispensar com uma ação ou conjurá-la novamente.Se você cria um som, o volume emitido pode variar desdeum sussurro até um grito. Pode ser a sua voz, a voz de outra pessoa, o rugido de um leão, a batida de tambores ou qualquer outro som à sua escolha. O som continua no mesmo tom enquanto a magia durar, ou você pode fazer sons mais discretos em momentos diferentes, antes que amagia termine.Se você criar uma imagem de um objeto - como uma cadeira, pegadas lamacentas ou uma pequena arca - esta não pode ser maior que um cubo de 1,5 metro [5-foot cube]. A imagem não pode emitir som, luz, odor ou qualquer outro efeito sensorial. Interação física com a imagem revela que se trata de uma ilusão, pois coisas passam através dela.Se uma criatura usar uma ação para examinar o som ou a imagem, a criatura pode determinar que é uma ilusão comum teste bem-sucedido de Inteligência (Investigação) contra a CD para evitar sua magia. A ilusão torna-se desbotada para uma criatura que consiga discerni-la.\nLivro do Jogador (PHB), p. 248 (260)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Lâmina Estrondosa",
+              "nome_ingles": "Booming Blade",
+              "caracteristicas": "Truque de  Evocação (Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:1,5m [5 ft.]\nComponentes:V M (uma arma)\nDuração:Uma rodada",
+              "descricao": "Como parte da ação usada para conjurar esta magia, você deve fazer um ataque corpo a corpo com uma arma contra uma criatura dentro do alcance da magia, do contrário a magia falha. Se acertar, o alvo sofre os efeitos normais do ataque e fica envolto em uma energia estrondosa até o começo do próximo turno do conjurador. Se o alvo se mover voluntariamente antes disso, ele imediatamente recebe 1d8 de dano trovejante e a magia encerra.\nTasha's Cauldron to Everything, p. 106",
+              "visible": true,
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "playlist": [],
+      "notes": "Ritual final no Templo Submerso durante eclipse total. Confronto com Elzyra e Avatar de Umberlee.",
+      "images": [],
+      "ships": [
+        {
+          "id": "ship-1769996079741",
+          "name": "Sereia de Murann",
+          "type": "player",
+          "maxHp": 150,
+          "currentHp": 147,
+          "maxMorale": 100,
+          "currentMorale": 100,
           "image": "",
           "conditions": [],
           "inventory": []
@@ -218,316 +570,1160 @@
       ]
     }
   ],
-  "activeSceneId": "cena-1769974156276",
+  "activeSceneId": "cena-prologo",
   "library": {
     "mobs": [],
     "tracks": []
   },
   "gallery": {
-    "images": [
-      {
-        "id": "gallery-1768087265581",
-        "url": "/images/img-1768087265438.webp",
-        "name": "3a.webp",
-        "uploadedAt": "2026-01-10T23:21:05.581Z"
-      },
-      {
-        "id": "gallery-1768088659058",
-        "url": "/images/img-1768088658951.webp",
-        "name": "2149365813.jpg",
-        "uploadedAt": "2026-01-10T23:44:19.058Z"
-      },
-      {
-        "id": "gallery-1768088706209",
-        "url": "/images/img-1768088706074.webp",
-        "name": "gussbit_patient_looking_confused_at_medication_bottles_versus_86f18450-f50a-44c8-8a3e-34570244c450_1.png",
-        "uploadedAt": "2026-01-10T23:45:06.209Z"
-      },
-      {
-        "id": "gallery-1768134362078",
-        "url": "/images/img-1768134361912.webp",
-        "name": "mythicalproduction_35248_A_breathtaking_mythical_enchanted_fore_68bc5483-6e2b-4630-83f4-f760da68abe5.png",
-        "uploadedAt": "2026-01-11T12:26:02.078Z"
-      },
-      {
-        "id": "img-1768140904946",
-        "url": "/images/img-1768140904862.webp",
-        "name": "3a.webp",
-        "uploadedAt": "2026-01-11T14:15:04.946Z"
-      }
-    ],
-    "audio": [
-      {
-        "id": "audio-1768140911453",
-        "url": "/audio/audio-1768140911453.mp3",
-        "name": "sound-effect-1904.mp3",
-        "type": "sfx",
-        "uploadedAt": "2026-01-11T14:15:11.454Z"
-      }
-    ]
+    "images": [],
+    "audio": []
   },
   "presets": {
     "mobs": [
       {
-        "id": "preset-1769872885337",
-        "name": "Teste",
-        "color": "red",
-        "maxHp": 10,
+        "id": "preset-mob-bandido",
+        "name": "Bandido",
+        "nameEnglish": "Bandit",
+        "color": "#8B4513",
+        "maxHp": 11,
         "damageDice": "1d6",
-        "toHit": 0,
+        "toHit": 3,
         "image": "",
-        "createdAt": "2026-01-31T15:21:25.337Z"
+        "cr": "1/8",
+        "source": "MM p.343",
+        "faction": "Piratas & Criminosos de Skaug",
+        "role": "Marinheiro comum, bucaneiro bêbado",
+        "createdAt": "2026-02-02T01:30:00.000Z"
+      },
+      {
+        "id": "preset-mob-brutamontes",
+        "name": "Brutamontes",
+        "nameEnglish": "Thug",
+        "color": "#8B4513",
+        "maxHp": 32,
+        "damageDice": "1d6+1",
+        "toHit": 4,
+        "image": "",
+        "cr": "1/2",
+        "source": "MM p.350",
+        "faction": "Piratas & Criminosos de Skaug",
+        "role": "Brutamontes de doca, capangas de agiota",
+        "createdAt": "2026-02-02T01:30:01.000Z"
+      },
+      {
+        "id": "preset-mob-espiao",
+        "name": "Espião",
+        "nameEnglish": "Spy",
+        "color": "#2F4F4F",
+        "maxHp": 27,
+        "damageDice": "1d6",
+        "toHit": 4,
+        "image": "",
+        "cr": "1",
+        "source": "MM p.349",
+        "faction": "Piratas & Criminosos de Skaug",
+        "role": "Informante dos Sombras do Porto, vigia",
+        "createdAt": "2026-02-02T01:30:02.000Z"
+      },
+      {
+        "id": "preset-mob-mago-conves",
+        "name": "Mago de Convés Pirata",
+        "nameEnglish": "Pirate Deck Wizard",
+        "color": "#4B0082",
+        "maxHp": 22,
+        "damageDice": "1d6",
+        "toHit": 4,
+        "image": "",
+        "cr": "1",
+        "source": "GOS p.242",
+        "faction": "Piratas & Criminosos de Skaug",
+        "role": "Mago de bordo iniciante (Ventos Negros)",
+        "createdAt": "2026-02-02T01:30:03.000Z"
+      },
+      {
+        "id": "preset-mob-capitao-bandido",
+        "name": "Capitão Bandido",
+        "nameEnglish": "Bandit Captain",
+        "color": "#8B4513",
+        "maxHp": 65,
+        "damageDice": "2d6+3",
+        "toHit": 5,
+        "image": "",
+        "cr": "2",
+        "source": "MM p.344",
+        "faction": "Piratas & Criminosos de Skaug",
+        "role": "Capitão de navio pequeno, oficial de convés",
+        "createdAt": "2026-02-02T01:30:04.000Z"
+      },
+      {
+        "id": "preset-mob-espadachim",
+        "name": "Espadachim",
+        "nameEnglish": "Swashbuckler",
+        "color": "#DC143C",
+        "maxHp": 66,
+        "damageDice": "2d6+4",
+        "toHit": 6,
+        "image": "",
+        "cr": "3",
+        "source": "VGM p.217",
+        "faction": "Piratas & Criminosos de Skaug",
+        "role": "Duelista de elite, imediato de navio pirata",
+        "createdAt": "2026-02-02T01:30:05.000Z"
+      },
+      {
+        "id": "preset-mob-veterano",
+        "name": "Veterano",
+        "nameEnglish": "Veteran",
+        "color": "#696969",
+        "maxHp": 58,
+        "damageDice": "2d8+3",
+        "toHit": 5,
+        "image": "",
+        "cr": "3",
+        "source": "MM p.350",
+        "faction": "Piratas & Criminosos de Skaug",
+        "role": "Guarda de elite de Skaug, mercenário experiente",
+        "createdAt": "2026-02-02T01:30:06.000Z"
+      },
+      {
+        "id": "preset-mob-capitao-pirata",
+        "name": "Capitão Pirata",
+        "nameEnglish": "Pirate Captain",
+        "color": "#8B0000",
+        "maxHp": 65,
+        "damageDice": "2d6+3",
+        "toHit": 5,
+        "image": "",
+        "cr": "2",
+        "source": "GOS p.241",
+        "faction": "Piratas & Criminosos de Skaug",
+        "role": "Capitão padrão (para navios menores)",
+        "createdAt": "2026-02-02T01:30:07.000Z"
+      },
+      {
+        "id": "preset-mob-assassino",
+        "name": "Assassino",
+        "nameEnglish": "Assassin",
+        "color": "#000000",
+        "maxHp": 78,
+        "damageDice": "3d6+6",
+        "toHit": 6,
+        "image": "",
+        "cr": "8",
+        "source": "MM p.343",
+        "faction": "Piratas & Criminosos de Skaug",
+        "role": "Lâmina oculta dos Sombras do Porto (fim de jogo)",
+        "createdAt": "2026-02-02T01:30:08.000Z"
+      },
+      {
+        "id": "preset-mob-acolito",
+        "name": "Acólito",
+        "nameEnglish": "Acolyte",
+        "color": "#1E90FF",
+        "maxHp": 9,
+        "damageDice": "1d4",
+        "toHit": 2,
+        "image": "",
+        "cr": "1/4",
+        "source": "MM p.342",
+        "faction": "Devotos de Umberlee",
+        "role": "Iniciado do templo, assistente de ritual",
+        "createdAt": "2026-02-02T01:30:09.000Z"
+      },
+      {
+        "id": "preset-mob-sacerdote",
+        "name": "Sacerdote",
+        "nameEnglish": "Priest",
+        "color": "#4169E1",
+        "maxHp": 27,
+        "damageDice": "2d8",
+        "toHit": 3,
+        "image": "",
+        "cr": "2",
+        "source": "MM p.348",
+        "faction": "Devotos de Umberlee",
+        "role": "Sacerdote de nível médio, líder de altar pequeno",
+        "createdAt": "2026-02-02T01:30:10.000Z"
+      },
+      {
+        "id": "preset-mob-bruxa-mar",
+        "name": "Bruxa do Mar",
+        "nameEnglish": "Sea Hag",
+        "color": "#2F4F4F",
+        "maxHp": 52,
+        "damageDice": "2d6",
+        "toHit": 4,
+        "image": "",
+        "cr": "2",
+        "source": "MM p.179",
+        "faction": "Devotos de Umberlee",
+        "role": "Oráculo corrompida em Ioma",
+        "createdAt": "2026-02-02T01:30:11.000Z"
+      },
+      {
+        "id": "preset-mob-espirito-agua",
+        "name": "Espírito da Água",
+        "nameEnglish": "Water Weird",
+        "color": "#00CED1",
+        "maxHp": 58,
+        "damageDice": "3d6",
+        "toHit": 5,
+        "image": "",
+        "cr": "3",
+        "source": "MM p.299",
+        "faction": "Devotos de Umberlee",
+        "role": "Guardião de piscinas sagradas e altares",
+        "createdAt": "2026-02-02T01:30:12.000Z"
+      },
+      {
+        "id": "preset-mob-druida",
+        "name": "Druida",
+        "nameEnglish": "Druid",
+        "color": "#228B22",
+        "maxHp": 27,
+        "damageDice": "2d8",
+        "toHit": 4,
+        "image": "",
+        "cr": "2",
+        "source": "MM p.346",
+        "faction": "Devotos de Umberlee",
+        "role": "Devoto focado em tempestades",
+        "createdAt": "2026-02-02T01:30:13.000Z"
+      },
+      {
+        "id": "preset-mob-sacerdote-kraken",
+        "name": "Sacerdote do Kraken",
+        "nameEnglish": "Kraken Priest",
+        "color": "#191970",
+        "maxHp": 75,
+        "damageDice": "3d8+3",
+        "toHit": 6,
+        "image": "",
+        "cr": "5",
+        "source": "VGM p.215",
+        "faction": "Devotos de Umberlee / Filhos do Kraken",
+        "role": "Alta-Sacerdotisa de Umberlee (Ondas-Altas) ou tenente cultista",
+        "createdAt": "2026-02-02T01:30:14.000Z"
+      },
+      {
+        "id": "preset-mob-elemental-agua",
+        "name": "Elemental da Água",
+        "nameEnglish": "Water Elemental",
+        "color": "#4682B4",
+        "maxHp": 114,
+        "damageDice": "3d10+3",
+        "toHit": 7,
+        "image": "",
+        "cr": "5",
+        "source": "MM p.124",
+        "faction": "Devotos de Umberlee",
+        "role": "Invocação sagrada para defesa de templos",
+        "createdAt": "2026-02-02T01:30:15.000Z"
+      },
+      {
+        "id": "preset-mob-sacerdote-guerra",
+        "name": "Sacerdote de Guerra",
+        "nameEnglish": "War Priest",
+        "color": "#B22222",
+        "maxHp": 117,
+        "damageDice": "4d8+4",
+        "toHit": 7,
+        "image": "",
+        "cr": "9",
+        "source": "VGM p.218",
+        "faction": "Devotos de Umberlee",
+        "role": "Elite da guarda de Elzyra (Campeões da Maré)",
+        "createdAt": "2026-02-02T01:30:16.000Z"
+      },
+      {
+        "id": "preset-mob-arquidruida",
+        "name": "Arquidruida",
+        "nameEnglish": "Archdruid",
+        "color": "#006400",
+        "maxHp": 132,
+        "damageDice": "5d8+5",
+        "toHit": 8,
+        "image": "",
+        "cr": "12",
+        "source": "VGM p.210",
+        "faction": "Devotos de Umberlee",
+        "role": "Boss Base - Estatística base para Elzyra",
+        "createdAt": "2026-02-02T01:30:17.000Z"
+      },
+      {
+        "id": "preset-mob-cultista",
+        "name": "Cultista",
+        "nameEnglish": "Cultist",
+        "color": "#4B0082",
+        "maxHp": 9,
+        "damageDice": "1d6",
+        "toHit": 3,
+        "image": "",
+        "cr": "1/8",
+        "source": "MM p.345",
+        "faction": "Filhos do Kraken",
+        "role": "Fanático descartável, iniciado",
+        "createdAt": "2026-02-02T01:30:18.000Z"
+      },
+      {
+        "id": "preset-mob-cria-mar",
+        "name": "Cria do Mar",
+        "nameEnglish": "Sea Spawn",
+        "color": "#556B2F",
+        "maxHp": 32,
+        "damageDice": "2d6",
+        "toHit": 4,
+        "image": "",
+        "cr": "1",
+        "source": "VGM p.189",
+        "faction": "Filhos do Kraken",
+        "role": "Mutante transformado pelo Kraken (soldado raso)",
+        "createdAt": "2026-02-02T01:30:19.000Z"
+      },
+      {
+        "id": "preset-mob-fanatico-culto",
+        "name": "Fanático do Culto",
+        "nameEnglish": "Cult Fanatic",
+        "color": "#8B008B",
+        "maxHp": 33,
+        "damageDice": "2d8",
+        "toHit": 4,
+        "image": "",
+        "cr": "2",
+        "source": "MM p.345",
+        "faction": "Filhos do Kraken",
+        "role": "Líder de célula pequena, conjurador",
+        "createdAt": "2026-02-02T01:30:20.000Z"
+      },
+      {
+        "id": "preset-mob-rebento-profundo",
+        "name": "Rebento Profundo",
+        "nameEnglish": "Deep Scion",
+        "color": "#20B2AA",
+        "maxHp": 67,
+        "damageDice": "2d8+2",
+        "toHit": 5,
+        "image": "",
+        "cr": "3",
+        "source": "VGM p.135",
+        "faction": "Filhos do Kraken",
+        "role": "Espião que muda de forma (infiltrado em tripulações)",
+        "createdAt": "2026-02-02T01:30:21.000Z"
+      },
+      {
+        "id": "preset-mob-chuul",
+        "name": "Chuul",
+        "nameEnglish": "Chuul",
+        "color": "#8B7355",
+        "maxHp": 93,
+        "damageDice": "3d10+3",
+        "toHit": 6,
+        "image": "",
+        "cr": "4",
+        "source": "MM p.40",
+        "faction": "Filhos do Kraken",
+        "role": "Guarda-costas de aberrações, cães do culto",
+        "createdAt": "2026-02-02T01:30:22.000Z"
+      },
+      {
+        "id": "preset-mob-hidra",
+        "name": "Hidra",
+        "nameEnglish": "Hydra",
+        "color": "#2E8B57",
+        "maxHp": 172,
+        "damageDice": "4d10+4",
+        "toHit": 8,
+        "image": "",
+        "cr": "8",
+        "source": "MM p.190",
+        "faction": "Filhos do Kraken",
+        "role": "Filha do Kraken (serpente de muitas cabeças)",
+        "createdAt": "2026-02-02T01:30:23.000Z"
+      },
+      {
+        "id": "preset-mob-aboleth",
+        "name": "Aboleth",
+        "nameEnglish": "Aboleth",
+        "color": "#483D8B",
+        "maxHp": 135,
+        "damageDice": "4d10+5",
+        "toHit": 9,
+        "image": "",
+        "cr": "10",
+        "source": "MM p.13",
+        "faction": "Filhos do Kraken",
+        "role": "Mestre mental em cavernas profundas",
+        "createdAt": "2026-02-02T01:30:24.000Z"
+      },
+      {
+        "id": "preset-mob-kraken-jovem",
+        "name": "Kraken Jovem",
+        "nameEnglish": "Juvenile Kraken",
+        "color": "#000080",
+        "maxHp": 207,
+        "damageDice": "6d10+6",
+        "toHit": 10,
+        "image": "",
+        "cr": "14",
+        "source": "GOS p.238",
+        "faction": "Filhos do Kraken",
+        "role": "Versão enfraquecida para Boss",
+        "createdAt": "2026-02-02T01:30:25.000Z"
+      },
+      {
+        "id": "preset-mob-merfolk",
+        "name": "Tritão / Sereiano",
+        "nameEnglish": "Merfolk",
+        "color": "#00BFFF",
+        "maxHp": 11,
+        "damageDice": "1d6",
+        "toHit": 2,
+        "image": "",
+        "cr": "1/8",
+        "source": "MM p.218",
+        "faction": "Povo Eshar'kai",
+        "role": "Cidadão comum Eshar'kai (pacífico)",
+        "createdAt": "2026-02-02T01:30:26.000Z"
+      },
+      {
+        "id": "preset-mob-batedor",
+        "name": "Batedor",
+        "nameEnglish": "Scout",
+        "color": "#6B8E23",
+        "maxHp": 16,
+        "damageDice": "1d6",
+        "toHit": 4,
+        "image": "",
+        "cr": "1/2",
+        "source": "MM p.349",
+        "faction": "Povo Eshar'kai",
+        "role": "Batedor Eshar'kai (anfíbio)",
+        "createdAt": "2026-02-02T01:30:27.000Z"
+      },
+      {
+        "id": "preset-mob-espectro",
+        "name": "Espectro",
+        "nameEnglish": "Specter",
+        "color": "#708090",
+        "maxHp": 22,
+        "damageDice": "2d6",
+        "toHit": 4,
+        "image": "",
+        "cr": "1",
+        "source": "MM p.279",
+        "faction": "Povo Eshar'kai",
+        "role": "Eshar'kai enlouquecido (espírito menor)",
+        "createdAt": "2026-02-02T01:30:28.000Z"
+      },
+      {
+        "id": "preset-mob-fantasma",
+        "name": "Fantasma",
+        "nameEnglish": "Ghost",
+        "color": "#DCDCDC",
+        "maxHp": 45,
+        "damageDice": "3d8",
+        "toHit": 5,
+        "image": "",
+        "cr": "4",
+        "source": "MM p.147",
+        "faction": "Povo Eshar'kai",
+        "role": "Eshar'kai nobre no Plano-Prisão (possessão)",
+        "createdAt": "2026-02-02T01:30:29.000Z"
+      },
+      {
+        "id": "preset-mob-mestre-ondas",
+        "name": "Mestre das Ondas Tritão",
+        "nameEnglish": "Triton Master of Waves",
+        "color": "#1E90FF",
+        "maxHp": 105,
+        "damageDice": "4d8+4",
+        "toHit": 8,
+        "image": "",
+        "cr": "8",
+        "source": "MTF p.245",
+        "faction": "Povo Eshar'kai",
+        "role": "Boss Base - Nhal'zar (conjurador poderoso)",
+        "createdAt": "2026-02-02T01:30:30.000Z"
+      },
+      {
+        "id": "preset-mob-mago",
+        "name": "Mago",
+        "nameEnglish": "Mage",
+        "color": "#9370DB",
+        "maxHp": 40,
+        "damageDice": "3d6",
+        "toHit": 5,
+        "image": "",
+        "cr": "6",
+        "source": "MM p.347",
+        "faction": "Povo Eshar'kai",
+        "role": "Arcanista Eshar'kai (reflavor para magias de água)",
+        "createdAt": "2026-02-02T01:30:31.000Z"
+      },
+      {
+        "id": "preset-mob-tubarao-recife",
+        "name": "Tubarão de Recife",
+        "nameEnglish": "Reef Shark",
+        "color": "#5F9EA0",
+        "maxHp": 22,
+        "damageDice": "2d6",
+        "toHit": 4,
+        "image": "",
+        "cr": "1/2",
+        "source": "MM p.328",
+        "faction": "Monstros das Profundezas",
+        "role": "Perigo em águas rasas/naufrágios",
+        "createdAt": "2026-02-02T01:30:32.000Z"
+      },
+      {
+        "id": "preset-mob-harpia",
+        "name": "Harpia",
+        "nameEnglish": "Harpy",
+        "color": "#DAA520",
+        "maxHp": 38,
+        "damageDice": "2d8",
+        "toHit": 3,
+        "image": "",
+        "cr": "1",
+        "source": "MM p.181",
+        "faction": "Monstros das Profundezas",
+        "role": "Sereias malignas (reflavor para costeiras)",
+        "createdAt": "2026-02-02T01:30:33.000Z"
+      },
+      {
+        "id": "preset-mob-tubarao-cacador",
+        "name": "Tubarão Caçador",
+        "nameEnglish": "Hunter Shark",
+        "color": "#4682B4",
+        "maxHp": 45,
+        "damageDice": "3d8",
+        "toHit": 6,
+        "image": "",
+        "cr": "2",
+        "source": "MM p.328",
+        "faction": "Monstros das Profundezas",
+        "role": "Tubarão grande, predador comum",
+        "createdAt": "2026-02-02T01:30:34.000Z"
+      },
+      {
+        "id": "preset-mob-plesiossauro",
+        "name": "Plesiossauro",
+        "nameEnglish": "Plesiosaurus",
+        "color": "#5F9EA0",
+        "maxHp": 68,
+        "damageDice": "3d10+3",
+        "toHit": 6,
+        "image": "",
+        "cr": "2",
+        "source": "MM p.79",
+        "faction": "Monstros das Profundezas",
+        "role": "Serpente Marinha Menor",
+        "createdAt": "2026-02-02T01:30:35.000Z"
+      },
+      {
+        "id": "preset-mob-orca",
+        "name": "Orca",
+        "nameEnglish": "Killer Whale",
+        "color": "#000000",
+        "maxHp": 90,
+        "damageDice": "4d10+4",
+        "toHit": 6,
+        "image": "",
+        "cr": "3",
+        "source": "MM p.328",
+        "faction": "Monstros das Profundezas",
+        "role": "Pode ser montaria de druidas",
+        "createdAt": "2026-02-02T01:30:36.000Z"
+      },
+      {
+        "id": "preset-mob-tubarao-gigante",
+        "name": "Tubarão Gigante",
+        "nameEnglish": "Giant Shark",
+        "color": "#2F4F4F",
+        "maxHp": 126,
+        "damageDice": "5d10+5",
+        "toHit": 9,
+        "image": "",
+        "cr": "5",
+        "source": "MM p.328",
+        "faction": "Monstros das Profundezas",
+        "role": "Megalodon, terror dos mares abertos",
+        "createdAt": "2026-02-02T01:30:37.000Z"
+      },
+      {
+        "id": "preset-mob-polvo-gigante",
+        "name": "Polvo Gigante",
+        "nameEnglish": "Giant Octopus",
+        "color": "#8B4789",
+        "maxHp": 52,
+        "damageDice": "3d10",
+        "toHit": 5,
+        "image": "",
+        "cr": "1",
+        "source": "MM p.326",
+        "faction": "Monstros das Profundezas",
+        "role": "Perigo de agarrar em mergulhos",
+        "createdAt": "2026-02-02T01:30:38.000Z"
+      },
+      {
+        "id": "preset-mob-tartaruga-dragao",
+        "name": "Tartaruga Dragão",
+        "nameEnglish": "Dragon Turtle",
+        "color": "#006400",
+        "maxHp": 341,
+        "damageDice": "6d12+6",
+        "toHit": 13,
+        "image": "",
+        "cr": "17",
+        "source": "MM p.86",
+        "faction": "Monstros das Profundezas",
+        "role": "Boss Opcional - Lenda viva, evento cataclísmico",
+        "createdAt": "2026-02-02T01:30:39.000Z"
+      },
+      {
+        "id": "preset-mob-gigante-tempestade",
+        "name": "Gigante da Tempestade",
+        "nameEnglish": "Storm Giant",
+        "color": "#4169E1",
+        "maxHp": 230,
+        "damageDice": "6d10+6",
+        "toHit": 14,
+        "image": "",
+        "cr": "13",
+        "source": "MM p.156",
+        "faction": "Clímax Thordentor",
+        "role": "Reflavor - Avatar Menor de Umberlee",
+        "createdAt": "2026-02-02T01:30:40.000Z"
+      },
+      {
+        "id": "preset-mob-leviata",
+        "name": "Leviatã",
+        "nameEnglish": "Leviathan",
+        "color": "#191970",
+        "maxHp": 328,
+        "damageDice": "8d12+8",
+        "toHit": 17,
+        "image": "",
+        "cr": "20",
+        "source": "MTF p.198",
+        "faction": "Clímax Thordentor",
+        "role": "Manifestação física da fúria do mar (Elemental)",
+        "createdAt": "2026-02-02T01:30:41.000Z"
+      },
+      {
+        "id": "preset-mob-kraken",
+        "name": "Kraken",
+        "nameEnglish": "Kraken",
+        "color": "#000080",
+        "maxHp": 472,
+        "damageDice": "10d12+10",
+        "toHit": 18,
+        "image": "",
+        "cr": "23",
+        "source": "MM p.197",
+        "faction": "Clímax Thordentor",
+        "role": "O Kraken Ancião dos Filhos do Kraken (se liberto)",
+        "createdAt": "2026-02-02T01:30:42.000Z"
+      },
+      {
+        "id": "preset-mob-empireo",
+        "name": "Empíreo",
+        "nameEnglish": "Empyrean",
+        "color": "#FFD700",
+        "maxHp": 313,
+        "damageDice": "8d12+8",
+        "toHit": 17,
+        "image": "",
+        "cr": "23",
+        "source": "MM p.130",
+        "faction": "Clímax Thordentor",
+        "role": "Reflavor - Thal'thorak (Titã com stats divinos)",
+        "createdAt": "2026-02-02T01:30:43.000Z"
+      },
+      {
+        "id": "preset-mob-sombra",
+        "name": "Sombra",
+        "nameEnglish": "Shadow",
+        "color": "#2F2F2F",
+        "maxHp": 16,
+        "damageDice": "2d6",
+        "toHit": 4,
+        "image": "",
+        "cr": "1/2",
+        "source": "MM p.269",
+        "faction": "Abismo das Águas Mortas",
+        "role": "Crianças do Vazio, drenam força em ataques surpresa",
+        "createdAt": "2026-02-02T01:30:44.000Z"
+      },
+      {
+        "id": "preset-mob-carnical",
+        "name": "Carniçal",
+        "nameEnglish": "Ghast",
+        "color": "#556B2F",
+        "maxHp": 36,
+        "damageDice": "3d8",
+        "toHit": 4,
+        "image": "",
+        "cr": "2",
+        "source": "MM p.148",
+        "faction": "Abismo das Águas Mortas",
+        "role": "Eshar'kai fisicamente degenerados, paralisam com toque",
+        "createdAt": "2026-02-02T01:30:45.000Z"
+      },
+      {
+        "id": "preset-mob-allip",
+        "name": "Allip",
+        "nameEnglish": "Allip",
+        "color": "#8B8989",
+        "maxHp": 40,
+        "damageDice": "3d8",
+        "toHit": 6,
+        "image": "",
+        "cr": "5",
+        "source": "MTF p.116",
+        "faction": "Abismo das Águas Mortas",
+        "role": "Eshar'kai sacerdotes que descobriram segredos proibidos e enlouqueceram",
+        "createdAt": "2026-02-02T01:30:46.000Z"
+      },
+      {
+        "id": "preset-mob-banshee",
+        "name": "Banshee",
+        "nameEnglish": "Banshee",
+        "color": "#C0C0C0",
+        "maxHp": 58,
+        "damageDice": "4d8",
+        "toHit": 4,
+        "image": "",
+        "cr": "4",
+        "source": "MM p.23",
+        "faction": "Abismo das Águas Mortas",
+        "role": "Damas do Lamento, guardiãs de ruínas flutuantes (reflavor aquático)",
+        "createdAt": "2026-02-02T01:30:47.000Z"
+      },
+      {
+        "id": "preset-mob-perseguidor-invisivel",
+        "name": "Perseguidor Invisível",
+        "nameEnglish": "Invisible Stalker",
+        "color": "#87CEEB",
+        "maxHp": 104,
+        "damageDice": "4d10+4",
+        "toHit": 6,
+        "image": "",
+        "cr": "6",
+        "source": "MM p.192",
+        "faction": "Abismo das Águas Mortas",
+        "role": "Guardião planar convocado para impedir fugas",
+        "createdAt": "2026-02-02T01:30:48.000Z"
+      },
+      {
+        "id": "preset-mob-aparicao",
+        "name": "Aparição",
+        "nameEnglish": "Wraith",
+        "color": "#696969",
+        "maxHp": 67,
+        "damageDice": "4d8+3",
+        "toHit": 6,
+        "image": "",
+        "cr": "5",
+        "source": "MM p.302",
+        "faction": "Abismo das Águas Mortas",
+        "role": "Comandantes espectrais que lideram os Eshar'kai perdidos",
+        "createdAt": "2026-02-02T01:30:49.000Z"
+      },
+      {
+        "id": "preset-mob-cria-estelar",
+        "name": "Cria Estelar Estraçalhadora",
+        "nameEnglish": "Star Spawn Mangler",
+        "color": "#4B0150",
+        "maxHp": 71,
+        "damageDice": "4d8+4",
+        "toHit": 7,
+        "image": "",
+        "cr": "5",
+        "source": "MTF p.236",
+        "faction": "Abismo das Águas Mortas",
+        "role": "Aberrações do Vazio que vazaram para o plano-prisão",
+        "createdAt": "2026-02-02T01:30:50.000Z"
+      },
+      {
+        "id": "preset-mob-morkoth",
+        "name": "Morkoth",
+        "nameEnglish": "Morkoth",
+        "color": "#6A0DAD",
+        "maxHp": 130,
+        "damageDice": "5d10+5",
+        "toHit": 9,
+        "image": "",
+        "cr": "11",
+        "source": "VGM p.178",
+        "faction": "Abismo das Águas Mortas",
+        "role": "Boss Opcional - Entidade colecionadora de ilhas perdidas no plano",
+        "createdAt": "2026-02-02T01:30:51.000Z"
       }
     ],
     "players": [
       {
-        "id": "preset-player-1769883643901",
-        "characterName": "Paragon",
-        "maxHp": 50,
-        "currentHp": 5,
-        "conditions": [],
-        "photo": "",
-        "playerName": "Gustavo",
-        "createdAt": "2026-01-31T18:20:43.901Z",
-        "inventory": [
-          {
-            "nome": "Amigos",
-            "nome_ingles": "Friends",
-            "caracteristicas": "Truque de  Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:Pessoal\nComponentes:S M (uma pequena quantidade de maquiagem aplicada a rosto enquanto esta magia é conjurada)\nDuração:Concentração,\n                                         Até 1 minuto",
-            "descricao": "Enquanto a magia durar, você tem vantagem em todos os testes de Carisma dirigidos a uma criatura, à sua escolha e que não seja hostil a você. Ao término da magia, a criatura percebe que você usou magia para influenciar o humor dela, tornando-se hostil a você. Uma criatura propensa à violência pode lhe atacar. Criaturas não violentas podem buscar outras formas de retaliação (a critério do DM), dependendo da natureza da sua interação com ela.\nLivro do Jogador (PHB), p. 212 (244)"
-          },
-          {
-            "nome": "Heroísmo",
-            "nome_ingles": "Heroism",
-            "caracteristicas": "1º Círculo, Encantamento (Bardo, Paladino)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
-            "descricao": "Você toca uma criatura voluntária que torna-se imbuída de bravura. Enquanto a magia durar, o alvo está imune a ser amedrontado e ganha uma quantidade de pontos de vida temporários igual ao seu modificador do atributo de conjuração, no início de cada um dos turnos dela. Quando a magia terminar, o alvo perde quaisquer pontos de vida temporários remanescentes derivados desta magia.\nLivro do Jogador (PHB), p. 248 (250)"
-          }
-        ]
-      },
-      {
-        "id": "preset-player-1769897208367",
-        "characterName": "bers",
-        "maxHp": 20,
-        "currentHp": 5,
-        "conditions": [],
-        "inventory": [],
-        "photo": "/images/img-1768083732380.webp",
-        "playerName": "tuss",
-        "createdAt": "2026-01-31T22:06:48.367Z"
-      },
-      {
-        "id": "preset-player-1769900254094",
-        "characterName": "asd",
-        "playerName": "ohj",
-        "maxHp": 20,
-        "currentHp": 0,
+        "id": "preset-player-barril",
+        "characterName": "Barril",
+        "playerName": "Felsky",
+        "maxHp": 27,
+        "currentHp": 27,
         "conditions": [],
         "inventory": [
           {
-            "nome": "Cura Completa",
-            "nome_ingles": "Heal",
-            "caracteristicas": "6º Círculo, Evocação (Clérigo, Druida)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Instantânea",
-            "descricao": "Escolha uma criatura à sua vista e no alcance da magia. Uma onda de energia positiva a preenche, fazendo com que recupere 70 pontos de vida. Esta magia também põe fim a cegueira, surdez ou a qualquer doença que afete o alvo. Esta magia não tem efeito sobre constructos ou mortos-vivos.\nLivro do Jogador (PHB), p. 233 (250)"
+            "nome": "INSPIRAÇÃO DE BARDO",
+            "descricao": "que você tenha acesso, como mostrado na tabela. Por Você pode inspirar os outros através de palavras exemplo, quando você alcança o 3° nível da classe, você animadoras ou música. Para tanto, você usa uma ação pode aprender uma nova magia de 1° ou 2° nível.\nbônus no seu turno para escolher uma outra criatura, que Além disso, quando você adquire um nível nessa não seja você mesmo, a até 18 metros de você que possa classe, você pode escolher uma magia de bardo que você ouvi-lo. Essa criatura ganha um dado de Inspiração de conheça e substituí-la por outra magia da lista de magias Bardo, um d6.\nde bardo, que também deve ser de um nível ao qual você Uma vez, nos próximos 10 minutos, a criatura poderá tenha espaços de magia.\nrolar o dado e adicionar o valor rolado a um teste de habilidade, jogada de ataque ou teste de resistência que HABILIDADE DE CONJURAÇÃO ela fizer. A criatura pode esperar até rolar o d20 antes de Sua habilidade de conjuração é Carisma para suas decidir usar o dado de Inspiração de Bardo, mas deve magias de bardo, portanto, você usa seu Carisma sempre decidir antes do Mestre dizer se a rolagem foi bem ou mal que alguma magia se referir à sua habilidade de conjurar sucedida. Quando o dado de Inspiração de Bardo for magias. Além disso, você usa o seu modificador de rolado, ele é gasto. Uma criatura pode ter apenas um Carisma para definir a CD dos testes de resistência para dado de Inspiração de Bardo por vez.\nVocê pode usar essa característica um número de",
+            "visible": true,
+            "quantity": 1
           },
           {
-            "nome": "AÇÃO ARDILOSA",
-            "descricao": "A partir do 2º nível, seu pensamento rápido e agilidade faz você se mover e agir rapidamente. Você pode usar uma ação bônus durante cada um de seus turnos em combate. Esta ação pode ser usada somente para Disparada, Desengajar ou Esconder."
+            "nome": "Zombaria Perversa",
+            "nome_ingles": "Vicious Mockery",
+            "caracteristicas": "Truque de  Encantamento (Bardo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V\nDuração:Instantânea",
+            "descricao": "Você lança uma série de insultos carregados com sutis encantamentos contra uma criatura à sua vista e no alcance da magia. Se o alvo puder ouvir você (embora ele não precise lhe entender), ele deve ser bem-sucedido em uma salvaguarda de Sabedoria. Se falhar, sofre 1d4 pontos de dano psíquico e terá desvantagem na próxima jogada de ataque que ele fizer antes do fim do próximo turno dele.\nLivro do Jogador (PHB), p. 289 (285)",
+            "visible": true,
+            "quantity": 1
           },
           {
-            "nome": "Alterar-se",
-            "nome_ingles": "Alter Self",
-            "caracteristicas": "2º Círculo, Transmutação (Artífice, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:Pessoal\nComponentes:V S\nDuração:Concentração,\n                                         Até uma hora",
-            "descricao": "Você assume uma forma diferente. Quando conjurar a magia, escolha uma das opções a seguir, cujos efeitos persistem enquanto a magia durar. Dentro desse período, você pode usar uma ação para finalizar uma das opções escolhidas, e obter os benefícios de outra.Adaptação Aquática. Você adapta seu corpo para o ambiente aquático, com guelras crescendo e membranas nascendo entre seus dedos. Você pode respirar debaixo d'água e ganha deslocamento de natação com valor igual ao seu deslocamento de caminhada.Mudar Aparência. Você transforma sua aparência conforme desejar, alterando sua altura, peso, características raciais, som da voz, comprimento do cabelo, cor da pele e características peculiares, se existirem. Você pode adquirir a aparência de outra raça, embora nenhuma de suas estatísticas mude. Você não pode parecer com uma criatura de tamanho diferente do seu, e sua forma básica permanece a mesma; por exemplo, se você é bípede, você não pode usar a magia para se tornar quadrúpede. A qualquer momento, enquanto a magia durar, você pode usar sua ação para trocar de aparência novamente.Armas Naturais. Crescem em seu corpo garras, presas, espinhos, chifres ou uma arma natural diferente, à sua escolha. Seu ataque desarmado causa 1d6 pontos de dano contundente, cortante ou perfurante, conforme a arma natural escolhida, e você é proficiente com seus ataques desarmados. Por fim, sua arma natural é mágica e você tem um bônus de +1 em suas jogadas de ataque e dano quando usá-la.\nLivro do Jogador (PHB), p. 212 (211)"
+            "nome": "Mãos Mágicas",
+            "nome_ingles": "Mage Hand",
+            "caracteristicas": "Truque de  Invocação (Artífice, Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V S\nDuração:1 minuto",
+            "descricao": "Uma mão flutuante e espectral aparece em um ponto à sua escolha e no alcance da magia. A mão permanece enquanto a magia durar ou até você dispensá-la com uma ação. A mão desaparece caso se distancie mais de 9 metros [30 ft.] de você ou se você conjurar a magia novamente.Você pode usar sua ação para controlar a mão. Você pode fazer com que ela manipule objetos, abra portas ou recipientes destrancados, guarde ou pegue itens de recipientes abertos, ou derrame o conteúdo de frascos. Você pode movê-la até 9 metros [30 ft.] a cada vez que a usa. Ela não pode atacar, ativar itens mágicos ou carregar mais de 4,5 quilos [10 pounds].\nLivro do Jogador (PHB), p. 256 (256)",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Palavra Curativa",
+            "nome_ingles": "Healing Word",
+            "caracteristicas": "1º Círculo, Evocação (Bardo, Clérigo, Druida)\nTempo de Conjuração:Uma ação bônus\nAlcance:18m [60 ft.]\nComponentes:V\nDuração:Instantânea",
+            "descricao": "Escolha uma criatura à sua vista e no alcance da magia. Ela recupera uma quantidade de pontos de vida igual a 1d4 + seu modificador de atributo de conjuração. Esta magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 264 (250)",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Fogo das Fadas",
+            "nome_ingles": "Faerie Fire",
+            "caracteristicas": "1º Círculo, Evocação (Artífice, Bardo, Druida)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
+            "descricao": "Todos os objetos em um cubo de 6 metros [20-foot cube] no alcance da magia se tornam delineados por uma luz azul, verde ou violeta (à sua escolha). Qualquer criatura que esteja na área quando a magia for conjurada também é delineada pela luz, caso falhe em uma salvaguarda de Destreza. Enquanto a magia durar, objetos e criaturas afetadas por ela emitem uma luz tênue, criando meia-luz em um raio de 3 metros [10-foot radius].Qualquer jogada de ataque contra uma criatura ou objeto afetado tem vantagem, caso o atacante possa vê-los.Objetos e criaturas afetados não podem se beneficiar por estarem invisíveis.\nLivro do Jogador (PHB), p. 244 (239)",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Detectar Magia",
+            "nome_ingles": "Detect Magic",
+            "caracteristicas": "1º Círculo, Adivinhação (Artífice, Bardo, Clérigo, Druida, Feiticeiro, Guardião, Mago, Paladino)\nTempo de Conjuração:Uma ação  ou Ritual\nAlcance:Pessoal\nComponentes:V S\nDuração:Concentração,\n                                         Até 10 minutos",
+            "descricao": "Enquanto a magia durar, você pode sentir a presença de energia mágica a até 9 metros [30 ft.]. Caso seja bem-sucedido ao fazê-lo, você pode usar sua ação para ver uma tênue aura ao redor de qualquer criatura ou objeto que possuam energia mágica e que estejam visíveis na área, distinguindo, inclusive, a escola da magia, caso ela pertença a alguma.A magia pode atravessar a maioria das barreiras, sendo bloqueada, no entanto, por 30 centímetros [1 foot] de pedra, 2,5 centímetros [1 inch] de metal comum, uma folha fina de chumbo ou 1 metro [3 ft.] de madeira ou terra.\nLivro do Jogador (PHB), p. 236 (231)",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Compreender Idiomas",
+            "nome_ingles": "Comprehend Languages",
+            "caracteristicas": "1º Círculo, Adivinhação (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação  ou Ritual\nAlcance:Pessoal\nComponentes:V S M (um pitada de fuligem e sal)\nDuração:Uma hora",
+            "descricao": "Enquanto a magia durar, você entende o significado literal de qualquer idioma falado que ouvir. Você tambem entende qualquer idioma escrito que veja, mas deve tocar a superfície sobre a qual as palavras estão escritas. Demora cerca de 1 minuto para ler uma página de texto.Esta magia não decodifica mensagens secretas em um texto ou um glifo, como um selo arcano, que não faça parte de um idioma escrito.\nLivro do Jogador (PHB), p. 225 (224)",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Sugestão",
+            "nome_ingles": "Suggestion",
+            "caracteristicas": "2º Círculo, Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V M (uma língua de uma cobra e um pouco de favo de mel ou uma gota de óleo adocicado)\nDuração:Concentração,\n                                         Até 8 horas",
+            "descricao": "Você sugere um curso de ação (limitado a uma sentença ou duas) e influencia magicamente uma criatura à sua vista no alcance da magia e que possa lhe ouvir e compreender. Criaturas que não podem ser enfeitiçadas são imunes a este efeito. A sugestão precisa ser dita de uma forma que faça o curso de ação parecer razoável. Pedir à criatura que se esfaqueie, jogue-se contra uma lança, imole-se ou faça algum outro ato evidentemente danoso, automaticamente cancela o efeito da magia.O alvo deve fazer uma salvaguarda de Sabedoria. Se falhar, ele segue os atos sugeridos da melhor forma possível, segundo suas habilidades. A continuidade dos atos será feita enquanto a magia durar. Se a atividade sugerida pode ser completada em um período menor, a magia se encerra quando o sujeito termina aquilo que lhe foi sugerido.Também podem ser especificadas condições que disparam uma atividade especial enquanto estiver dentro da duração da magia. Por exemplo, pode ser sugerido que uma cavaleira dê sua montaria ao primeiro mendigo que ela encontrar. Se a condição não for preenchida antes do fim dos efeitos, a atividade não é concluída.Se você ou qualquer de seus companheiros causarem dano ao alvo, a magia se encerra.\nLivro do Jogador (PHB), p. 282 (279)",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "INCREMENTO NO VALOR DE HABILIDADE",
+            "descricao": "bardo prefere ser honesto que político.\nQuando você atinge o 4° nível e novamente no 8°, 12°, 16° Os membros do colégio se reúnem em bibliotecas e, as e 19° nível, você pode aumentar um valor de habilidade, à vezes, em faculdades de verdade, completas com salas de sua escolha, em 2 ou você pode aumentar dois valores de aula e dormitórios, para partilhar seu conhecimento uns habilidade, à sua escolha, em 1. Como padrão, você não com os outros. Eles também se encontram em festivais ou pode elevar um valor de habilidade acima de 20 com essa em assuntos de estado, onde eles podem expor corrupção, característica.\ndesvendar mentiras e zombar da superestima de figuras de autoridade.",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "tipo": "arma",
+            "grupo": "Arma",
+            "nome": "Adaga",
+            "custo": {
+              "quant": 2,
+              "moeda": "po"
+            },
+            "dano": "1d4 perfurante",
+            "peso_kg": 0.5,
+            "propriedades": [
+              "acuidade",
+              "leve",
+              "arremesso (distância 6/18)"
+            ],
+            "propriedades_texto": "acuidade, leve, arremesso (distância 6/18)",
+            "renderData": {
+              "tags": [
+                "Arma",
+                "acuidade",
+                "leve",
+                "arremesso (distância 6/18)"
+              ],
+              "stats": [
+                {
+                  "label": "Dano",
+                  "value": "1d4 perfurante"
+                },
+                {
+                  "label": "Peso",
+                  "value": "0.5 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "2 po"
+                }
+              ]
+            },
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "tipo": "armadura",
+            "categoria": "leve",
+            "nome": "Couro",
+            "custo": {
+              "quant": 10,
+              "moeda": "po"
+            },
+            "ca": "11 + modificador de Des",
+            "forca_min": null,
+            "furtividade": null,
+            "peso_kg": 5,
+            "grupo": "Armadura",
+            "renderData": {
+              "tags": [
+                "Armadura leve"
+              ],
+              "stats": [
+                {
+                  "label": "CA",
+                  "value": "11 + modificador de Des"
+                },
+                {
+                  "label": "Força Mín.",
+                  "value": "-"
+                },
+                {
+                  "label": "Peso",
+                  "value": "5 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "10 po"
+                }
+              ]
+            },
+            "visible": true,
+            "quantity": 1
           }
         ],
         "photo": "",
-        "createdAt": "2026-01-31T22:57:34.094Z"
+        "class": "Bardo",
+        "level": 6,
+        "race": "Humano",
+        "createdAt": "2026-02-02T01:30:52.000Z"
       },
       {
-        "id": "preset-player-1769963752160",
-        "characterName": "d2",
-        "playerName": "teste",
-        "maxHp": 20,
-        "currentHp": 20,
-        "conditions": [],
-        "inventory": [
-          {
-            "nome": "Bola de Fogo",
-            "nome_ingles": "Fireball",
-            "caracteristicas": "3º Círculo, Evocação (Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:45m [150 ft.]\nComponentes:V S M (uma pequena bola de guano de morcego e enxofre)\nDuração:Instantânea",
-            "descricao": "Um rastro brilhante lampeja do seu dedo apontado para um local à sua escolha e no alcance da magia, onde desabrocha com um estrondo grave em uma explosão de chamas. Cada criatura em uma esfera com raio de 6 metros [20-foot-radius sphere], centrada naquele ponto, deve fazer uma salvaguarda de Destreza. Se falhar, sofre 8d6 pontos de dano ígneo, ou metade do dano em caso de sucesso.O fogo se alastra, contornando os cantos. Ele incendeia objetos inflamáveis na área que não estejam sendo usados ou carregados.\nLivro do Jogador (PHB), p. 220 (241)"
-          },
-          {
-            "nome": "FÚRIA",
-            "descricao": "A partir do 2° nível, você pode desistir de toda Em batalha, você luta com uma ferocidade primitiva. No preocupação com sua defesa para atacar com um seu turno, você pode entrar em fúria com uma ação desespero feroz. Quando você fizer o seu primeiro ataque bônus.\nno turno, você pode decidir atacar descuidadamente.\nEnquanto estiver em fúria, você recebe os seguintes Fazer isso lhe concede vantagem nas jogadas de ataque benefícios se você não estiver vestindo uma armadura com armas corpo-a-corpo usando Força durante seu turno, pesada:\nporém, as jogadas de ataques feitas contra você possuem  Você tem vantagem em testes de Força e testes de vantagem até o início do seu próximo turno.\nresistência de Força  Quando você desferir um ataque com arma corpo-a-"
-          }
-        ],
-        "photo": "",
-        "createdAt": "2026-02-01T16:35:52.160Z"
-      },
-      {
-        "id": "preset-player-1769980109935",
-        "characterName": "oi",
-        "playerName": "ois",
-        "maxHp": 20,
-        "currentHp": 5,
-        "conditions": [],
-        "inventory": [],
-        "photo": "",
-        "createdAt": "2026-02-01T21:08:29.935Z"
-      }
-    ],
-    "player": [
-      {
-        "id": "preset-player-1769872261483",
-        "characterName": "Pafis",
-        "maxHp": 20,
-        "currentHp": 5,
-        "conditions": [
-          "paralyzed",
-          "poisoned"
-        ],
-        "photo": "/images/img-1768083732380.webp",
-        "playerName": "Martur",
-        "createdAt": "2026-01-31T15:11:01.483Z"
-      },
-      {
-        "id": "preset-player-1769872336295",
-        "characterName": "Grog",
-        "playerName": "teste",
-        "maxHp": 20,
-        "currentHp": 5,
-        "conditions": [],
-        "photo": "/images/img-1768083732380.webp",
-        "createdAt": "2026-01-31T15:12:16.295Z"
-      }
-    ],
-    "ships": [
-      {
-        "id": "ship-1769982081687",
-        "name": "o serio",
-        "type": "player",
-        "maxHp": 150,
-        "currentHp": 95,
-        "maxMorale": 120,
-        "currentMorale": 70,
-        "image": "/images/img-1768083732380.webp",
+        "id": "preset-player-silvare",
+        "characterName": "Silvaré",
+        "playerName": "Lucas",
+        "maxHp": 27,
+        "currentHp": 27,
         "conditions": [],
         "inventory": [
           {
             "tipo": "arma",
             "grupo": "Arma",
-            "nome": "Besta Pesada",
+            "nome": "Rapieira",
             "custo": {
-              "quant": 50,
+              "quant": 25,
               "moeda": "po"
             },
-            "dano": "1d10 perfurante",
-            "peso_kg": 4.5,
+            "dano": "1d8 perfurante",
+            "peso_kg": 1,
             "propriedades": [
-              "munição (distância 30/120)",
-              "pesada",
-              "recarga",
-              "duas mãos"
+              "acuidade"
             ],
-            "propriedades_texto": "munição (distância 30/120), pesada, recarga, duas mãos",
+            "propriedades_texto": "acuidade",
             "renderData": {
               "tags": [
                 "Arma",
-                "munição (distância 30/120)",
-                "pesada",
-                "recarga",
+                "acuidade"
+              ],
+              "stats": [
+                {
+                  "label": "Dano",
+                  "value": "1d8 perfurante"
+                },
+                {
+                  "label": "Peso",
+                  "value": "1 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "25 po"
+                }
+              ]
+            },
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "tipo": "arma",
+            "grupo": "Arma",
+            "nome": "Adaga",
+            "custo": {
+              "quant": 2,
+              "moeda": "po"
+            },
+            "dano": "1d4 perfurante",
+            "peso_kg": 0.5,
+            "propriedades": [
+              "acuidade",
+              "leve",
+              "arremesso (distância 6/18)"
+            ],
+            "propriedades_texto": "acuidade, leve, arremesso (distância 6/18)",
+            "renderData": {
+              "tags": [
+                "Arma",
+                "acuidade",
+                "leve",
+                "arremesso (distância 6/18)"
+              ],
+              "stats": [
+                {
+                  "label": "Dano",
+                  "value": "1d4 perfurante"
+                },
+                {
+                  "label": "Peso",
+                  "value": "0.5 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "2 po"
+                }
+              ]
+            },
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "tipo": "arma",
+            "grupo": "Arma",
+            "nome": "Arco Curto",
+            "custo": {
+              "quant": 25,
+              "moeda": "po"
+            },
+            "dano": "1d6 perfurante",
+            "peso_kg": 1,
+            "propriedades": [
+              "munição (distância 24/96)",
+              "duas mãos"
+            ],
+            "propriedades_texto": "munição (distância 24/96), duas mãos",
+            "renderData": {
+              "tags": [
+                "Arma",
+                "munição (distância 24/96)",
                 "duas mãos"
               ],
               "stats": [
                 {
                   "label": "Dano",
-                  "value": "1d10 perfurante"
+                  "value": "1d6 perfurante"
                 },
                 {
                   "label": "Peso",
-                  "value": "4.5 kg"
+                  "value": "1 kg"
                 },
                 {
                   "label": "Custo",
-                  "value": "50 po"
+                  "value": "25 po"
                 }
               ]
             },
-            "quantity": 2
+            "visible": true,
+            "quantity": 1
           },
           {
-            "nome": "Acalmar Emoções",
-            "nome_ingles": "Calm Emotions",
-            "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
-            "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)"
+            "nome": "ATAQUE FURTIVO",
+            "descricao": "A partir do 1º nível, você sabe como atacar sutilmente e explorar a distração de seus inimigos. Uma vez por turno, você pode adicionar 1d6 nas jogadas de dano contra qualquer criatura que acertar, desde que tenha vantagem nas jogadas de ataque. O ataque deve ser com uma arma de acuidade ou à distância.\n\nVocê não precisa ter vantagem nas jogadas de ataque se outro inimigo do seu alvo estiver a 1,5 metro de distância dele, desde que este inimigo não esteja incapacitado e você não tenha desvantagem nas jogadas de ataque.\n\nA quantidade de dano extra aumenta conforme você ganha níveis nessa classe, como mostrado na coluna Ataque Furtivo da tabela O Ladino.",
+            "visible": true,
+            "quantity": 1
           },
           {
-            "tipo": "municao",
-            "nome": "Balas de Canhão (Caixa)",
-            "unidade": "caixa",
-            "variantes_por_categoria_navio": [
-              {
-                "categoria_navio": "Grande",
-                "custo": {
-                  "quant": 20,
-                  "moeda": "po"
-                },
-                "equivalencia": "1 combate para navio Grande"
-              },
-              {
-                "categoria_navio": "Imenso",
-                "custo": {
-                  "quant": 40,
-                  "moeda": "po"
-                },
-                "equivalencia": "1 combate para navio Imenso"
-              },
-              {
-                "categoria_navio": "Colossal",
-                "custo": {
-                  "quant": 80,
-                  "moeda": "po"
-                },
-                "equivalencia": "1 combate para navio Colossal"
-              }
-            ],
-            "estoque_inicial": {
-              "min": 3,
-              "max": 10,
-              "unidade": "caixas",
-              "regra": "depende_da_categoria"
-            },
-            "notas": [],
-            "grupo": "Munição",
-            "renderData": {
-              "tags": [
-                "Munição",
-                "caixa"
-              ],
-              "stats": [
-                {
-                  "label": "Estoque",
-                  "value": "3-10 caixas"
-                }
-              ]
-            }
+            "nome": "ESPECIALIZAÇÃO",
+            "descricao": "No 1º nível, você escolhe duas de suas perícias nas quais seja proficiente, ou uma perícia na qual seja proficiente e ferramentas de ladrão. Seu bônus de proficiência é dobrado em qualquer teste de habilidade que você fizer usando qualquer uma dessas proficiências escolhidas.\n\nNo 6º nível, você pode escolher outras duas de suas proficiências (em perícias ou ferramentas de ladrão) para ganhar esse mesmo benefício.",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "TRAPACEIRO ARCANO",
+            "descricao": "escrita e comportamento de outra pessoa, infalivelmente.\nVocê deve gastar pelo menos três horas estudando esses Alguns ladinos aprimoram suas finas perícias de três componentes do comportamento de uma pessoa, furtividade e agilidade com magia, aprendendo truques ouvindo sua articulação, examinando sua escrita e de encantamento e ilusão. Esses ladinos incluem não observando seus maneirismos.\nsomente batedores de carteira e assaltantes, mas também Habilidade de Conjuração. Sua habilidade de trapaceiros, enganadores e um número significativo de conjuração é Inteligência para suas magias de mago, aventureiros.\nportanto, você usa sua Inteligência sempre que alguma magia se referir à sua habilidade de conjurar magias.\nCONJURAÇÃO Além disso, você usa o seu modificador de Inteligência Quando você alcançar o 3° nível, você adquire a para definir a CD dos testes de resistência para as magias habilidade de conjurar magias. Veja o capítulo 10 para as de mago que você conjura e quando você realiza uma regras gerais de conjuração e o capítulo 11 para a lista de jogada de ataque com uma magia.\nmagias de mago.\nTruques. Você aprende três truques: mãos mágicas e CD para suas magias = 8 + bônus de proficiência + outros dois truques, à sua escolha, da lista de magias de seu modificador de Inteligência mago. Você aprende um truque de mago adicional, à sua escolha, no 10° nível.\nModificador de ataque de magia = seu bônus de Espaços de Magia. A tabela Conjuração de proficiência + seu modificador de Inteligência Trapaceiro Arcano mostra quantos espaços de magia de 1° nível e superiores você possui disponíveis para MÃOS MÁGICAS MALABARISTAS conjuração. Para conjurar uma dessas magias, você deve A partir do 3° nível, quando você conjurar mãos mágicas, gastar uma espaço de magia do nível da magia ou você pode fazer a mão espectral ficar invisível e poderá superior. Você recobra todos os espaços de magia gastos realizar as seguintes tarefas adicionais:\nquando você completa um descanso longo.\n Você pode guardar um objeto que a mão estiver Por exemplo, se você quiser conjurar a magia de 1° segurando em um recipiente vestido ou carregado por nível enfeitiçar pessoa e você tiver um espaço de magia de outra criatura.\n1° nível e um de 2° nível disponíveis, você poderá conjurar  Você pode recuperar um objeto guardado em um enfeitiçar pessoa usando qualquer dos dois espaços.\nrecipiente vestido ou carregado por outra criatura.\nMagias Conhecidas de 1° Nível e Superiores. Você  Você pode usar ferramentas de ladrão para abrir conhece três magias de 1° nível, à sua escolha, as quais fechaduras ou desarmar armadilhas à distância.\nduas delas você deve escolher das magias de encantamento e ilusão da lista de magias de mago.\nVocê pode realizar qualquer dessas tarefas sem ser A coluna Magias Conhecidas na tabela Conjuração do notado por uma criatura se for bem sucedido num teste de Trapaceiro Arcano mostra quando você aprende mais Destreza (Prestidigitação) resistido por um teste de magias de mago, de 1° nível ou superior. Cada uma Sabedoria (Percepção) da criatura.\ndessas magias deve ser uma magia de encantamento ou Além disso, você pode usar a ação bônus concedida por ilusão, à sua escolha, de um nível a que você tenha sua Ação Ardilosa para controlar a mão.\nacesso, como mostrado na tabela. Por exemplo, quando você alcança o 7° nível da classe, você pode aprender uma EMBOSCADA MÁGICA nova magia de 1° ou 2° nível.\nA partir do 9° nível, se você estiver escondido de uma As magias que você aprende no 8°, 14° e 20° nível criatura quando conjurar uma magia nela, a criatura terá podem vir de qualquer escola de magia.\nAlém disso, quando você adquire um nível nessa desvantagem em qualquer teste de resistência que ela classe, você pode escolher uma magia de mago que você fizer contra a magia nesse turno.\nconheça e substituí-la por outra magia da lista de magias de mago, que também deve ser de um nível ao qual você TRAPACEIRO VERSÁTIL tenha espaços de magia e deve ser uma magia de No 13° nível, você ganha a habilidade de distrair alvos encantamento ou ilusão, exceto as magias substituídas no com suas mãos mágicas. Com uma ação bônus, no seu 8°, 14° e 20º nível.\nturno, você pode designar uma criatura a até 1,5 metro da mão espectral criada por essa magia. Fazer isso, lhe CONJURAÇÃO DE TRAPACEIRO ARCANO concede vantagem nas jogadas de ataque contra essa Nível de Truques Magias Espaços de Magia por Nível criatura até o final do turno.\nLadino Conhecidos Conhecidas LADRÃO DE MAGIA No 17° nível, você ganha a habilidade de, magicamente, roubar o conhecimento de como conjurar uma magia de outro conjurador.\nImediatamente depois de uma criatura conjurar uma magia que tenha você como alvo ou inclua você na sua área de efeito, você pode usar sua reação para forçar a criatura a realizar um teste de resistência com o 10° modificador de habilidade de conjuração dele. A CD é 11° igual a CD das suas magias. Numa falha, você ignora o 12° efeito da magia sobre você e rouba o conhecimento da 13° magia, se ela for de, pelo menos, 1° nível e de um nível 14° que você possa conjurar (não precisa ser uma magia de 15° mago). Pelas próximas 8 horas, você conhece a magia e 16° pode conjurá-la usando seus espaços de magia. A criatura 17° não pode conjurar a magia até que 8 horas tenham se 18° passado.\n19° Uma vez que você tenha usado essa característica, 20° você não pode usá-la novamente até ter terminado um descanso longo.",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Mãos Mágicas",
+            "nome_ingles": "Mage Hand",
+            "caracteristicas": "Truque de  Invocação (Artífice, Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V S\nDuração:1 minuto",
+            "descricao": "Uma mão flutuante e espectral aparece em um ponto à sua escolha e no alcance da magia. A mão permanece enquanto a magia durar ou até você dispensá-la com uma ação. A mão desaparece caso se distancie mais de 9 metros [30 ft.] de você ou se você conjurar a magia novamente.Você pode usar sua ação para controlar a mão. Você pode fazer com que ela manipule objetos, abra portas ou recipientes destrancados, guarde ou pegue itens de recipientes abertos, ou derrame o conteúdo de frascos. Você pode movê-la até 9 metros [30 ft.] a cada vez que a usa. Ela não pode atacar, ativar itens mágicos ou carregar mais de 4,5 quilos [10 pounds].\nLivro do Jogador (PHB), p. 256 (256)",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Ilusão Menor",
+            "nome_ingles": "Minor Illusion",
+            "caracteristicas": "Truque de  Ilusão (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:S M (um pouco de lã)\nDuração:1 minuto",
+            "descricao": "Você cria um som ou uma imagem de um objeto ao alcanceda magia, que permanece enquanto esta durar. A ilusão termina se você a dispensar com uma ação ou conjurá-la novamente.Se você cria um som, o volume emitido pode variar desdeum sussurro até um grito. Pode ser a sua voz, a voz de outra pessoa, o rugido de um leão, a batida de tambores ou qualquer outro som à sua escolha. O som continua no mesmo tom enquanto a magia durar, ou você pode fazer sons mais discretos em momentos diferentes, antes que amagia termine.Se você criar uma imagem de um objeto - como uma cadeira, pegadas lamacentas ou uma pequena arca - esta não pode ser maior que um cubo de 1,5 metro [5-foot cube]. A imagem não pode emitir som, luz, odor ou qualquer outro efeito sensorial. Interação física com a imagem revela que se trata de uma ilusão, pois coisas passam através dela.Se uma criatura usar uma ação para examinar o som ou a imagem, a criatura pode determinar que é uma ilusão comum teste bem-sucedido de Inteligência (Investigação) contra a CD para evitar sua magia. A ilusão torna-se desbotada para uma criatura que consiga discerni-la.\nLivro do Jogador (PHB), p. 248 (260)",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Lâmina Estrondosa",
+            "nome_ingles": "Booming Blade",
+            "caracteristicas": "Truque de  Evocação (Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:1,5m [5 ft.]\nComponentes:V M (uma arma)\nDuração:Uma rodada",
+            "descricao": "Como parte da ação usada para conjurar esta magia, você deve fazer um ataque corpo a corpo com uma arma contra uma criatura dentro do alcance da magia, do contrário a magia falha. Se acertar, o alvo sofre os efeitos normais do ataque e fica envolto em uma energia estrondosa até o começo do próximo turno do conjurador. Se o alvo se mover voluntariamente antes disso, ele imediatamente recebe 1d8 de dano trovejante e a magia encerra.\nTasha's Cauldron to Everything, p. 106",
+            "visible": true,
+            "quantity": 1
           }
         ],
-        "createdAt": "2026-02-01T21:41:21.687Z"
-      },
+        "photo": "",
+        "class": "Ladino (Trapaceiro Arcano)",
+        "level": 6,
+        "race": "Humano",
+        "createdAt": "2026-02-02T01:30:53.000Z"
+      }
+    ],
+    "ships": [
       {
-        "id": "ship-1769982158841",
-        "name": "a trita",
-        "type": "mob",
-        "maxHp": 100,
-        "currentHp": 100,
-        "maxMorale": 10,
-        "currentMorale": 10,
+        "id": "ship-sereia-murann",
+        "name": "Sereia de Murann",
+        "type": "player",
+        "maxHp": 150,
+        "currentHp": 147,
+        "maxMorale": 100,
+        "currentMorale": 100,
         "image": "",
         "conditions": [],
         "inventory": [],
-        "createdAt": "2026-02-01T21:42:38.841Z"
+        "shipClass": "Caravela",
+        "category": "Imenso",
+        "speed": "50 ft (12 quadrados)",
+        "maneuverability": "Padrão (custo 2)",
+        "ac": 14,
+        "carism": 1,
+        "constitution": 2,
+        "dexterity": 1,
+        "crew": "8-30",
+        "cannons": "4/10",
+        "createdAt": "2026-02-02T01:30:54.000Z"
       }
     ]
   }
