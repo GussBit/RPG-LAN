@@ -12,6 +12,7 @@ export const useGameStore = create((set, get) => ({
   // Estado inicial da galeria
   gallery: { images: [], audio: [] },
   presets: { mobs: [], players: [], ships: [] },
+  customItems: [],
 
   // --- CENAS (SCENES) ---
 
@@ -641,6 +642,47 @@ export const useGameStore = create((set, get) => ({
         [type]: updatedList 
       } 
     });
+  },
+
+  // --- ITENS CUSTOMIZADOS ---
+
+  fetchCustomItems: async () => {
+    try {
+      const res = await fetch(`${API_URL}/customItems`);
+      if (res.ok) {
+        const data = await res.json();
+        set({ customItems: data });
+      }
+    } catch (error) {
+      console.error('Erro ao buscar itens customizados:', error);
+    }
+  },
+
+  createCustomItem: async (item) => {
+    try {
+      const res = await fetch(`${API_URL}/customItems`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item)
+      });
+      const newItem = await res.json();
+      set(state => ({ customItems: [...state.customItems, newItem] }));
+      return newItem;
+    } catch (error) {
+      console.error('Erro ao criar item customizado:', error);
+      throw error;
+    }
+  },
+
+  deleteCustomItem: async (id) => {
+    try {
+      await fetch(`${API_URL}/customItems/${id}`, { method: 'DELETE' });
+      set(state => ({
+        customItems: state.customItems.filter(i => i.id !== id)
+      }));
+    } catch (error) {
+      console.error('Erro ao deletar item customizado:', error);
+    }
   },
 
 }));

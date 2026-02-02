@@ -11,6 +11,7 @@ export default function PlayerShips({
     updateShipHP,
     updateShipMorale,
     toggleShipCondition,
+    updateShipInventoryQuantity,
     onRemoveItem,
     onOpenCompendium,
     crisisConditions
@@ -224,7 +225,13 @@ export default function PlayerShips({
                                         </div>
                                         <div className="space-y-2">
                                             {(ship.inventory || []).map((item, idx) => (
-                                                <InventoryItemCard key={idx} item={item} index={idx} onRemove={onRemoveItem} />
+                                                <InventoryItemCard 
+                                                    key={idx} 
+                                                    item={item} 
+                                                    index={idx} 
+                                                    onUpdateQuantity={(idx, delta) => updateShipInventoryQuantity(ship.id, idx, delta)}
+                                                    onRemove={onRemoveItem} 
+                                                />
                                             ))}
                                             {(ship.inventory || []).length === 0 && (
                                                 <div className="text-center text-zinc-600 text-xs py-8 border-2 border-dashed border-zinc-800 rounded-xl">Porão de carga vazio</div>

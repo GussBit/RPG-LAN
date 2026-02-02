@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Square, Play, Pause,
-  Wind, Music, Zap, FolderOpen, Plus, Volume2
+  Wind, Music, Zap, FolderOpen, Plus, Volume2, BookOpen
 } from 'lucide-react';
 import PillButton from './ui/PillButton';
 
@@ -13,6 +13,7 @@ export default function Header({
   volAmbience, setVolAmbience, volMusic, setVolMusic, volSfx, setVolSfx,
   isGlobalPaused, toggleGlobalPause, stopAllAudio,
   onOpenGallery, onAddPlayer, onAddMob
+  , onAddItem
 }) {
   const [addMenuOpen, setAddMenuOpen] = useState(false);
   const [volumeMenuOpen, setVolumeMenuOpen] = useState(false);
@@ -190,6 +191,10 @@ export default function Header({
               <button onClick={() => { onAddPlayer(); setAddMenuOpen(false); }} className="w-full text-left px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-700 flex items-center gap-3 transition-colors">
                 <Plus size={16} className="text-zinc-400" />
                 <span>Novo Player</span>
+              </button>
+              <button onClick={() => { if(onAddItem) onAddItem(); setAddMenuOpen(false); }} className="w-full text-left px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-700 flex items-center gap-3 transition-colors">
+                <BookOpen size={16} className="text-zinc-400" />
+                <span>Novo Item</span>
               </button>
               <button onClick={() => { onOpenGallery(); setAddMenuOpen(false); }} className="w-full text-left px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-700 flex items-center gap-3 transition-colors">
                 <FolderOpen size={16} className="text-zinc-400" />

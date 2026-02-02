@@ -1,0 +1,259 @@
+{
+  "apendice_navio": {
+    "recursos_consumo": [
+      {
+        "tipo": "recurso_consumo",
+        "nome": "Água e Rações",
+        "unidade": "tripulante_dia",
+        "custo": { "quant": 2, "moeda": "pp" },
+        "estoque_inicial": { "quant": 30, "unidade": "dias_para_tripulacao_atual" },
+        "efeitos_falta": {
+          "dia_1": { "moral_delta_por_dia": -5 },
+          "apos_3_dias": { "moral_delta_por_dia": -10 },
+          "apos_7_dias": { "motim": "automatico" }
+        },
+        "notas": []
+      },
+      {
+        "tipo": "recurso_consumo",
+        "nome": "Rum (Barril)",
+        "unidade": "barril",
+        "custo": { "quant": 10, "moeda": "po" },
+        "rendimento": { "serve_tripulantes": 10 },
+        "estoque_inicial": { "min": 4, "max": 10, "unidade": "barris" },
+        "uso": ["dias_de_folga", "oferendas_religiosas"],
+        "efeitos": [{ "quando": "festa", "moral_delta": 5 }],
+        "notas": []
+      },
+      {
+        "tipo": "recurso_consumo",
+        "nome": "Carne Fresca (Barril Salgado)",
+        "unidade": "barril",
+        "custo": { "quant": 20, "moeda": "po" },
+        "rendimento": { "serve_tripulantes": 10 },
+        "estoque_inicial": { "min": 2, "max": 5, "unidade": "barris" },
+        "validade": { "dias": 14, "requisito": "sal_para_preservar" },
+        "efeitos": [{ "quando": "festa", "moral_delta": 5 }],
+        "alternativas": [
+          {
+            "nome": "Pescar",
+            "teste": { "pericia": "Sobrevivência", "cd": 12 },
+            "tempo": { "horas": 4 },
+            "resultado": { "rende": { "quant": 1, "unidade": "barril_por_10_homens" } }
+          }
+        ],
+        "notas": []
+      }
+    ],
+    "municao_combate": [
+      {
+        "tipo": "municao",
+        "nome": "Balas de Canhão (Caixa)",
+        "unidade": "caixa",
+        "variantes_por_categoria_navio": [
+          {
+            "categoria_navio": "Grande",
+            "custo": { "quant": 20, "moeda": "po" },
+            "equivalencia": "1 combate para navio Grande"
+          },
+          {
+            "categoria_navio": "Imenso",
+            "custo": { "quant": 40, "moeda": "po" },
+            "equivalencia": "1 combate para navio Imenso"
+          },
+          {
+            "categoria_navio": "Colossal",
+            "custo": { "quant": 80, "moeda": "po" },
+            "equivalencia": "1 combate para navio Colossal"
+          }
+        ],
+        "estoque_inicial": {
+          "min": 3,
+          "max": 10,
+          "unidade": "caixas",
+          "regra": "depende_da_categoria"
+        },
+        "notas": []
+      }
+    ],
+    "municao_especial": [
+      {
+        "tipo": "municao_especial",
+        "nome": "Incendiária (Balas de Fogo)",
+        "custo_adicional_por_bateria": { "quant": 20, "moeda": "po" },
+        "modificadores": {
+          "ca_inimigo_delta": 2,
+          "crise_automatica": "Incêndio"
+        }
+      },
+      {
+        "tipo": "municao_especial",
+        "nome": "Metralha (Bala Estilhaçada)",
+        "custo_adicional_por_bateria": { "quant": 15, "moeda": "po" },
+        "modificadores": {
+          "ca_inimigo_delta": 2,
+          "crise_automatica": "Tripulação"
+        }
+      },
+      {
+        "tipo": "municao_especial",
+        "nome": "Corrente (Bala Dupla com Corrente)",
+        "custo_adicional_por_bateria": { "quant": 20, "moeda": "po" },
+        "modificadores": {
+          "ca_inimigo_delta": 2,
+          "crise_automatica": "Vela/Mastro",
+          "movimento_delta": -2
+        }
+      }
+    ],
+    "reparos_manutencao": [
+      {
+        "tipo": "reparo",
+        "nome": "Madeira de Reparo",
+        "unidade": "tábua",
+        "custo": { "quant": 10, "moeda": "po" },
+        "calculo_estoque": {
+          "opcao_a": "1 tábua para cada 10 tripulantes",
+          "opcao_b": "1 tábua para cada 10 HP do navio",
+          "regra": "use_a_maior_quantidade"
+        },
+        "uso": ["reparos_de_campo_no_mar", "construcao"],
+        "limites": ["estaleiro_em_porto_necessario_para_100_porcento_pv"]
+      },
+      {
+        "tipo": "reparo",
+        "nome": "Cordas e Velas Sobressalentes",
+        "unidade": "conjunto",
+        "custo": { "quant": 30, "moeda": "po" },
+        "estoque_por_categoria": [
+          { "categoria_navio": "Grande", "suporta_reparos": 3 },
+          { "categoria_navio": "Imenso", "suporta_reparos": 2 },
+          { "categoria_navio": "Colossal", "suporta_reparos": 1 }
+        ],
+        "uso": ["reparar_crise_de_vela_ou_mastro_no_mar"],
+        "mecanica": {
+          "teste": { "pericia": "Carpinteiro", "atributo": "Des", "cd": 15 },
+          "tempo": { "horas": 4 }
+        }
+      }
+    ],
+    "aprimoramentos": {
+      "estruturais": [
+        {
+          "tipo": "aprimoramento",
+          "categoria": "estrutural",
+          "nome": "Casco Reforçado",
+          "custo": { "quant": 2000, "moeda": "po" },
+          "efeitos": [
+            { "pv_percent_delta": 20 },
+            { "velocidade_delta": -1 }
+          ]
+        },
+        {
+          "tipo": "aprimoramento",
+          "categoria": "estrutural",
+          "nome": "Casco Aliviado",
+          "custo": { "quant": 1500, "moeda": "po" },
+          "efeitos": [
+            { "velocidade_delta": 2 },
+            { "pv_percent_delta": -10 }
+          ]
+        },
+        {
+          "tipo": "aprimoramento",
+          "categoria": "estrutural",
+          "nome": "Velas Tempestade",
+          "custo": { "quant": 1000, "moeda": "po" },
+          "efeitos": [
+            { "vento_a_favor": "rola 1d10 em vez de 1d6" }
+          ]
+        },
+        {
+          "tipo": "aprimoramento",
+          "categoria": "estrutural",
+          "nome": "Velas Reforçadas",
+          "custo": { "quant": 800, "moeda": "po" },
+          "efeitos": [
+            { "ignora_primeira_crise_vela": true }
+          ]
+        },
+        {
+          "tipo": "aprimoramento",
+          "categoria": "estrutural",
+          "nome": "Leme de Precisão",
+          "custo": { "quant": 1200, "moeda": "po" },
+          "efeitos": [
+            { "vantagem_em": ["manobras", "abordagem"] }
+          ]
+        }
+      ],
+      "ofensivos": [
+        {
+          "tipo": "aprimoramento",
+          "categoria": "ofensivo",
+          "nome": "Canhões de Proa",
+          "custo": { "quant": 3000, "moeda": "po" },
+          "efeitos": [
+            { "canhao_pesado_frontal_por_rodada_delta": 1 }
+          ]
+        },
+        {
+          "tipo": "aprimoramento",
+          "categoria": "ofensivo",
+          "nome": "Baterias Balanceadas",
+          "custo": { "quant": 1500, "moeda": "po" },
+          "efeitos": [
+            { "ataques_em_todos_canhoes_delta": 1 }
+          ]
+        },
+        {
+          "tipo": "aprimoramento",
+          "categoria": "ofensivo",
+          "nome": "Aríete Reforçado",
+          "custo": { "quant": 1200, "moeda": "po" },
+          "efeitos": [
+            { "dano_colisao": "+2d10" },
+            { "vantagem_em": ["abordagem"] }
+          ]
+        }
+      ],
+      "utilitarios": [
+        {
+          "tipo": "aprimoramento",
+          "categoria": "utilitario",
+          "nome": "Contrabando Secreto",
+          "custo": { "quant": 800, "moeda": "po" },
+          "efeitos": [
+            { "detectar_carga_ilegal": "desvantagem_para_quem_procura" }
+          ]
+        },
+        {
+          "tipo": "aprimoramento",
+          "categoria": "utilitario",
+          "nome": "Cozinha de Qualidade",
+          "custo": { "quant": 700, "moeda": "po" },
+          "efeitos": [
+            { "custo_diario_tripulacao_percent_delta": -25 }
+          ]
+        },
+        {
+          "tipo": "aprimoramento",
+          "categoria": "utilitario",
+          "nome": "Cabines Confortáveis",
+          "custo": { "quant": 2000, "moeda": "po" },
+          "efeitos": [
+            { "moral_inicial_delta": 20 }
+          ]
+        }
+      ]
+    },
+    "exemplos": [
+      {
+        "tipo": "exemplo",
+        "nome": "Exemplo de Custo Total (Brigantina)",
+        "observacao": "placeholder",
+        "itens": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,1753 @@
+{
+  "schema_version": "1.0",
+  "moedas": {
+    "pc": "peças de cobre",
+    "pp": "peças de prata",
+    "po": "peças de ouro"
+  },
+  "armaduras": [
+    {
+      "tipo": "armadura",
+      "categoria": "leve",
+      "nome": "Acolchoada",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "ca": "11 + modificador de Des",
+      "forca_min": null,
+      "furtividade": "desvantagem",
+      "peso_kg": 4.0
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "leve",
+      "nome": "Couro",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "ca": "11 + modificador de Des",
+      "forca_min": null,
+      "furtividade": null,
+      "peso_kg": 5.0
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "leve",
+      "nome": "Couro Batido",
+      "custo": {
+        "quant": 45,
+        "moeda": "po"
+      },
+      "ca": "12 + modificador de Des",
+      "forca_min": null,
+      "furtividade": null,
+      "peso_kg": 6.5
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "medio",
+      "nome": "Gibão de Peles",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "ca": "12 + modificador de Des (máx. +2)",
+      "forca_min": null,
+      "furtividade": null,
+      "peso_kg": 6.0
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "medio",
+      "nome": "Camisão de Malha",
+      "custo": {
+        "quant": 30,
+        "moeda": "po"
+      },
+      "ca": "13 + modificador de Des (máx. +2)",
+      "forca_min": null,
+      "furtividade": null,
+      "peso_kg": 10.0
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "medio",
+      "nome": "Brunea",
+      "custo": {
+        "quant": 50,
+        "moeda": "po"
+      },
+      "ca": "14 + modificador de Des (máx. +2)",
+      "forca_min": null,
+      "furtividade": "desvantagem",
+      "peso_kg": 22.5
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "medio",
+      "nome": "Peitoral",
+      "custo": {
+        "quant": 400,
+        "moeda": "po"
+      },
+      "ca": "14 + modificador de Des (máx. +2)",
+      "forca_min": null,
+      "furtividade": null,
+      "peso_kg": 10.0
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "medio",
+      "nome": "Meia-Armadura",
+      "custo": {
+        "quant": 750,
+        "moeda": "po"
+      },
+      "ca": "15 + modificador de Des (máx. +2)",
+      "forca_min": null,
+      "furtividade": "desvantagem",
+      "peso_kg": 20.0
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "pesado",
+      "nome": "Cota de anéis",
+      "custo": {
+        "quant": 30,
+        "moeda": "po"
+      },
+      "ca": "15",
+      "forca_min": null,
+      "furtividade": "desvantagem",
+      "peso_kg": 20.0
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "pesado",
+      "nome": "Cota de malha",
+      "custo": {
+        "quant": 75,
+        "moeda": "po"
+      },
+      "ca": "16",
+      "forca_min": 13,
+      "furtividade": "desvantagem",
+      "peso_kg": 27.5
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "pesado",
+      "nome": "Cota de talas",
+      "custo": {
+        "quant": 200,
+        "moeda": "po"
+      },
+      "ca": "17",
+      "forca_min": 15,
+      "furtividade": "desvantagem",
+      "peso_kg": 30.0
+    },
+    {
+      "tipo": "armadura",
+      "categoria": "pesado",
+      "nome": "Placas",
+      "custo": {
+        "quant": 1500,
+        "moeda": "po"
+      },
+      "ca": "18",
+      "forca_min": 15,
+      "furtividade": "desvantagem",
+      "peso_kg": 32.5
+    },
+    {
+      "tipo": "escudo",
+      "categoria": "escudo",
+      "nome": "Escudo",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "bonus_ca": "+2",
+      "forca_min": null,
+      "furtividade": null,
+      "peso_kg": 3.0
+    }
+  ],
+  "armas": [
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Adaga",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "dano": "1d4 perfurante",
+      "peso_kg": 0.5,
+      "propriedades": [
+        "acuidade",
+        "leve",
+        "arremesso (distância 6/18)"
+      ],
+      "propriedades_texto": "acuidade, leve, arremesso (distância 6/18)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Azagaia",
+      "custo": {
+        "quant": 5,
+        "moeda": "pp"
+      },
+      "dano": "1d6 perfurante",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "arremesso (distância 9/36)"
+      ],
+      "propriedades_texto": "arremesso (distância 9/36)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Bordão",
+      "custo": {
+        "quant": 2,
+        "moeda": "pp"
+      },
+      "dano": "1d6 concussão",
+      "peso_kg": 2.0,
+      "propriedades": [
+        "versátil (1d8)"
+      ],
+      "propriedades_texto": "versátil (1d8)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Clava Grande",
+      "custo": {
+        "quant": 2,
+        "moeda": "pp"
+      },
+      "dano": "1d8 concussão",
+      "peso_kg": 5.0,
+      "propriedades": [
+        "pesada",
+        "duas mãos"
+      ],
+      "propriedades_texto": "pesada, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Foice Curta",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "dano": "1d4 cortante",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "leve"
+      ],
+      "propriedades_texto": "leve"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Lança",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "dano": "1d6 perfurante",
+      "peso_kg": 1.5,
+      "propriedades": [
+        "arremesso (distância 6/18)",
+        "versátil (1d8)"
+      ],
+      "propriedades_texto": "arremesso (distância 6/18), versátil (1d8)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Maça",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "dano": "1d6 concussão",
+      "peso_kg": 2.0,
+      "propriedades": [],
+      "propriedades_texto": null
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Machadinha",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "dano": "1d6 cortante",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "leve",
+        "arremesso (distância 6/18)"
+      ],
+      "propriedades_texto": "leve, arremesso (distância 6/18)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Martelo Leve",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "dano": "1d4 concussão",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "leve",
+        "arremesso (distância 6/18)"
+      ],
+      "propriedades_texto": "leve, arremesso (distância 6/18)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_corpo_a_corpo",
+      "nome": "Porrete",
+      "custo": {
+        "quant": 1,
+        "moeda": "pp"
+      },
+      "dano": "1d4 concussão",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "leve"
+      ],
+      "propriedades_texto": "leve"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_distancia",
+      "nome": "Arco Curto",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "dano": "1d6 perfurante",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "munição (distância 24/96)",
+        "duas mãos"
+      ],
+      "propriedades_texto": "munição (distância 24/96), duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_distancia",
+      "nome": "Beste Leve",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "dano": "1d8 perfurante",
+      "peso_kg": 2.5,
+      "propriedades": [
+        "munição (distância 24/96)",
+        "recarga",
+        "duas mãos"
+      ],
+      "propriedades_texto": "munição (distância 24/96), recarga, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_distancia",
+      "nome": "Dardo",
+      "custo": {
+        "quant": 5,
+        "moeda": "pc"
+      },
+      "dano": "1d4 perfurante",
+      "peso_kg": 0.1,
+      "propriedades": [
+        "acuidade",
+        "arremesso (distância 6/18)"
+      ],
+      "propriedades_texto": "acuidade, arremesso (distância 6/18)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "simples_distancia",
+      "nome": "Funda",
+      "custo": {
+        "quant": 1,
+        "moeda": "pp"
+      },
+      "dano": "1d4 concussão",
+      "peso_kg": null,
+      "propriedades": [
+        "munição (distância 9/36)"
+      ],
+      "propriedades_texto": "munição (distância 9/36)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Alabarda",
+      "custo": {
+        "quant": 20,
+        "moeda": "po"
+      },
+      "dano": "1d10 cortante",
+      "peso_kg": 3.0,
+      "propriedades": [
+        "pesada",
+        "alcance",
+        "duas mãos"
+      ],
+      "propriedades_texto": "pesada, alcance, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Cimitarra",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "dano": "1d6 cortante",
+      "peso_kg": 1.5,
+      "propriedades": [
+        "acuidade",
+        "leve"
+      ],
+      "propriedades_texto": "acuidade, leve"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Chicote",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "dano": "1d4 cortante",
+      "peso_kg": 1.5,
+      "propriedades": [
+        "acuidade",
+        "alcance"
+      ],
+      "propriedades_texto": "acuidade, alcance"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Espada Curta",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "dano": "1d6 perfurante",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "acuidade",
+        "leve"
+      ],
+      "propriedades_texto": "acuidade, leve"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Espada Grande",
+      "custo": {
+        "quant": 50,
+        "moeda": "po"
+      },
+      "dano": "2d6 cortante",
+      "peso_kg": 3.0,
+      "propriedades": [
+        "pesada",
+        "duas mãos"
+      ],
+      "propriedades_texto": "pesada, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Espada Longa",
+      "custo": {
+        "quant": 15,
+        "moeda": "po"
+      },
+      "dano": "1d8 cortante",
+      "peso_kg": 1.5,
+      "propriedades": [
+        "versátil (1d10)"
+      ],
+      "propriedades_texto": "versátil (1d10)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Glaive",
+      "custo": {
+        "quant": 20,
+        "moeda": "po"
+      },
+      "dano": "1d10 cortante",
+      "peso_kg": 3.0,
+      "propriedades": [
+        "pesada",
+        "alcance",
+        "duas mãos"
+      ],
+      "propriedades_texto": "pesada, alcance, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Lança de Montaria",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "dano": "1d12 perfurante",
+      "peso_kg": 3.0,
+      "propriedades": [
+        "alcance",
+        "especial"
+      ],
+      "propriedades_texto": "alcance, especial"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Lança Longa",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "dano": "1d10 perfurante",
+      "peso_kg": 4.0,
+      "propriedades": [
+        "pesada",
+        "alcance",
+        "duas mãos"
+      ],
+      "propriedades_texto": "pesada, alcance, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Maça Estrela",
+      "custo": {
+        "quant": 15,
+        "moeda": "po"
+      },
+      "dano": "1d8 perfurante",
+      "peso_kg": 2.0,
+      "propriedades": [],
+      "propriedades_texto": null
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Machado Grande",
+      "custo": {
+        "quant": 30,
+        "moeda": "po"
+      },
+      "dano": "1d12 cortante",
+      "peso_kg": 3.5,
+      "propriedades": [
+        "pesada",
+        "duas mãos"
+      ],
+      "propriedades_texto": "pesada, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Machado de Batalha",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "dano": "1d8 cortante",
+      "peso_kg": 2.0,
+      "propriedades": [
+        "versátil (1d10)"
+      ],
+      "propriedades_texto": "versátil (1d10)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Malho",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "dano": "2d6 concussão",
+      "peso_kg": 5.0,
+      "propriedades": [
+        "pesada",
+        "duas mãos"
+      ],
+      "propriedades_texto": "pesada, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Mangual",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "dano": "1d8 concussão",
+      "peso_kg": 1.0,
+      "propriedades": [],
+      "propriedades_texto": null
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Martelo de Guerra",
+      "custo": {
+        "quant": 15,
+        "moeda": "po"
+      },
+      "dano": "1d8 concussão",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "versátil (1d10)"
+      ],
+      "propriedades_texto": "versátil (1d10)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Picareta de Guerra",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "dano": "1d8 perfurante",
+      "peso_kg": 1.0,
+      "propriedades": [],
+      "propriedades_texto": null
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Rapieira",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "dano": "1d8 perfurante",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "acuidade"
+      ],
+      "propriedades_texto": "acuidade"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_corpo_a_corpo",
+      "nome": "Tridente",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "dano": "1d6 perfurante",
+      "peso_kg": 2.0,
+      "propriedades": [
+        "arremesso (6/18)",
+        "versátil (1d8)"
+      ],
+      "propriedades_texto": "arremesso (6/18), versátil (1d8)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_distancia",
+      "nome": "Arco Longo",
+      "custo": {
+        "quant": 50,
+        "moeda": "po"
+      },
+      "dano": "1d8 perfurante",
+      "peso_kg": 1.0,
+      "propriedades": [
+        "munição (distância 45/180)",
+        "pesada",
+        "duas mãos"
+      ],
+      "propriedades_texto": "munição (distância 45/180), pesada, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_distancia",
+      "nome": "Besta de Mão",
+      "custo": {
+        "quant": 75,
+        "moeda": "po"
+      },
+      "dano": "1d6 perfurante",
+      "peso_kg": 1.5,
+      "propriedades": [
+        "munição (distância 9/36)",
+        "leve",
+        "recarga"
+      ],
+      "propriedades_texto": "munição (distância 9/36), leve, recarga"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_distancia",
+      "nome": "Besta Pesada",
+      "custo": {
+        "quant": 50,
+        "moeda": "po"
+      },
+      "dano": "1d10 perfurante",
+      "peso_kg": 4.5,
+      "propriedades": [
+        "munição (distância 30/120)",
+        "pesada",
+        "recarga",
+        "duas mãos"
+      ],
+      "propriedades_texto": "munição (distância 30/120), pesada, recarga, duas mãos"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_distancia",
+      "nome": "Rede",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "dano": null,
+      "peso_kg": 1.5,
+      "propriedades": [
+        "especial",
+        "arremesso (distância 1,5/4,5)"
+      ],
+      "propriedades_texto": "especial, arremesso (distância 1,5/4,5)"
+    },
+    {
+      "tipo": "arma",
+      "grupo": "marcial_distancia",
+      "nome": "Zarabatana",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "dano": "1 perfurante",
+      "peso_kg": 0.5,
+      "propriedades": [
+        "munição (distância 7,5/30)",
+        "recarga"
+      ],
+      "propriedades_texto": "munição (distância 7,5/30), recarga"
+    }
+  ],
+  "equipamentos": [
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Ábaco",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Ácido (vidro)",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Água benta (frasco)",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Algemas",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Algibeira",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Aljava",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Ampulheta",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Antídoto (vidro)",
+      "custo": {
+        "quant": 50,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Apito de advertência",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Aríete portátil",
+      "custo": {
+        "quant": 4,
+        "moeda": "po"
+      },
+      "peso_kg": 17.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Armadilha de caça",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 12.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Arpéu",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Balança de mercador",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 1.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Balde",
+      "custo": {
+        "quant": 5,
+        "moeda": "pc"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Barril",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 35.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Baú",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 12.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Bolsa de componentes",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Caixa de Fogo",
+      "custo": {
+        "quant": 5,
+        "moeda": "pp"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Caneca",
+      "custo": {
+        "quant": 2,
+        "moeda": "pc"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Caneta tinteiro",
+      "custo": {
+        "quant": 2,
+        "moeda": "pc"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Cantil",
+      "custo": {
+        "quant": 2,
+        "moeda": "pp"
+      },
+      "peso_kg": 2.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Cesto",
+      "custo": {
+        "quant": 4,
+        "moeda": "pp"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Cobertor de inverno",
+      "custo": {
+        "quant": 5,
+        "moeda": "pp"
+      },
+      "peso_kg": 1.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Corda de cânhamo (15 metros)",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 5.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Corda de seda (15 metros)",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "peso_kg": 2.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Corrente (3 metros)",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 5.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Equipamento de pescaria",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Escada (3 metros)",
+      "custo": {
+        "quant": 1,
+        "moeda": "pp"
+      },
+      "peso_kg": 12.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Esferas (sacola com 1.000)",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Espelho de aço",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 0.25
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Estrepes (bolsa com 20)",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Fechadura",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Fogo alquímico (frasco)",
+      "custo": {
+        "quant": 50,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Frasco",
+      "custo": {
+        "quant": 2,
+        "moeda": "pc"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Garrafa de vidro",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Giz (1 peça)",
+      "custo": {
+        "quant": 1,
+        "moeda": "pc"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Grimório",
+      "custo": {
+        "quant": 50,
+        "moeda": "po"
+      },
+      "peso_kg": 1.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Jarra",
+      "custo": {
+        "quant": 4,
+        "moeda": "pc"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Kit de escalada",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "peso_kg": 6.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Kit de primeiros-socorros",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 1.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Lâmpada",
+      "custo": {
+        "quant": 5,
+        "moeda": "pp"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Lanterna coberta",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Lanterna furta-fogo",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Lente de aumento",
+      "custo": {
+        "quant": 100,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Livro",
+      "custo": {
+        "quant": 25,
+        "moeda": "po"
+      },
+      "peso_kg": 2.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Luneta",
+      "custo": {
+        "quant": 1000,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Manto",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Marreta",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 5.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Martelo",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 1.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Mochila",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 2.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "municao",
+      "nome": "Balas de Funda (20)",
+      "custo": {
+        "quant": 4,
+        "moeda": "pc"
+      },
+      "peso_kg": 0.75
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "municao",
+      "nome": "Flechas (20)",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "municao",
+      "nome": "Virotes (20)",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 0.75
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "municao",
+      "nome": "Zarabatana (50)",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Óleo (frasco)",
+      "custo": {
+        "quant": 1,
+        "moeda": "pp"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Pá",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 2.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Panela de ferro",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 5.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Papel (uma folha)",
+      "custo": {
+        "quant": 2,
+        "moeda": "pp"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Parafina",
+      "custo": {
+        "quant": 5,
+        "moeda": "pp"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Pé de cabra",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 2.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Pedra de amolar",
+      "custo": {
+        "quant": 1,
+        "moeda": "pc"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Perfume (frasco)",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Pergaminho (uma folha)",
+      "custo": {
+        "quant": 1,
+        "moeda": "pp"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Picareta de minerador",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 5.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Píton",
+      "custo": {
+        "quant": 5,
+        "moeda": "pc"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Poção de cura",
+      "custo": {
+        "quant": 50,
+        "moeda": "po"
+      },
+      "peso_kg": 0.25
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Porta mapas ou pergaminhos",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Porta virotes",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Pregos de ferro (10)",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 2.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Rações de viagem (1 dia)",
+      "custo": {
+        "quant": 5,
+        "moeda": "pp"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Robes",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Roldana e polia",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 2.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Roupas comuns",
+      "custo": {
+        "quant": 5,
+        "moeda": "pp"
+      },
+      "peso_kg": 1.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Roupas de viajante",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Roupas de entretenimento",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Roupas finas",
+      "custo": {
+        "quant": 15,
+        "moeda": "po"
+      },
+      "peso_kg": 3.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Sabão",
+      "custo": {
+        "quant": 2,
+        "moeda": "pc"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Saco",
+      "custo": {
+        "quant": 1,
+        "moeda": "pc"
+      },
+      "peso_kg": 0.25
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Saco de dormir",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": 3.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Sino",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Tenda para duas pessoas",
+      "custo": {
+        "quant": 2,
+        "moeda": "po"
+      },
+      "peso_kg": 10.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Tocha",
+      "custo": {
+        "quant": 1,
+        "moeda": "pc"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Tinta (frasco de 30ml)",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Vara (3 metros)",
+      "custo": {
+        "quant": 5,
+        "moeda": "pc"
+      },
+      "peso_kg": 3.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Vela",
+      "custo": {
+        "quant": 1,
+        "moeda": "pc"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "aventura",
+      "nome": "Veneno básico (frasco)",
+      "custo": {
+        "quant": 100,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "foco_arcano",
+      "nome": "Bastão",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "foco_arcano",
+      "nome": "Cajado",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "foco_arcano",
+      "nome": "Cristal",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "foco_arcano",
+      "nome": "Orbe",
+      "custo": {
+        "quant": 20,
+        "moeda": "po"
+      },
+      "peso_kg": 1.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "foco_arcano",
+      "nome": "Varinha",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "foco_druidico",
+      "nome": "Cajado de madeira",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 2.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "foco_druidico",
+      "nome": "Ramo de visco",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "foco_druidico",
+      "nome": "Totem",
+      "custo": {
+        "quant": 1,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "foco_druidico",
+      "nome": "Varinha de teixo",
+      "custo": {
+        "quant": 10,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "simbolo_sagrado",
+      "nome": "Amuleto",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 0.5
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "simbolo_sagrado",
+      "nome": "Emblema",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "simbolo_sagrado",
+      "nome": "Relicário",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": 1.0
+    },
+    {
+      "tipo": "equipamento",
+      "categoria": "simbolo_sagrado",
+      "nome": "Sinete",
+      "custo": {
+        "quant": 5,
+        "moeda": "po"
+      },
+      "peso_kg": null
+    }
+  ]
+}

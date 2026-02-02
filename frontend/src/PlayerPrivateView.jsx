@@ -45,6 +45,7 @@ export default function PlayerPrivateView() {
     const [viewMode, setViewMode] = useState('sheet');
     const [selectedShipId, setSelectedShipId] = useState(null);
     const [shipTab, setShipTab] = useState('controls'); // 'controls' | 'cargo'
+    const [customItems, setCustomItems] = useState([]);
 
     useEffect(() => {
         fetchPlayerData();
@@ -114,13 +115,18 @@ export default function PlayerPrivateView() {
     const handleAddToInventory = async (item) => {
         if (!data) return;
         const currentInventory = data.player.inventory || [];
+        const existingIdx = currentInventory.findIndex(i => i.nome === item.nome);
         
-        if (currentInventory.some(i => i.nome === item.nome)) {
-            toast.warning('Item já está no inventário');
-            return;
+        let newInventory;
+        if (existingIdx >= 0) {
+            newInventory = [...currentInventory];
+            newInventory[existingIdx] = { ...newInventory[existingIdx], quantity: (newInventory[existingIdx].quantity || 1) + 1 };
+            toast.success(`+1 ${item.nome} (Total: ${newInventory[existingIdx].quantity})`);
+        } else {
+            newInventory = [...currentInventory, { ...item, quantity: 1 }];
+            toast.success(`${item.nome} adicionado!`);
         }
 
-        const newInventory = [...currentInventory, item];
         try {
             await fetch(`${BACKEND_URL}/api/scenes/${data.scene.id}/players/${data.player.id}`, {
                 method: 'PATCH',
@@ -128,9 +134,36 @@ export default function PlayerPrivateView() {
                 body: JSON.stringify({ inventory: newInventory })
             });
             fetchPlayerData();
-            toast.success(`${item.nome} adicionado!`);
         } catch (err) { 
             toast.error('Erro ao salvar item'); 
+        }
+    };
+
+    const handleUpdateInventoryQuantity = async (index, delta) => {
+        if (!data) return;
+        const newInventory = [...data.player.inventory];
+        const item = newInventory[index];
+        const newQuantity = (item.quantity || 1) + delta;
+        
+        if (newQuantity <= 0) {
+            if (window.confirm(`Remover "${item.nome}"?`)) {
+                newInventory.splice(index, 1);
+            } else {
+                return;
+            }
+        } else {
+            newInventory[index] = { ...item, quantity: newQuantity };
+        }
+
+        try {
+            await fetch(`${BACKEND_URL}/api/scenes/${data.scene.id}/players/${data.player.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ inventory: newInventory })
+            });
+            fetchPlayerData();
+        } catch (err) { 
+            toast.error('Erro ao atualizar inventário'); 
         }
     };
 
@@ -159,7 +192,17 @@ export default function PlayerPrivateView() {
         if (!ship) return;
 
         const currentInventory = ship.inventory || [];
-        const newInventory = [...currentInventory, item];
+        const existingIdx = currentInventory.findIndex(i => i.nome === item.nome);
+        
+        let newInventory;
+        if (existingIdx >= 0) {
+            newInventory = [...currentInventory];
+            newInventory[existingIdx] = { ...newInventory[existingIdx], quantity: (newInventory[existingIdx].quantity || 1) + 1 };
+            toast.success(`+1 ${item.nome} no navio`);
+        } else {
+            newInventory = [...currentInventory, { ...item, quantity: 1 }];
+            toast.success(`${item.nome} carregado no navio!`);
+        }
         
         try {
             await fetch(`${BACKEND_URL}/api/scenes/${data.scene.id}/ships/${ship.id}`, {
@@ -168,9 +211,39 @@ export default function PlayerPrivateView() {
                 body: JSON.stringify({ inventory: newInventory })
             });
             fetchPlayerData();
-            toast.success(`${item.nome} carregado no navio!`);
         } catch (err) { 
             toast.error('Erro ao carregar item'); 
+        }
+    };
+
+    const handleUpdateShipInventoryQuantity = async (shipId, index, delta) => {
+        if (!data) return;
+        const ship = data.scene.ships.find(s => s.id === shipId);
+        if (!ship) return;
+
+        const newInventory = [...ship.inventory];
+        const item = newInventory[index];
+        const newQuantity = (item.quantity || 1) + delta;
+
+        if (newQuantity <= 0) {
+             if (window.confirm(`Remover "${item.nome}" do navio?`)) {
+                newInventory.splice(index, 1);
+            } else {
+                return;
+            }
+        } else {
+            newInventory[index] = { ...item, quantity: newQuantity };
+        }
+
+        try {
+            await fetch(`${BACKEND_URL}/api/scenes/${data.scene.id}/ships/${ship.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ inventory: newInventory })
+            });
+            fetchPlayerData();
+        } catch (err) { 
+            toast.error('Erro ao atualizar carga'); 
         }
     };
 
@@ -304,6 +377,10 @@ export default function PlayerPrivateView() {
     const { player, scene } = data;
     const ships = scene.ships || [];
 
+    // Filtra itens ocultos
+    const visibleInventory = (player.inventory || []).filter(i => i.visible !== false);
+    const visibleShips = ships.map(s => ({ ...s, inventory: (s.inventory || []).filter(i => i.visible !== false) }));
+
     return (
         <div className="min-h-screen bg-zinc-950 relative overflow-hidden pb-16">
             <ToastContainer
@@ -317,6 +394,7 @@ export default function PlayerPrivateView() {
                 draggable
                 pauseOnHover
                 theme="dark"
+                style={{ zIndex: 99999 }}
             />
 
             {/* Background da cena (blur) */}
@@ -339,13 +417,14 @@ export default function PlayerPrivateView() {
                         />
                     ) : viewMode === 'inventory' ? (
                         <PlayerInventory 
-                            inventory={player.inventory} 
+                            inventory={visibleInventory} 
+                            onUpdateQuantity={handleUpdateInventoryQuantity}
                             onRemove={handleRemoveFromInventory} 
                             onOpenCompendium={() => setCompendiumOpen(true)} 
                         />
                     ) : (
                         <PlayerShips 
-                            ships={ships} 
+                            ships={visibleShips} 
                             selectedShipId={selectedShipId} 
                             setSelectedShipId={setSelectedShipId} 
                             shipTab={shipTab} 
@@ -353,6 +432,7 @@ export default function PlayerPrivateView() {
                             updateShipHP={updateShipHP} 
                             updateShipMorale={updateShipMorale}
                             toggleShipCondition={toggleShipCondition} 
+                            updateShipInventoryQuantity={handleUpdateShipInventoryQuantity}
                             onRemoveItem={handleRemoveFromShipInventory} 
                             onOpenCompendium={() => setCompendiumOpen(true)} 
                             crisisConditions={CRISIS_CONDITIONS} 
@@ -407,6 +487,7 @@ export default function PlayerPrivateView() {
             <Compendium 
                 open={compendiumOpen} 
                 onClose={() => setCompendiumOpen(false)} 
+                customItems={customItems}
                 onAddItem={viewMode === 'ships' ? handleAddToShipInventory : handleAddToInventory} 
             />
         </div>

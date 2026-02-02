@@ -35,7 +35,8 @@ export default function App() {
     updateMobHp, deleteMob, createMob, setActiveScene, createScene, duplicateScene, deleteScene,
     createPlayer, updatePlayerHp, deletePlayer, updatePlayer, togglePlayerCondition, toggleMobCondition, syncPlayers,
     updateSceneBackground, updateScene, updateMob, presets, fetchPresets, deletePreset, createPreset, addTrackFromUrl, updatePlayer: updatePlayerStore,
-    createShip, updateShip, deleteShip, toggleShipCondition
+    createShip, updateShip, deleteShip, toggleShipCondition,
+    customItems, fetchCustomItems, createCustomItem, deleteCustomItem
   } = useGameStore();
 
   // --- ESTADOS DE UI E FORMULÁRIOS ---
@@ -99,6 +100,7 @@ export default function App() {
     fetchPresets('mobs'); 
     fetchPresets('players'); 
     fetchPresets('ships');
+    fetchCustomItems();
   }, [fetchPresets]);
   
   useEffect(() => {
@@ -309,12 +311,50 @@ export default function App() {
     if (!player) return;
 
     const currentInventory = player.inventory || [];
-    // Evita duplicatas exatas se desejar
-    // if (currentInventory.some(i => i.nome === item.nome)) return toast.warning('Item já existe');
+    const existingIdx = currentInventory.findIndex(i => i.nome === item.nome);
+    
+    let newInventory;
+    if (existingIdx >= 0) {
+        newInventory = [...currentInventory];
+        newInventory[existingIdx] = { ...newInventory[existingIdx], quantity: (newInventory[existingIdx].quantity || 1) + 1 };
+        toast.success(`+1 ${item.nome} (Total: ${newInventory[existingIdx].quantity})`);
+    } else {
+        newInventory = [...currentInventory, { ...item, quantity: 1 }];
+        toast.success(`${item.nome} adicionado!`);
+    }
 
-    const newInventory = [...currentInventory, item];
     await updatePlayerStore(activeScene.id, player.id, { inventory: newInventory });
-    toast.success(`Item adicionado para ${player.characterName}`);
+  };
+
+  const handleUpdatePlayerInventoryQuantity = async (index, delta) => {
+    if (!inventoryPlayerId || !activeScene) return;
+    const player = activeScene.players.find(p => p.id === inventoryPlayerId);
+    if (!player) return;
+
+    const newInventory = [...(player.inventory || [])];
+    const item = newInventory[index];
+    const newQuantity = (item.quantity || 1) + delta;
+
+    if (newQuantity <= 0) {
+        if (window.confirm(`Remover "${item.nome}"?`)) {
+            newInventory.splice(index, 1);
+        } else {
+            return;
+        }
+    } else {
+        newInventory[index] = { ...item, quantity: newQuantity };
+    }
+
+    await updatePlayerStore(activeScene.id, player.id, { inventory: newInventory });
+  };
+
+  const handleTogglePlayerItemVisibility = async (index) => {
+    if (!inventoryPlayerId || !activeScene) return;
+    const player = activeScene.players.find(p => p.id === inventoryPlayerId);
+    if (!player) return;
+    const newInventory = [...(player.inventory || [])];
+    newInventory[index] = { ...newInventory[index], visible: newInventory[index].visible === false ? true : false };
+    await updatePlayerStore(activeScene.id, player.id, { inventory: newInventory });
   };
 
   const handleRemoveItemFromPlayer = async (index) => {
@@ -334,9 +374,50 @@ export default function App() {
     if (!mob) return;
 
     const currentInventory = mob.inventory || [];
-    const newInventory = [...currentInventory, item];
+    const existingIdx = currentInventory.findIndex(i => i.nome === item.nome);
+
+    let newInventory;
+    if (existingIdx >= 0) {
+        newInventory = [...currentInventory];
+        newInventory[existingIdx] = { ...newInventory[existingIdx], quantity: (newInventory[existingIdx].quantity || 1) + 1 };
+        toast.success(`+1 ${item.nome} (Total: ${newInventory[existingIdx].quantity})`);
+    } else {
+        newInventory = [...currentInventory, { ...item, quantity: 1 }];
+        toast.success(`${item.nome} adicionado!`);
+    }
+
     await updateMob(activeScene.id, mob.id, { inventory: newInventory });
-    toast.success(`Item adicionado para ${mob.name}`);
+  };
+
+  const handleUpdateMobInventoryQuantity = async (index, delta) => {
+    if (!inventoryMobId || !activeScene) return;
+    const mob = activeScene.mobs.find(m => m.id === inventoryMobId);
+    if (!mob) return;
+
+    const newInventory = [...(mob.inventory || [])];
+    const item = newInventory[index];
+    const newQuantity = (item.quantity || 1) + delta;
+
+    if (newQuantity <= 0) {
+        if (window.confirm(`Remover "${item.nome}"?`)) {
+            newInventory.splice(index, 1);
+        } else {
+            return;
+        }
+    } else {
+        newInventory[index] = { ...item, quantity: newQuantity };
+    }
+
+    await updateMob(activeScene.id, mob.id, { inventory: newInventory });
+  };
+
+  const handleToggleMobItemVisibility = async (index) => {
+    if (!inventoryMobId || !activeScene) return;
+    const mob = activeScene.mobs.find(m => m.id === inventoryMobId);
+    if (!mob) return;
+    const newInventory = [...(mob.inventory || [])];
+    newInventory[index] = { ...newInventory[index], visible: newInventory[index].visible === false ? true : false };
+    await updateMob(activeScene.id, mob.id, { inventory: newInventory });
   };
 
   const handleRemoveItemFromMob = async (index) => {
@@ -367,9 +448,50 @@ export default function App() {
     if (!ship) return;
 
     const currentInventory = ship.inventory || [];
-    const newInventory = [...currentInventory, item];
+    const existingIdx = currentInventory.findIndex(i => i.nome === item.nome);
+
+    let newInventory;
+    if (existingIdx >= 0) {
+        newInventory = [...currentInventory];
+        newInventory[existingIdx] = { ...newInventory[existingIdx], quantity: (newInventory[existingIdx].quantity || 1) + 1 };
+        toast.success(`+1 ${item.nome} (Total: ${newInventory[existingIdx].quantity})`);
+    } else {
+        newInventory = [...currentInventory, { ...item, quantity: 1 }];
+        toast.success(`${item.nome} carregado!`);
+    }
+
     await updateShip(activeScene.id, ship.id, { inventory: newInventory });
-    toast.success(`Item adicionado ao navio ${ship.name}`);
+  };
+
+  const handleUpdateShipInventoryQuantity = async (index, delta) => {
+    if (!inventoryShipId || !activeScene) return;
+    const ship = activeScene.ships.find(s => s.id === inventoryShipId);
+    if (!ship) return;
+
+    const newInventory = [...(ship.inventory || [])];
+    const item = newInventory[index];
+    const newQuantity = (item.quantity || 1) + delta;
+
+    if (newQuantity <= 0) {
+        if (window.confirm(`Remover "${item.nome}" do navio?`)) {
+            newInventory.splice(index, 1);
+        } else {
+            return;
+        }
+    } else {
+        newInventory[index] = { ...item, quantity: newQuantity };
+    }
+
+    await updateShip(activeScene.id, ship.id, { inventory: newInventory });
+  };
+
+  const handleToggleShipItemVisibility = async (index) => {
+    if (!inventoryShipId || !activeScene) return;
+    const ship = activeScene.ships.find(s => s.id === inventoryShipId);
+    if (!ship) return;
+    const newInventory = [...(ship.inventory || [])];
+    newInventory[index] = { ...newInventory[index], visible: newInventory[index].visible === false ? true : false };
+    await updateShip(activeScene.id, ship.id, { inventory: newInventory });
   };
 
   // --- RENDERIZADORES ---
@@ -458,7 +580,7 @@ export default function App() {
   return (
     <div className="h-dvh overflow-hidden bg-[#09090b] text-zinc-100" style={{ backgroundColor: activeScene.background ? 'transparent' : undefined }}>
       <style>{scrollbarStyles}</style>
-      <ToastContainer position="top-right" autoClose={3000} theme="dark" />
+      <ToastContainer position="top-right" autoClose={3000} theme="dark" style={{ zIndex: 99999 }} />
       
       {activeScene.background && (
         <div className="fixed inset-0 z-0 opacity-10 bg-cover bg-center" style={{ backgroundImage: `url(${getImageUrl(activeScene.background)})` }} />
@@ -478,6 +600,7 @@ export default function App() {
           onOpenGallery={() => { setGalleryType('images'); setGalleryCallback(null); setGalleryOpen(true); }}
           onAddPlayer={() => setPlayerModalOpen(true)}
           onAddMob={() => setMobModalOpen(true)}
+          onAddItem={() => setCompendiumOpen(true)}
         />
 
         {/* LAYOUT PRINCIPAL COM GRID DINÂMICO DE 5 COLUNAS */}
@@ -634,6 +757,8 @@ export default function App() {
         onClose={() => setInventoryPlayerId(null)}
         player={activeScene?.players?.find(p => p.id === inventoryPlayerId)}
         onRemoveItem={handleRemoveItemFromPlayer}
+        onUpdateQuantity={handleUpdatePlayerInventoryQuantity}
+        onToggleVisibility={handleTogglePlayerItemVisibility}
         onOpenCompendium={() => setCompendiumOpen(true)}
       />
 
@@ -645,6 +770,8 @@ export default function App() {
            return m ? { ...m, characterName: m.name, playerName: 'Mob' } : null;
         })()}
         onRemoveItem={handleRemoveItemFromMob}
+        onUpdateQuantity={handleUpdateMobInventoryQuantity}
+        onToggleVisibility={handleToggleMobItemVisibility}
         onOpenCompendium={() => setCompendiumOpen(true)}
       />
 
@@ -656,6 +783,8 @@ export default function App() {
            return s ? { ...s, characterName: s.name, playerName: 'Carga do Navio' } : null;
         })()}
         onRemoveItem={handleRemoveItemFromShip}
+        onUpdateQuantity={handleUpdateShipInventoryQuantity}
+        onToggleVisibility={handleToggleShipItemVisibility}
         onOpenCompendium={() => setCompendiumOpen(true)}
       />
 
@@ -663,6 +792,10 @@ export default function App() {
         open={compendiumOpen} 
         onClose={() => setCompendiumOpen(false)} 
         onAddItem={inventoryPlayerId ? handleAddItemToPlayer : (inventoryMobId ? handleAddItemToMob : (inventoryShipId ? handleAddItemToShip : null))}
+        customItems={customItems}
+        onCreateCustomItem={createCustomItem}
+        onDeleteCustomItem={deleteCustomItem}
+        isGM={true}
       />
 
       <QRCodeModal 

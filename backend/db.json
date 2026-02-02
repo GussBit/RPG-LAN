@@ -33,7 +33,17 @@
           "damageDice": "1d6",
           "toHit": 0,
           "image": "",
-          "conditions": []
+          "conditions": [],
+          "inventory": [
+            {
+              "nome": "Abraço Terrestre de Maximilian",
+              "nome_ingles": "Maximilian's Earthen Grasp",
+              "caracteristicas": "2º Círculo, Transmutação (Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V S M (uma mão em miniatura esculpida em barro)\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Você escolhe espaço desocupado de 1,5 metro quadrado [5-foot-square] no solo que você possa ver, dentro do alcance. Uma mão Média feita de solo compacto se ergue ali e alcança uma criatura que você posa ver a até 1,5 metro [5 ft.] dela. O alvo deve realizar salvaguarda de Força. Se falhar, o alvo sofre 2d6 de dano contundente e fica impedido pela duração da magia. Com uma ação, você pode fazer com que a mão esmague o alvo impedido, que deve realizar salvaguarda de Força. Ele sofre 2d6 de dano contundente se falhar, ou metade desse dano se obtiver sucesso. Para se libertar, o alvo impedido pode realizar um teste de Força contra a CD de resistência da sua magia. Se obtiver sucesso, o alvo escapa e não estará mais impedido pela mão. Com uma ação bônus, você pode fazer a mão alcançar uma criatura diferente ou se mover para um espaço desocupado diferente, dentro do alcance. A mão solta um alvo impedido se você fizer isso.\nXanathar's Guide to Everything, p. 161",
+              "visible": true,
+              "quantity": 1
+            }
+          ]
         }
       ],
       "players": [
@@ -47,14 +57,7 @@
           "accessUrl": "/p/2vq0pdxsxbz",
           "accessToken": "2vq0pdxsxbz",
           "conditions": [],
-          "inventory": [
-            {
-              "nome": "Acudir os Moribundos",
-              "nome_ingles": "Spare the Dying",
-              "caracteristicas": "Truque de  Necromancia (Artífice, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Instantânea",
-              "descricao": "Você toca uma criatura viva que tenha 0 pontos de vida. A criatura se torna estável. Essa magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 211 (277)"
-            }
-          ],
+          "inventory": [],
           "currentMorale": 7
         },
         {
@@ -98,7 +101,107 @@
           "currentMorale": 70,
           "image": "/images/img-1768083732380.webp",
           "conditions": [],
-          "inventory": []
+          "inventory": [
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Besta Pesada",
+              "custo": {
+                "quant": 50,
+                "moeda": "po"
+              },
+              "dano": "1d10 perfurante",
+              "peso_kg": 4.5,
+              "propriedades": [
+                "munição (distância 30/120)",
+                "pesada",
+                "recarga",
+                "duas mãos"
+              ],
+              "propriedades_texto": "munição (distância 30/120), pesada, recarga, duas mãos",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "munição (distância 30/120)",
+                  "pesada",
+                  "recarga",
+                  "duas mãos"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d10 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "4.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "50 po"
+                  }
+                ]
+              },
+              "quantity": 2
+            },
+            {
+              "nome": "Acalmar Emoções",
+              "nome_ingles": "Calm Emotions",
+              "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)"
+            },
+            {
+              "tipo": "municao",
+              "nome": "Balas de Canhão (Caixa)",
+              "unidade": "caixa",
+              "variantes_por_categoria_navio": [
+                {
+                  "categoria_navio": "Grande",
+                  "custo": {
+                    "quant": 20,
+                    "moeda": "po"
+                  },
+                  "equivalencia": "1 combate para navio Grande"
+                },
+                {
+                  "categoria_navio": "Imenso",
+                  "custo": {
+                    "quant": 40,
+                    "moeda": "po"
+                  },
+                  "equivalencia": "1 combate para navio Imenso"
+                },
+                {
+                  "categoria_navio": "Colossal",
+                  "custo": {
+                    "quant": 80,
+                    "moeda": "po"
+                  },
+                  "equivalencia": "1 combate para navio Colossal"
+                }
+              ],
+              "estoque_inicial": {
+                "min": 3,
+                "max": 10,
+                "unidade": "caixas",
+                "regra": "depende_da_categoria"
+              },
+              "notas": [],
+              "grupo": "Munição",
+              "renderData": {
+                "tags": [
+                  "Munição",
+                  "caixa"
+                ],
+                "stats": [
+                  {
+                    "label": "Estoque",
+                    "value": "3-10 caixas"
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "id": "ship-1769982158841",
@@ -269,14 +372,7 @@
         "maxHp": 20,
         "currentHp": 5,
         "conditions": [],
-        "inventory": [
-          {
-            "nome": "Acudir os Moribundos",
-            "nome_ingles": "Spare the Dying",
-            "caracteristicas": "Truque de  Necromancia (Artífice, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Instantânea",
-            "descricao": "Você toca uma criatura viva que tenha 0 pontos de vida. A criatura se torna estável. Essa magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 211 (277)"
-          }
-        ],
+        "inventory": [],
         "photo": "",
         "createdAt": "2026-02-01T21:08:29.935Z"
       }
@@ -317,7 +413,107 @@
         "currentMorale": 70,
         "image": "/images/img-1768083732380.webp",
         "conditions": [],
-        "inventory": [],
+        "inventory": [
+          {
+            "tipo": "arma",
+            "grupo": "Arma",
+            "nome": "Besta Pesada",
+            "custo": {
+              "quant": 50,
+              "moeda": "po"
+            },
+            "dano": "1d10 perfurante",
+            "peso_kg": 4.5,
+            "propriedades": [
+              "munição (distância 30/120)",
+              "pesada",
+              "recarga",
+              "duas mãos"
+            ],
+            "propriedades_texto": "munição (distância 30/120), pesada, recarga, duas mãos",
+            "renderData": {
+              "tags": [
+                "Arma",
+                "munição (distância 30/120)",
+                "pesada",
+                "recarga",
+                "duas mãos"
+              ],
+              "stats": [
+                {
+                  "label": "Dano",
+                  "value": "1d10 perfurante"
+                },
+                {
+                  "label": "Peso",
+                  "value": "4.5 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "50 po"
+                }
+              ]
+            },
+            "quantity": 2
+          },
+          {
+            "nome": "Acalmar Emoções",
+            "nome_ingles": "Calm Emotions",
+            "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+            "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)"
+          },
+          {
+            "tipo": "municao",
+            "nome": "Balas de Canhão (Caixa)",
+            "unidade": "caixa",
+            "variantes_por_categoria_navio": [
+              {
+                "categoria_navio": "Grande",
+                "custo": {
+                  "quant": 20,
+                  "moeda": "po"
+                },
+                "equivalencia": "1 combate para navio Grande"
+              },
+              {
+                "categoria_navio": "Imenso",
+                "custo": {
+                  "quant": 40,
+                  "moeda": "po"
+                },
+                "equivalencia": "1 combate para navio Imenso"
+              },
+              {
+                "categoria_navio": "Colossal",
+                "custo": {
+                  "quant": 80,
+                  "moeda": "po"
+                },
+                "equivalencia": "1 combate para navio Colossal"
+              }
+            ],
+            "estoque_inicial": {
+              "min": 3,
+              "max": 10,
+              "unidade": "caixas",
+              "regra": "depende_da_categoria"
+            },
+            "notas": [],
+            "grupo": "Munição",
+            "renderData": {
+              "tags": [
+                "Munição",
+                "caixa"
+              ],
+              "stats": [
+                {
+                  "label": "Estoque",
+                  "value": "3-10 caixas"
+                }
+              ]
+            }
+          }
+        ],
         "createdAt": "2026-02-01T21:41:21.687Z"
       },
       {

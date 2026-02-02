@@ -2,7 +2,7 @@ import React from 'react';
 import { Scroll, Backpack } from 'lucide-react';
 import InventoryItemCard from './InventoryItemCard';
 
-export default function PlayerInventory({ inventory, onRemove, onOpenCompendium }) {
+export default function PlayerInventory({ inventory, onUpdateQuantity, onRemove, onOpenCompendium }) {
     return (
         <div className="w-full max-w-2xl mx-auto animate-in fade-in duration-300">
             {/* Header do Inventário */}
@@ -42,6 +42,7 @@ export default function PlayerInventory({ inventory, onRemove, onOpenCompendium 
                         key={idx}
                         item={item}
                         index={idx}
+                        onUpdateQuantity={onUpdateQuantity}
                         onRemove={onRemove}
                     />
                 ))}
