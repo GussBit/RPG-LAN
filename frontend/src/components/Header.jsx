@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Square, Play, Pause,
-  Wind, Music, Zap, FolderOpen, Plus, Volume2, BookOpen
+  Wind, Music, Zap, FolderOpen, Plus, Volume2, BookOpen, FileJson
 } from 'lucide-react';
 import PillButton from './ui/PillButton';
 
@@ -15,6 +16,7 @@ export default function Header({
   onOpenGallery, onAddPlayer, onAddMob
   , onAddItem
 }) {
+  const navigate = useNavigate();
   const [addMenuOpen, setAddMenuOpen] = useState(false);
   const [volumeMenuOpen, setVolumeMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -175,7 +177,18 @@ export default function Header({
         </div>
       </div>
 
+      
+      
+
       <div className="flex items-center gap-2">
+        <button 
+          onClick={() => navigate('/editor')}
+          className="p-2 text-zinc-400 hover:text-white transition-colors bg-black/20 rounded-lg border border-white/5"
+          title="Editor de JSON"
+        >
+          <FileJson size={16} />
+        </button>
+
         <div className="relative" ref={menuRef}>
           <PillButton variant="primary" onClick={() => setAddMenuOpen(prev => !prev)} className="px-2 sm:px-3">
             <Plus size={16} />

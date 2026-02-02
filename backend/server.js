@@ -21,6 +21,8 @@ const publicDir = path.join(__dirname, 'public');
 const imagesDir = path.join(publicDir, 'images');
 const audioDir = path.join(publicDir, 'audio');
 
+const dataDir = path.join(__dirname, '../frontend/src/data');
+
 // Garante que as pastas existem ao iniciar
 [imagesDir, audioDir].forEach((dir) => {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -28,7 +30,7 @@ const audioDir = path.join(publicDir, 'audio');
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 // --- BANCO DE DADOS (JSON) ---
 // Note: Removemos 'gallery' daqui, pois agora é lido do disco
@@ -175,6 +177,52 @@ app.delete('/api/gallery/:type/:fileName', (req, res) => {
   }
 });
 
+// 5. Rotas para Edição de Dados (JSONs do Frontend)
+app.get('/api/data-files', (req, res) => {
+  try {
+    if (!fs.existsSync(dataDir)) {
+      return res.json([]);
+    }
+    const files = fs.readdirSync(dataDir).filter(f => f.endsWith('.json'));
+    res.json(files);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao listar arquivos de dados' });
+  }
+});
+
+app.get('/api/data/:filename', (req, res) => {
+  const { filename } = req.params;
+  if (filename.includes('..') || !filename.endsWith('.json')) return res.status(400).json({ error: 'Arquivo inválido' });
+  
+  try {
+    const filePath = path.join(dataDir, filename);
+    if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'Arquivo não encontrado' });
+    
+    const content = fs.readFileSync(filePath, 'utf-8');
+    res.json(JSON.parse(content));
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao ler arquivo' });
+  }
+});
+
+app.post('/api/data/:filename', (req, res) => {
+  const { filename } = req.params;
+  const content = req.body;
+  
+  if (filename.includes('..') || !filename.endsWith('.json')) return res.status(400).json({ error: 'Arquivo inválido' });
+
+  try {
+    const filePath = path.join(dataDir, filename);
+    // Salva formatado com indentação de 2 espaços
+    fs.writeFileSync(filePath, JSON.stringify(content, null, 2), 'utf-8');
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao salvar arquivo' });
+  }
+});
+
 // Serve arquivos estáticos (Imagens e Áudios)
 // Importante: Colocar isso APÓS as rotas da API para evitar conflitos
 app.use(express.static(publicDir));
@@ -292,6 +340,7 @@ app.post('/api/scenes/:sceneId/mobs', async (req, res) => {
     toHit: Number(mob.toHit ?? 0),
     image: mob.image || '',
     conditions: [],
+    inventory: mob.inventory || [],
   };
 
   scene.mobs = scene.mobs || [];
@@ -310,6 +359,31 @@ app.patch('/api/scenes/:sceneId/mobs/:mobId', async (req, res) => {
   if (!mob) return res.status(404).json({ error: 'Mob não encontrado' });
 
   Object.assign(mob, updates);
+
+  // --- SYNC GLOBAL DE INVENTÁRIO PARA MOBS ---
+  // Se o inventário foi alterado, propaga para o preset e para todos os outros mobs com o mesmo nome
+  if (updates.inventory) {
+    // 1. Atualiza o Preset (se existir)
+    if (!db.data.presets) db.data.presets = { mobs: [], players: [] };
+    if (!db.data.presets.mobs) db.data.presets.mobs = [];
+    
+    const preset = db.data.presets.mobs.find(p => p.name === mob.name);
+    if (preset) {
+      preset.inventory = updates.inventory;
+    }
+
+    // 2. Atualiza outras instâncias em todas as cenas
+    db.data.scenes.forEach(s => {
+      if (s.mobs) {
+        s.mobs.forEach(m => {
+          if (m.name === mob.name && m.id !== mobId) {
+            m.inventory = updates.inventory;
+          }
+        });
+      }
+    });
+  }
+
   await db.write();
   res.json(mob);
 });

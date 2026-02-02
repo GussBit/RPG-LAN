@@ -171,13 +171,30 @@ export const useGameStore = create((set, get) => ({
 
   updateMob: async (sceneId, mobId, updates) => {
     const { scenes, activeScene } = get();
-    const updatedMobs = activeScene.mobs.map(m => m.id === mobId ? { ...m, ...updates } : m);
-    const updatedScene = { ...activeScene, mobs: updatedMobs };
-
-    set({
-      scenes: scenes.map(s => s.id === sceneId ? updatedScene : s),
-      activeScene: activeScene?.id === sceneId ? updatedScene : activeScene
-    });
+    
+    // Se for atualização de inventário, aplica globalmente (por nome)
+    if (updates.inventory) {
+        const targetMob = activeScene.mobs.find(m => m.id === mobId);
+        if (targetMob) {
+            const mobName = targetMob.name;
+            const updatedScenes = scenes.map(s => ({
+                ...s,
+                mobs: (s.mobs || []).map(m => 
+                    (m.id === mobId || m.name === mobName) ? { ...m, ...updates } : m
+                )
+            }));
+            const updatedActive = updatedScenes.find(s => s.id === activeScene.id);
+            set({ scenes: updatedScenes, activeScene: updatedActive });
+        }
+    } else {
+        // Comportamento padrão (individual)
+        const updatedMobs = activeScene.mobs.map(m => m.id === mobId ? { ...m, ...updates } : m);
+        const updatedScene = { ...activeScene, mobs: updatedMobs };
+        set({
+          scenes: scenes.map(s => s.id === sceneId ? updatedScene : s),
+          activeScene: activeScene?.id === sceneId ? updatedScene : activeScene
+        });
+    }
 
     await fetch(`${API_URL}/scenes/${sceneId}/mobs/${mobId}`, {
       method: 'PATCH',

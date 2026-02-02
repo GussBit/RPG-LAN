@@ -29,6 +29,7 @@ import { CONDITIONS, getImageUrl } from './constants';
 import { API_URL } from './api';
 import PillButton from './components/ui/PillButton';
 
+
 export default function App() {
   const {
     scenes, activeScene, fetchScenes, isLoading, error,
@@ -49,6 +50,7 @@ export default function App() {
   const [editPlayerModalOpen, setEditPlayerModalOpen] = useState(false);
   const [editShipModalOpen, setEditShipModalOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
+  
 
   
   const [editingScene, setEditingScene] = useState(null);
@@ -267,7 +269,8 @@ export default function App() {
         if (type === 'mobs') {
             await createMob({
                 name: preset.name, color: preset.color, maxHp: preset.maxHp,
-                damageDice: preset.damageDice, toHit: preset.toHit, image: preset.image
+                damageDice: preset.damageDice, toHit: preset.toHit, image: preset.image,
+                inventory: preset.inventory
             });
             toast.success(`${preset.name} invocado!`);
         } else if (type === 'players') {
@@ -287,7 +290,13 @@ export default function App() {
 
   const handleSaveMobPreset = async (data) => {
     if (!data.name) return toast.error('Nome é obrigatório para salvar preset');
-    await createPreset('mobs', data);
+    
+    const payload = { ...data };
+    // Se estiver editando um mob, preserva o inventário no preset
+    if (editingMob && editingMob.inventory) {
+      payload.inventory = editingMob.inventory;
+    }
+    await createPreset('mobs', payload);
     toast.success('Preset de mob salvo!');
   };
 
@@ -518,6 +527,7 @@ export default function App() {
         </div>
     </div>
   );
+  
 
   // Tela de "Nenhuma Cena" (com botão de criar)
   if (!activeScene) return (
@@ -610,6 +620,7 @@ export default function App() {
             gridTemplateColumns: `${showLeftSidebar ? leftSidebarWidth : 0}px ${showLeftSidebar ? 4 : 0}px minmax(0, 1fr) ${showRightSidebar ? 4 : 0}px ${showRightSidebar ? mixerWidth : 0}px` 
           }}
         >
+          
           {/* 1. Esquerda: Cenas e Presets */}
           <Sidebar 
             scenes={scenes} activeScene={activeScene}
@@ -804,6 +815,7 @@ export default function App() {
         url={qrCodeData?.url} 
         title={qrCodeData?.title} 
       />
+
     </div>
   );
 }

@@ -56,9 +56,230 @@
               "quantity": 1
             }
           ]
+        },
+        {
+          "id": "mob-1770042654117",
+          "name": "Bandido",
+          "color": "#8B4513",
+          "maxHp": 11,
+          "currentHp": 11,
+          "damageDice": "1d6",
+          "toHit": 3,
+          "image": "",
+          "conditions": [],
+          "inventory": [
+            {
+              "tipo": "equipamento",
+              "categoria": "aventura",
+              "nome": "Ácido (vidro)",
+              "custo": {
+                "quant": 25,
+                "moeda": "po"
+              },
+              "peso_kg": 0.5,
+              "grupo": "Equipamento",
+              "renderData": {
+                "tags": [
+                  "Equipamento",
+                  "aventura"
+                ],
+                "stats": [
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "25 po"
+                  }
+                ]
+              },
+              "_folder": "objects",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "AÇÃO ARDILOSA",
+              "descricao": "A partir do 2º nível, seu pensamento rápido e agilidade faz você se mover e agir rapidamente. Você pode usar uma ação bônus durante cada um de seus turnos em combate. Esta ação pode ser usada somente para Disparada, Desengajar ou Esconder.",
+              "_folder": "habilidades",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Agarrão da Terra",
+              "nome_ingles": "Earthbind",
+              "caracteristicas": "2º Círculo, Transmutação (Bruxo, Druida, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:90m [300 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Escolha uma criatura que você possa ver, dentro do alcance. Laços amarelados de energia mágica rodeiam a criatura. O alvo deve ser bem sucedido em salvaguarda de Força ou seu deslocamento de voo (se possuir) será reduzido para 0m [0 ft.] pela duração da magia. Uma criatura voadora afetada por essa magia desce 18m [60 ft.] por turno até aterrissar no solo ou a magia acabar.\nXanathar's Guide to Everything, p. 154",
+              "_folder": "spells",
+              "visible": true,
+              "quantity": 1
+            }
+          ]
         }
       ],
-      "players": [],
+      "players": [
+        {
+          "id": "player-1770041562994",
+          "playerName": "Felsky",
+          "characterName": "Barril",
+          "photo": "",
+          "maxHp": 27,
+          "currentHp": 27,
+          "accessUrl": "/p/34npa3l5kd8",
+          "accessToken": "34npa3l5kd8",
+          "conditions": [],
+          "inventory": [
+            {
+              "nome": "INSPIRAÇÃO DE BARDO",
+              "descricao": "que você tenha acesso, como mostrado na tabela. Por Você pode inspirar os outros através de palavras exemplo, quando você alcança o 3° nível da classe, você animadoras ou música. Para tanto, você usa uma ação pode aprender uma nova magia de 1° ou 2° nível.\nbônus no seu turno para escolher uma outra criatura, que Além disso, quando você adquire um nível nessa não seja você mesmo, a até 18 metros de você que possa classe, você pode escolher uma magia de bardo que você ouvi-lo. Essa criatura ganha um dado de Inspiração de conheça e substituí-la por outra magia da lista de magias Bardo, um d6.\nde bardo, que também deve ser de um nível ao qual você Uma vez, nos próximos 10 minutos, a criatura poderá tenha espaços de magia.\nrolar o dado e adicionar o valor rolado a um teste de habilidade, jogada de ataque ou teste de resistência que HABILIDADE DE CONJURAÇÃO ela fizer. A criatura pode esperar até rolar o d20 antes de Sua habilidade de conjuração é Carisma para suas decidir usar o dado de Inspiração de Bardo, mas deve magias de bardo, portanto, você usa seu Carisma sempre decidir antes do Mestre dizer se a rolagem foi bem ou mal que alguma magia se referir à sua habilidade de conjurar sucedida. Quando o dado de Inspiração de Bardo for magias. Além disso, você usa o seu modificador de rolado, ele é gasto. Uma criatura pode ter apenas um Carisma para definir a CD dos testes de resistência para dado de Inspiração de Bardo por vez.\nVocê pode usar essa característica um número de",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Zombaria Perversa",
+              "nome_ingles": "Vicious Mockery",
+              "caracteristicas": "Truque de  Encantamento (Bardo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V\nDuração:Instantânea",
+              "descricao": "Você lança uma série de insultos carregados com sutis encantamentos contra uma criatura à sua vista e no alcance da magia. Se o alvo puder ouvir você (embora ele não precise lhe entender), ele deve ser bem-sucedido em uma salvaguarda de Sabedoria. Se falhar, sofre 1d4 pontos de dano psíquico e terá desvantagem na próxima jogada de ataque que ele fizer antes do fim do próximo turno dele.\nLivro do Jogador (PHB), p. 289 (285)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Mãos Mágicas",
+              "nome_ingles": "Mage Hand",
+              "caracteristicas": "Truque de  Invocação (Artífice, Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V S\nDuração:1 minuto",
+              "descricao": "Uma mão flutuante e espectral aparece em um ponto à sua escolha e no alcance da magia. A mão permanece enquanto a magia durar ou até você dispensá-la com uma ação. A mão desaparece caso se distancie mais de 9 metros [30 ft.] de você ou se você conjurar a magia novamente.Você pode usar sua ação para controlar a mão. Você pode fazer com que ela manipule objetos, abra portas ou recipientes destrancados, guarde ou pegue itens de recipientes abertos, ou derrame o conteúdo de frascos. Você pode movê-la até 9 metros [30 ft.] a cada vez que a usa. Ela não pode atacar, ativar itens mágicos ou carregar mais de 4,5 quilos [10 pounds].\nLivro do Jogador (PHB), p. 256 (256)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Palavra Curativa",
+              "nome_ingles": "Healing Word",
+              "caracteristicas": "1º Círculo, Evocação (Bardo, Clérigo, Druida)\nTempo de Conjuração:Uma ação bônus\nAlcance:18m [60 ft.]\nComponentes:V\nDuração:Instantânea",
+              "descricao": "Escolha uma criatura à sua vista e no alcance da magia. Ela recupera uma quantidade de pontos de vida igual a 1d4 + seu modificador de atributo de conjuração. Esta magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 264 (250)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Fogo das Fadas",
+              "nome_ingles": "Faerie Fire",
+              "caracteristicas": "1º Círculo, Evocação (Artífice, Bardo, Druida)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Todos os objetos em um cubo de 6 metros [20-foot cube] no alcance da magia se tornam delineados por uma luz azul, verde ou violeta (à sua escolha). Qualquer criatura que esteja na área quando a magia for conjurada também é delineada pela luz, caso falhe em uma salvaguarda de Destreza. Enquanto a magia durar, objetos e criaturas afetadas por ela emitem uma luz tênue, criando meia-luz em um raio de 3 metros [10-foot radius].Qualquer jogada de ataque contra uma criatura ou objeto afetado tem vantagem, caso o atacante possa vê-los.Objetos e criaturas afetados não podem se beneficiar por estarem invisíveis.\nLivro do Jogador (PHB), p. 244 (239)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Detectar Magia",
+              "nome_ingles": "Detect Magic",
+              "caracteristicas": "1º Círculo, Adivinhação (Artífice, Bardo, Clérigo, Druida, Feiticeiro, Guardião, Mago, Paladino)\nTempo de Conjuração:Uma ação  ou Ritual\nAlcance:Pessoal\nComponentes:V S\nDuração:Concentração,\n                                         Até 10 minutos",
+              "descricao": "Enquanto a magia durar, você pode sentir a presença de energia mágica a até 9 metros [30 ft.]. Caso seja bem-sucedido ao fazê-lo, você pode usar sua ação para ver uma tênue aura ao redor de qualquer criatura ou objeto que possuam energia mágica e que estejam visíveis na área, distinguindo, inclusive, a escola da magia, caso ela pertença a alguma.A magia pode atravessar a maioria das barreiras, sendo bloqueada, no entanto, por 30 centímetros [1 foot] de pedra, 2,5 centímetros [1 inch] de metal comum, uma folha fina de chumbo ou 1 metro [3 ft.] de madeira ou terra.\nLivro do Jogador (PHB), p. 236 (231)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Compreender Idiomas",
+              "nome_ingles": "Comprehend Languages",
+              "caracteristicas": "1º Círculo, Adivinhação (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação  ou Ritual\nAlcance:Pessoal\nComponentes:V S M (um pitada de fuligem e sal)\nDuração:Uma hora",
+              "descricao": "Enquanto a magia durar, você entende o significado literal de qualquer idioma falado que ouvir. Você tambem entende qualquer idioma escrito que veja, mas deve tocar a superfície sobre a qual as palavras estão escritas. Demora cerca de 1 minuto para ler uma página de texto.Esta magia não decodifica mensagens secretas em um texto ou um glifo, como um selo arcano, que não faça parte de um idioma escrito.\nLivro do Jogador (PHB), p. 225 (224)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Sugestão",
+              "nome_ingles": "Suggestion",
+              "caracteristicas": "2º Círculo, Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V M (uma língua de uma cobra e um pouco de favo de mel ou uma gota de óleo adocicado)\nDuração:Concentração,\n                                         Até 8 horas",
+              "descricao": "Você sugere um curso de ação (limitado a uma sentença ou duas) e influencia magicamente uma criatura à sua vista no alcance da magia e que possa lhe ouvir e compreender. Criaturas que não podem ser enfeitiçadas são imunes a este efeito. A sugestão precisa ser dita de uma forma que faça o curso de ação parecer razoável. Pedir à criatura que se esfaqueie, jogue-se contra uma lança, imole-se ou faça algum outro ato evidentemente danoso, automaticamente cancela o efeito da magia.O alvo deve fazer uma salvaguarda de Sabedoria. Se falhar, ele segue os atos sugeridos da melhor forma possível, segundo suas habilidades. A continuidade dos atos será feita enquanto a magia durar. Se a atividade sugerida pode ser completada em um período menor, a magia se encerra quando o sujeito termina aquilo que lhe foi sugerido.Também podem ser especificadas condições que disparam uma atividade especial enquanto estiver dentro da duração da magia. Por exemplo, pode ser sugerido que uma cavaleira dê sua montaria ao primeiro mendigo que ela encontrar. Se a condição não for preenchida antes do fim dos efeitos, a atividade não é concluída.Se você ou qualquer de seus companheiros causarem dano ao alvo, a magia se encerra.\nLivro do Jogador (PHB), p. 282 (279)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "INCREMENTO NO VALOR DE HABILIDADE",
+              "descricao": "bardo prefere ser honesto que político.\nQuando você atinge o 4° nível e novamente no 8°, 12°, 16° Os membros do colégio se reúnem em bibliotecas e, as e 19° nível, você pode aumentar um valor de habilidade, à vezes, em faculdades de verdade, completas com salas de sua escolha, em 2 ou você pode aumentar dois valores de aula e dormitórios, para partilhar seu conhecimento uns habilidade, à sua escolha, em 1. Como padrão, você não com os outros. Eles também se encontram em festivais ou pode elevar um valor de habilidade acima de 20 com essa em assuntos de estado, onde eles podem expor corrupção, característica.\ndesvendar mentiras e zombar da superestima de figuras de autoridade.",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Adaga",
+              "custo": {
+                "quant": 2,
+                "moeda": "po"
+              },
+              "dano": "1d4 perfurante",
+              "peso_kg": 0.5,
+              "propriedades": [
+                "acuidade",
+                "leve",
+                "arremesso (distância 6/18)"
+              ],
+              "propriedades_texto": "acuidade, leve, arremesso (distância 6/18)",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "acuidade",
+                  "leve",
+                  "arremesso (distância 6/18)"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d4 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "2 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "armadura",
+              "categoria": "leve",
+              "nome": "Couro",
+              "custo": {
+                "quant": 10,
+                "moeda": "po"
+              },
+              "ca": "11 + modificador de Des",
+              "forca_min": null,
+              "furtividade": null,
+              "peso_kg": 5,
+              "grupo": "Armadura",
+              "renderData": {
+                "tags": [
+                  "Armadura leve"
+                ],
+                "stats": [
+                  {
+                    "label": "CA",
+                    "value": "11 + modificador de Des"
+                  },
+                  {
+                    "label": "Força Mín.",
+                    "value": "-"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "10 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            }
+          ]
+        }
+      ],
       "playlist": [],
       "notes": "Os jogadores sobrevivem a um naufrágio na costa oeste de Skaug. Procurando abrigo, encontram a caverna do Santuário Esquecido e Nhal'zar, o último Eshar'kai livre. Ao final, são resgatados pelo Capitão Torvald.",
       "images": [],
@@ -594,7 +815,55 @@
         "source": "MM p.343",
         "faction": "Piratas & Criminosos de Skaug",
         "role": "Marinheiro comum, bucaneiro bêbado",
-        "createdAt": "2026-02-02T01:30:00.000Z"
+        "createdAt": "2026-02-02T01:30:00.000Z",
+        "inventory": [
+          {
+            "tipo": "equipamento",
+            "categoria": "aventura",
+            "nome": "Ácido (vidro)",
+            "custo": {
+              "quant": 25,
+              "moeda": "po"
+            },
+            "peso_kg": 0.5,
+            "grupo": "Equipamento",
+            "renderData": {
+              "tags": [
+                "Equipamento",
+                "aventura"
+              ],
+              "stats": [
+                {
+                  "label": "Peso",
+                  "value": "0.5 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "25 po"
+                }
+              ]
+            },
+            "_folder": "objects",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "AÇÃO ARDILOSA",
+            "descricao": "A partir do 2º nível, seu pensamento rápido e agilidade faz você se mover e agir rapidamente. Você pode usar uma ação bônus durante cada um de seus turnos em combate. Esta ação pode ser usada somente para Disparada, Desengajar ou Esconder.",
+            "_folder": "habilidades",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Agarrão da Terra",
+            "nome_ingles": "Earthbind",
+            "caracteristicas": "2º Círculo, Transmutação (Bruxo, Druida, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:90m [300 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
+            "descricao": "Escolha uma criatura que você possa ver, dentro do alcance. Laços amarelados de energia mágica rodeiam a criatura. O alvo deve ser bem sucedido em salvaguarda de Força ou seu deslocamento de voo (se possuir) será reduzido para 0m [0 ft.] pela duração da magia. Uma criatura voadora afetada por essa magia desce 18m [60 ft.] por turno até aterrissar no solo ou a magia acabar.\nXanathar's Guide to Everything, p. 154",
+            "_folder": "spells",
+            "visible": true,
+            "quantity": 1
+          }
+        ]
       },
       {
         "id": "preset-mob-brutamontes",
