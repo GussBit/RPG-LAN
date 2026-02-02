@@ -10,6 +10,7 @@ import {
 import { API_URL } from '../api';
 import { toast } from 'react-toastify';
 import Compendium from './Compendium';
+import { getImageUrl } from '../constants';
 import MediaGallery from '../MediaGallery';
 import { useGameStore } from '../store';
 
@@ -121,7 +122,7 @@ function MobPreview({ mob }) {
       <div className="flex items-start gap-4 mb-6">
         <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-white/10 bg-black shrink-0">
           {mob.image ? (
-            <img src={mob.image} className="w-full h-full object-cover" alt="" />
+            <img src={getImageUrl(mob.image)} className="w-full h-full object-cover" alt="" />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-zinc-700">
               <Skull size={32} />
@@ -421,7 +422,7 @@ export default function MobPresetsEditor() {
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className="relative">
                     {mob.image ? (
-                      <img src={mob.image} className="w-10 h-10 rounded-lg object-cover bg-black border border-white/10" alt="" />
+                      <img src={getImageUrl(mob.image)} className="w-10 h-10 rounded-lg object-cover bg-black border border-white/10" alt="" />
                     ) : (
                       <div className="w-10 h-10 rounded-lg bg-zinc-800 border border-white/10 flex items-center justify-center">
                         <Skull size={18} className="text-zinc-600" />
@@ -485,7 +486,7 @@ export default function MobPresetsEditor() {
                           onClick={() => setShowGallery(true)}
                         >
                           {formData.image ? (
-                            <img src={formData.image} className="w-full h-full object-cover" alt="Preview" />
+                            <img src={getImageUrl(formData.image)} className="w-full h-full object-cover" alt="Preview" />
                           ) : (
                             <ImageIcon size={40} className="text-zinc-700" />
                           )}

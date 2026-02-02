@@ -1,150 +1,218 @@
-import React, { useState } from 'react';
-import { ChevronUp, ChevronDown, Trash2, Plus, Minus, Eye, EyeOff } from 'lucide-react';
+import React from 'react';
+import { getImageUrl } from '../../constants';
+import { Plus, Minus, Trash2 } from 'lucide-react';
 
-export default function InventoryItemCard({ item, index, onRemove, onUpdateQuantity, onToggleVisibility, isGM }) {
-    const [expanded, setExpanded] = useState(false);
-    
-    // Normaliza as tags: usa renderData.tags ou extrai da primeira linha de caracteristicas
-    const tags = item.renderData?.tags || (item.caracteristicas ? item.caracteristicas.split('\n')[0].split(',') : []);
-    
+export default function InventoryItemCard({ item, index, onClick, onUpdateQuantity, onRemove, viewMode = 'expanded' }) {
+  // Normaliza as tags
+  const tags = item.renderData?.tags || 
+    (item.caracteristicas ? item.caracteristicas.split('\n')[0].split(',') : []);
+
+  // Helper para gerar iniciais
+  const getInitials = (name) => {
+    if (!name) return '?';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  };
+
+  // Resolve imagem
+  const imageSrc = item.image 
+    ? getImageUrl(item.image) 
+    : (item._folder ? `/${item._folder}/${item.nome_ingles || item.nome}.png` : null);
+
+  const quantity = item.quantity || item.quantidade || 1;
+
+  // MODO COMPACTO - Só imagem e título
+  if (viewMode === 'compact') {
     return (
-        <div className="bg-zinc-900/80 border border-white/10 rounded-xl overflow-hidden hover:border-indigo-500/30 transition-all group">
-            {/* Header Compacto - Sempre Visível */}
-            <div className="p-3 sm:p-4">
-                <div className="flex items-start justify-between gap-3">
-                    
-                    {/* Toggle de Visibilidade (Apenas GM) */}
-                    {isGM && onToggleVisibility && (
-                        <button 
-                            onClick={(e) => { e.stopPropagation(); onToggleVisibility(index); }}
-                            className={`p-1.5 rounded transition-colors shrink-0 mt-0.5 ${item.visible === false ? 'text-zinc-600 hover:text-zinc-400' : 'text-indigo-400 hover:text-indigo-300'}`}
-                            title={item.visible === false ? "Oculto para jogadores (Clique para mostrar)" : "Visível para jogadores (Clique para ocultar)"}
-                        >
-                            {item.visible === false ? <EyeOff size={16} /> : <Eye size={16} />}
-                        </button>
-                    )}
-                    
-                    {/* Controles de Quantidade (Se disponível) */}
-                    {onUpdateQuantity && (
-                        <div className="flex flex-col items-center justify-center bg-black/40 rounded-lg p-1 border border-white/5 shrink-0">
-                            <button 
-                                onClick={(e) => { e.stopPropagation(); onUpdateQuantity(index, 1); }}
-                                className="p-0.5 hover:bg-white/10 rounded text-zinc-400 hover:text-emerald-400 transition-colors"
-                            >
-                                <Plus size={10} />
-                            </button>
-                            <span className="text-xs font-bold text-white font-mono w-5 text-center">{item.quantity || 1}</span>
-                            <button 
-                                onClick={(e) => { e.stopPropagation(); onUpdateQuantity(index, -1); }}
-                                className="p-0.5 hover:bg-white/10 rounded text-zinc-400 hover:text-red-400 transition-colors"
-                            >
-                                <Minus size={10} />
-                            </button>
-                        </div>
-                    )}
+      <div
+        onClick={onClick}
+        className="group relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/10 rounded-lg overflow-hidden hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 cursor-pointer"
+      >
+        {/* Badge de Quantidade */}
+        {quantity > 1 && (
+          <div className="absolute top-1 right-1 z-10 bg-indigo-600 text-white text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-lg">
+            ×{quantity}
+          </div>
+        )}
 
-                    <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-bold text-zinc-200 text-sm sm:text-base truncate">
-                                {item.nome}
-                            </h3>
-                            {item.nome_ingles && (
-                                <span className="text-[10px] text-indigo-400/60 font-mono hidden sm:inline">
-                                    {item.nome_ingles}
-                                </span>
-                            )}
-                        </div>
-                        
-                        {/* Tags de Características */}
-                        {tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mb-2">
-                                {tags.slice(0, 3).map((tag, i) => (
-                                    <span 
-                                        key={i} 
-                                        className="text-[9px] sm:text-[10px] px-2 py-0.5 bg-indigo-500/10 text-indigo-300 rounded-full border border-indigo-500/20 uppercase tracking-wider"
-                                    >
-                                        {tag.trim()}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                    
-                    {/* Botões de Ação */}
-                    <div className="flex gap-1 shrink-0">
-                        <button
-                            onClick={() => setExpanded(!expanded)}
-                            className="p-2 text-zinc-400 hover:text-indigo-400 hover:bg-indigo-500/10 rounded-lg transition-colors"
-                            title={expanded ? 'Recolher' : 'Ver Mais'}
-                        >
-                            {expanded ? (
-                                <ChevronUp size={16} className="sm:w-[18px] sm:h-[18px]" />
-                            ) : (
-                                <ChevronDown size={16} className="sm:w-[18px] sm:h-[18px]" />
-                            )}
-                        </button>
-                        <button
-                            onClick={() => onRemove(index)}
-                            className="p-2 text-zinc-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-                            title="Remover"
-                        >
-                            <Trash2 size={14} className="sm:w-4 sm:h-4" />
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            {/* Detalhes Expandíveis */}
-            {expanded && (
-                <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-0 border-t border-white/5 animate-in slide-in-from-top-2 duration-200">
-                    {/* Nome em Inglês (mobile) */}
-                    {item.nome_ingles && (
-                        <div className="text-[10px] text-indigo-400/80 font-mono mb-3 sm:hidden">
-                            {item.nome_ingles}
-                        </div>
-                    )}
-                    
-                    {/* Características Completas */}
-                    <div className="bg-black/20 rounded-lg p-2 sm:p-3 mb-3 space-y-1">
-                        {item.renderData?.stats ? (
-                            // Renderização para Itens com Stats (Objetos/Navio)
-                            item.renderData.stats.map((stat, i) => (
-                                <div key={i} className="flex items-start gap-2 text-[10px] sm:text-xs">
-                                    <span className="font-bold text-zinc-500 uppercase tracking-wide min-w-[80px] shrink-0">
-                                        {stat.label}
-                                    </span>
-                                    <span className="text-zinc-300">
-                                        {stat.value}
-                                    </span>
-                                </div>
-                            ))
-                        ) : item.caracteristicas ? (
-                            // Renderização para Magias (String parseada)
-                            item.caracteristicas.split('\n').slice(1).map((line, i) => {
-                                const [key, val] = line.split(':');
-                                if (!val) return null;
-                                return (
-                                    <div key={i} className="flex items-start gap-2 text-[10px] sm:text-xs">
-                                        <span className="font-bold text-zinc-500 uppercase tracking-wide min-w-[80px] shrink-0">
-                                            {key.trim()}
-                                        </span>
-                                        <span className="text-zinc-300">
-                                            {val.trim()}
-                                        </span>
-                                    </div>
-                                );
-                            })
-                        ) : null}
-                    </div>
-                    
-                    {/* Descrição */}
-                    {item.descricao && (
-                        <div className="text-xs sm:text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-950/50 rounded-lg p-3 border-l-2 border-indigo-500/30">
-                            {item.descricao}
-                        </div>
-                    )}
-                </div>
-            )}
+        {/* Badge de Invisível */}
+        {item.invisivel && (
+          <div className="absolute top-1 left-1 z-10 bg-red-600/80 text-white text-[8px] sm:text-[9px] font-bold px-1 py-0.5 rounded-full backdrop-blur-sm">
+            🚫
+          </div>
+        )}
+
+        {/* Imagem ou Iniciais - SEM PADDING, COLADO NO TOPO */}
+        <div className="aspect-square w-full bg-gradient-to-br from-zinc-800 to-black relative overflow-hidden">
+          {imageSrc ? (
+            <img
+              src={imageSrc}
+              alt={item.nome}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+          ) : null}
+          
+          {/* Fallback - Iniciais */}
+          <div 
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ display: imageSrc ? 'none' : 'flex' }}
+          >
+            <span className="text-2xl sm:text-3xl font-black text-white/20 select-none">
+              {getInitials(item.nome)}
+            </span>
+          </div>
+
+          {/* Overlay gradiente */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
+          
+          {/* Título sobre a imagem */}
+          <div className="absolute bottom-0 left-0 right-0 p-1.5 sm:p-2">
+            <h3 className="text-[10px] sm:text-xs font-bold text-white leading-tight line-clamp-2 break-words drop-shadow-lg hyphens-auto">
+              {item.nome}
+            </h3>
+          </div>
         </div>
+
+        {/* Indicador de "Toque para abrir" */}
+        <div className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="bg-indigo-600 rounded-full p-0.5 sm:p-1">
+            <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </div>
+        </div>
+      </div>
     );
+  }
+
+  // MODO EXPANDIDO - Completo com descrição e tags
+  return (
+    <div
+      onClick={onClick}
+      className="group relative bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/10 rounded-xl overflow-hidden hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 flex flex-col cursor-pointer"
+    >
+      {/* Badge de Quantidade */}
+      {quantity > 1 && (
+        <div className="absolute top-2 right-2 z-10 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+          ×{quantity}
+        </div>
+      )}
+
+      {/* Badge de Invisível */}
+      {item.invisivel && (
+        <div className="absolute top-2 left-2 z-10 bg-red-600/80 text-white text-xs font-bold px-2 py-1 rounded-full backdrop-blur-sm">
+          🚫 Oculto
+        </div>
+      )}
+
+      {/* Imagem ou Iniciais - SEM PADDING, COLADO NO TOPO */}
+      <div className="aspect-square w-full bg-gradient-to-br from-zinc-800 to-black relative overflow-hidden flex-shrink-0">
+        {imageSrc ? (
+          <img
+            src={imageSrc}
+            alt={item.nome}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        
+        {/* Fallback - Iniciais */}
+        <div 
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ display: imageSrc ? 'none' : 'flex' }}
+        >
+          <span className="text-4xl font-black text-white/20 select-none">
+            {getInitials(item.nome)}
+          </span>
+        </div>
+
+        {/* Overlay gradiente na imagem */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+      </div>
+
+      {/* Info do Item */}
+      <div className="p-3 space-y-2 flex-1 flex flex-col">
+        {/* Nome - com quebra de palavra */}
+        <h3 className="text-sm font-bold text-white leading-tight line-clamp-2 text-left break-words hyphens-auto">
+          {item.nome}
+        </h3>
+
+        {/* Tags */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {tags.slice(0, 3).map((tag, i) => (
+              <span
+                key={i}
+                className="px-2 py-0.5 bg-indigo-500/20 border border-indigo-500/30 rounded text-[10px] text-indigo-300 uppercase tracking-wider"
+              >
+                {tag.trim()}
+              </span>
+            ))}
+            {tags.length > 3 && (
+              <span className="px-2 py-0.5 bg-zinc-700/50 border border-zinc-600/30 rounded text-[10px] text-zinc-400">
+                +{tags.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Descrição Curta */}
+        {item.descricao && (
+          <p className="text-xs text-zinc-400 line-clamp-2 text-left break-words">
+            {item.descricao}
+          </p>
+        )}
+      </div>
+
+      {/* Controles de Ação (Visíveis no Hover ou sempre em mobile se desejar) */}
+      {(onUpdateQuantity || onRemove) && (
+        <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-20" onClick={e => e.stopPropagation()}>
+          {onUpdateQuantity && (
+            <div className="flex items-center bg-black/60 backdrop-blur-md rounded-lg border border-white/10 overflow-hidden shadow-xl">
+              <button 
+                onClick={() => onUpdateQuantity(index, -1)}
+                className="p-1.5 hover:bg-white/10 text-zinc-300 hover:text-red-400 transition-colors"
+              >
+                <Minus size={12} />
+              </button>
+              <span className="text-xs font-mono w-5 text-center text-white font-bold">
+                {quantity}
+              </span>
+              <button 
+                onClick={() => onUpdateQuantity(index, 1)}
+                className="p-1.5 hover:bg-white/10 text-zinc-300 hover:text-emerald-400 transition-colors"
+              >
+                <Plus size={12} />
+              </button>
+            </div>
+          )}
+          {onRemove && (
+            <button 
+              onClick={() => onRemove(index)}
+              className="p-1.5 bg-black/60 backdrop-blur-md hover:bg-red-900/80 border border-white/10 hover:border-red-500/50 rounded-lg text-zinc-400 hover:text-red-400 transition-colors shadow-xl"
+            >
+              <Trash2 size={14} />
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Indicador de "Toque para abrir" */}
+      <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="bg-indigo-600 rounded-full p-1.5">
+          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
 }

@@ -1,6 +1,8 @@
-import React from 'react';
-import { Ship, ArrowLeft, Shield, Anchor, Box } from 'lucide-react';
+import React, { useState } from 'react';
+import { Ship, ArrowLeft, Shield, Anchor, Box, Search, Grid3x3, LayoutGrid } from 'lucide-react';
 import InventoryItemCard from './InventoryItemCard';
+import ItemDetailsModal from '../modals/ItemDetailsModal';
+import { getImageUrl } from '../../constants';
 
 export default function PlayerShips({
     ships,
@@ -16,6 +18,38 @@ export default function PlayerShips({
     onOpenCompendium,
     crisisConditions
 }) {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [viewMode, setViewMode] = useState(() => localStorage.getItem('shipInventoryViewMode') || 'expanded');
+    const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+
+    const ship = ships.find(s => s.id === selectedShipId);
+
+    const filteredInventory = (ship?.inventory || []).filter(item => 
+        item.nome.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const gridClasses = viewMode === 'compact' 
+        ? 'grid-cols-3 gap-2 sm:gap-3'
+        : 'grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3';
+
+    const selectedItem = (ship && selectedItemIndex !== null) ? ship.inventory[selectedItemIndex] : null;
+
+    const handleModalQuantityUpdate = (item, newQty) => {
+        if (selectedItemIndex !== null && ship) {
+             const currentItem = ship.inventory[selectedItemIndex];
+             const currentQty = currentItem.quantity || currentItem.quantidade || 1;
+             const delta = newQty - currentQty;
+             updateShipInventoryQuantity(ship.id, selectedItemIndex, delta);
+        }
+    };
+
+    const handleModalRemove = (item) => {
+        if (selectedItemIndex !== null) {
+            onRemoveItem(selectedItemIndex);
+            setSelectedItemIndex(null);
+        }
+    };
+
     return (
         <div className="w-full max-w-2xl mx-auto animate-in fade-in duration-300">
             <div className="flex items-center justify-between mb-4 px-1">
@@ -52,7 +86,6 @@ export default function PlayerShips({
             ) : (
                 /* Detalhes do Navio Selecionado */
                 (() => {
-                    const ship = ships.find(s => s.id === selectedShipId);
                     if (!ship) return <div className="text-center">Navio não encontrado</div>;
                     
                     const hpPct = Math.max(0, Math.min(100, (ship.currentHp / ship.maxHp) * 100));
@@ -114,7 +147,7 @@ export default function PlayerShips({
                                 {/* Foto */}
                                 <div className="h-48 sm:h-56 relative bg-gradient-to-br from-cyan-900/40 to-blue-900/40">
                                     {ship.image ? (
-                                        <img src={ship.image} alt={ship.name} className="absolute inset-0 w-full h-full object-cover" />
+                                        <img src={getImageUrl(ship.image)} alt={ship.name} className="absolute inset-0 w-full h-full object-cover" />
                                     ) : (
                                         <div className="absolute inset-0 flex items-center justify-center">
                                             <Ship className="w-20 h-20 text-cyan-700" />
@@ -217,26 +250,64 @@ export default function PlayerShips({
                                 ) : (
                                     /* Inventário do Navio */
                                     <div className="p-4">
-                                        <div className="flex items-center justify-between mb-2">
-                                            <h4 className="text-sm font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
-                                                <Box size={14} /> Carga
-                                            </h4>
-                                            <button onClick={onOpenCompendium} className="text-xs bg-cyan-600/20 text-cyan-300 px-2 py-1 rounded hover:bg-cyan-600/40">+ Item</button>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="flex items-center gap-2">
+                                                <Box size={16} className="text-cyan-400" />
+                                                <h4 className="text-sm font-bold text-zinc-200 uppercase tracking-wider">
+                                                    Carga ({ship.inventory?.length || 0})
+                                                </h4>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        const newMode = viewMode === 'compact' ? 'expanded' : 'compact';
+                                                        setViewMode(newMode);
+                                                        localStorage.setItem('shipInventoryViewMode', newMode);
+                                                    }}
+                                                    className="p-1.5 text-zinc-400 hover:text-white bg-zinc-800/50 rounded-lg transition-colors"
+                                                >
+                                                    {viewMode === 'compact' ? <LayoutGrid size={16} /> : <Grid3x3 size={16} />}
+                                                </button>
+                                                <button 
+                                                    onClick={onOpenCompendium} 
+                                                    className="text-xs bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded-lg font-bold transition-colors shadow-lg shadow-cyan-900/20"
+                                                >
+                                                    + Item
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className="space-y-2">
-                                            {(ship.inventory || []).map((item, idx) => (
+
+                                        {(ship.inventory || []).length > 0 && (
+                                            <div className="relative mb-4">
+                                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={14} />
+                                                <input 
+                                                    value={searchTerm}
+                                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                                    placeholder="Buscar na carga..."
+                                                    className="w-full bg-black/30 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-zinc-200 outline-none focus:border-cyan-500/50 transition-colors"
+                                                />
+                                            </div>
+                                        )}
+
+                                        <div className={`grid ${gridClasses} gap-2`}>
+                                            {filteredInventory.map((item, idx) => (
                                                 <InventoryItemCard 
                                                     key={idx} 
                                                     item={item} 
-                                                    index={idx} 
+                                                    index={ship.inventory.indexOf(item)} 
                                                     onUpdateQuantity={(idx, delta) => updateShipInventoryQuantity(ship.id, idx, delta)}
                                                     onRemove={onRemoveItem} 
+                                                    viewMode={viewMode}
+                                                    onClick={() => setSelectedItemIndex(ship.inventory.indexOf(item))}
                                                 />
                                             ))}
-                                            {(ship.inventory || []).length === 0 && (
-                                                <div className="text-center text-zinc-600 text-xs py-8 border-2 border-dashed border-zinc-800 rounded-xl">Porão de carga vazio</div>
-                                            )}
                                         </div>
+                                        
+                                        {filteredInventory.length === 0 && (
+                                            <div className="text-center text-zinc-600 text-xs py-12 border-2 border-dashed border-zinc-800 rounded-xl">
+                                                {searchTerm ? 'Nenhum item encontrado' : 'Porão de carga vazio'}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -244,6 +315,14 @@ export default function PlayerShips({
                     );
                 })()
             )}
+
+            <ItemDetailsModal
+                item={selectedItem}
+                open={selectedItemIndex !== null}
+                onClose={() => setSelectedItemIndex(null)}
+                onRemove={handleModalRemove}
+                onUpdateQuantity={handleModalQuantityUpdate}
+            />
         </div>
     );
 }

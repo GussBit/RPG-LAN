@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, Heart, AlertCircle } from 'lucide-react';
+import { getImageUrl } from '../../constants';
 
 export default function PlayerSheet({ player, updateHP, toggleCondition, conditionsList }) {
     const hpPercent = (player.currentHp / player.maxHp) * 100;
@@ -30,7 +31,7 @@ export default function PlayerSheet({ player, updateHP, toggleCondition, conditi
                 <div className="h-64 sm:h-80 relative bg-gradient-to-br from-indigo-500/20 via-zinc-900/50 to-purple-500/20">
                     {player.photo ? (
                         <img
-                            src={player.photo}
+                            src={getImageUrl(player.photo)}
                             alt={player.characterName}
                             className={`absolute inset-0 w-full h-full object-cover ${
                                 conditions.includes('blinded') ? 'brightness-[0.2] blur-[1px] grayscale' : ''

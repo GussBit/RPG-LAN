@@ -31,6 +31,7 @@ const dataDir = path.join(__dirname, '../frontend/src/data');
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
+app.use(express.static(publicDir));
 
 // --- BANCO DE DADOS (JSON) ---
 // Note: Removemos 'gallery' daqui, pois agora é lido do disco
@@ -748,25 +749,56 @@ app.post('/api/presets/:type', async (req, res) => {
 
 app.patch('/api/presets/:type/:presetId', async (req, res) => {
   const { type, presetId } = req.params;
-  console.log(`[PATCH] Recebido para: ${type}/${presetId}`); // Log para confirmar que a requisição chegou
   const updates = req.body;
   
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('🔧 [PATCH] Requisição recebida');
+  console.log('📋 Type:', type);
+  console.log('🆔 Preset ID:', presetId);
+  console.log('📦 Updates:', updates);
+
   if (!db.data.presets || !db.data.presets[type]) {
+    console.error(`❌ Tipo "${type}" não existe!`);
     return res.status(404).json({ error: 'Tipo de preset não encontrado' });
   }
   
-  // BUSCA MAIS FLEXÍVEL - aceita ID ou nome
-  const preset = db.data.presets[type].find(p => 
-    p.id === presetId || p.id.includes(presetId)
-  );
+  console.log('📋 Total de presets:', db.data.presets[type].length);
+  console.log('🗂️ IDs disponíveis:', db.data.presets[type].map(p => p.id));
+
+  // 🔥 BUSCA BIDIRECIONAL - funciona para ambos os formatos
+  const preset = db.data.presets[type].find(p => {
+    const match = (
+      p.id === presetId ||                           // Exato
+      p.id.includes(presetId) ||                     // Banco tem mais (preset-mobs-123 contém preset-123)
+      presetId.includes(p.id) ||                     // ID enviado tem mais (preset-mobs-123 contém preset-123)
+      p.id === `preset-${type}-${presetId}` ||       // Adiciona tipo
+      p.id.endsWith(presetId) ||                     // Termina com
+      p.id.replace('preset-', '') === presetId ||    // Remove prefixo
+      p.id.replace(`preset-${type}-`, '') === presetId // Remove prefixo completo
+    );
+    
+    if (match) {
+      console.log(`✅ Match encontrado: "${p.id}" === "${presetId}"`);
+    }
+    
+    return match;
+  });
 
   if (!preset) {
-    console.log('Preset não encontrado. IDs disponíveis:', db.data.presets[type].map(p => p.id));
-    return res.status(404).json({ error: 'Preset não encontrado' });
+    console.error(`❌ Preset "${presetId}" não encontrado!`);
+    return res.status(404).json({ 
+      error: 'Preset não encontrado',
+      searchedFor: presetId,
+      available: db.data.presets[type].map(p => p.id)
+    });
   }
   
+  console.log(`✅ Atualizando preset: ${preset.id}`);
   Object.assign(preset, updates);
   await db.write();
+  console.log('💾 Salvo com sucesso!');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  
   res.json(preset);
 });
 

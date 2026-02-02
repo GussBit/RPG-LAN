@@ -619,21 +619,40 @@ export const useGameStore = create((set, get) => ({
   },
 
   updatePreset: async (type, presetId, updates) => {
-    const url = `${API_URL}/presets/${type}/${encodeURIComponent(presetId)}`;
-    const res = await fetch(url, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updates)
-    });
-    if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(`Falha ao atualizar (${res.status}): ${errorText}`);
+    try {
+      const url = `${API_URL}/presets/${type}/${encodeURIComponent(presetId)}`;
+      
+      console.log(`🔧 [Store] Atualizando:`, { type, presetId, url });
+      
+      const res = await fetch(url, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ error: 'Erro desconhecido' }));
+        console.error('❌ [Store] Erro do servidor:', errorData);
+        throw new Error(`Erro ${res.status}: ${errorData.error || 'Falha ao atualizar'}\nIDs disponíveis: ${errorData.available?.join(', ')}`);
+      }
+
+      const updated = await res.json();
+      console.log(`✅ [Store] Atualizado:`, updated.id);
+      
+      set(state => ({
+        presets: { 
+          ...state.presets, 
+          [type]: (state.presets[type] || []).map(p => 
+            p.id === presetId || p.id === updated.id ? updated : p
+          )
+        }
+      }));
+      
+      return updated;
+    } catch (error) {
+      console.error('❌ [Store] Erro completo:', error);
+      throw error;
     }
-    const updated = await res.json();
-    set(state => ({
-        presets: { ...state.presets, [type]: (state.presets[type] || []).map(p => p.id === presetId ? updated : p) }
-    }));
-    return updated;
   },
 
   deletePreset: async (type, presetId) => {

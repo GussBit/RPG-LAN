@@ -3,7 +3,7 @@
     {
       "id": "cena-prologo",
       "name": "0. Prólogo",
-      "background": "",
+      "background": "/images/img-1768083732380.webp",
       "mobs": [
         {
           "id": "mob-1769997427626",
@@ -55,7 +55,7 @@
                 ]
               },
               "visible": true,
-              "quantity": 1
+              "quantity": 2
             },
             {
               "tipo": "equipamento",
@@ -86,197 +86,6 @@
               "_folder": "objects",
               "visible": true,
               "quantity": 2
-            },
-            {
-              "nome": "Agarrão da Terra",
-              "nome_ingles": "Earthbind",
-              "caracteristicas": "2º Círculo, Transmutação (Bruxo, Druida, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:90m [300 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
-              "descricao": "Escolha uma criatura que você possa ver, dentro do alcance. Laços amarelados de energia mágica rodeiam a criatura. O alvo deve ser bem sucedido em salvaguarda de Força ou seu deslocamento de voo (se possuir) será reduzido para 0m [0 ft.] pela duração da magia. Uma criatura voadora afetada por essa magia desce 18m [60 ft.] por turno até aterrissar no solo ou a magia acabar.\nXanathar's Guide to Everything, p. 154",
-              "_folder": "spells",
-              "visible": true,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "mob-1770042654117",
-          "name": "Bandido",
-          "color": "#8B4513",
-          "maxHp": 11,
-          "currentHp": 11,
-          "damageDice": "1d6",
-          "toHit": 3,
-          "image": "",
-          "conditions": [],
-          "inventory": [
-            {
-              "tipo": "equipamento",
-              "categoria": "aventura",
-              "nome": "Ácido (vidro)",
-              "custo": {
-                "quant": 25,
-                "moeda": "po"
-              },
-              "peso_kg": 0.5,
-              "grupo": "Equipamento",
-              "renderData": {
-                "tags": [
-                  "Equipamento",
-                  "aventura"
-                ],
-                "stats": [
-                  {
-                    "label": "Peso",
-                    "value": "0.5 kg"
-                  },
-                  {
-                    "label": "Custo",
-                    "value": "25 po"
-                  }
-                ]
-              },
-              "_folder": "objects",
-              "visible": true,
-              "quantity": 1
-            },
-            {
-              "nome": "AÇÃO ARDILOSA",
-              "descricao": "A partir do 2º nível, seu pensamento rápido e agilidade faz você se mover e agir rapidamente. Você pode usar uma ação bônus durante cada um de seus turnos em combate. Esta ação pode ser usada somente para Disparada, Desengajar ou Esconder.",
-              "_folder": "habilidades",
-              "visible": true,
-              "quantity": 1
-            },
-            {
-              "nome": "Agarrão da Terra",
-              "nome_ingles": "Earthbind",
-              "caracteristicas": "2º Círculo, Transmutação (Bruxo, Druida, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:90m [300 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
-              "descricao": "Escolha uma criatura que você possa ver, dentro do alcance. Laços amarelados de energia mágica rodeiam a criatura. O alvo deve ser bem sucedido em salvaguarda de Força ou seu deslocamento de voo (se possuir) será reduzido para 0m [0 ft.] pela duração da magia. Uma criatura voadora afetada por essa magia desce 18m [60 ft.] por turno até aterrissar no solo ou a magia acabar.\nXanathar's Guide to Everything, p. 154",
-              "_folder": "spells",
-              "visible": true,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "mob-1770052850268",
-          "name": "Tubarão de Recife",
-          "color": "#5F9EA0",
-          "maxHp": 22,
-          "currentHp": 22,
-          "damageDice": "2d6",
-          "toHit": 4,
-          "image": "",
-          "conditions": [],
-          "inventory": [
-            {
-              "tipo": "arma",
-              "grupo": "Arma",
-              "nome": "Espada Grande",
-              "custo": {
-                "quant": 50,
-                "moeda": "po"
-              },
-              "dano": "2d6 cortante",
-              "peso_kg": 3,
-              "propriedades": [
-                "pesada",
-                "duas mãos"
-              ],
-              "propriedades_texto": "pesada, duas mãos",
-              "renderData": {
-                "tags": [
-                  "Arma",
-                  "pesada",
-                  "duas mãos"
-                ],
-                "stats": [
-                  {
-                    "label": "Dano",
-                    "value": "2d6 cortante"
-                  },
-                  {
-                    "label": "Peso",
-                    "value": "3 kg"
-                  },
-                  {
-                    "label": "Custo",
-                    "value": "50 po"
-                  }
-                ]
-              },
-              "visible": true,
-              "quantity": 1
-            },
-            {
-              "tipo": "equipamento",
-              "categoria": "aventura",
-              "nome": "Ácido (vidro)",
-              "custo": {
-                "quant": 25,
-                "moeda": "po"
-              },
-              "peso_kg": 0.5,
-              "grupo": "Equipamento",
-              "renderData": {
-                "tags": [
-                  "Equipamento",
-                  "aventura"
-                ],
-                "stats": [
-                  {
-                    "label": "Peso",
-                    "value": "0.5 kg"
-                  },
-                  {
-                    "label": "Custo",
-                    "value": "25 po"
-                  }
-                ]
-              },
-              "_folder": "objects",
-              "visible": true,
-              "quantity": 1
-            },
-            {
-              "tipo": "armadura",
-              "categoria": "leve",
-              "nome": "Acolchoada",
-              "custo": {
-                "quant": 5,
-                "moeda": "po"
-              },
-              "ca": "11 + modificador de Des",
-              "forca_min": null,
-              "furtividade": "desvantagem",
-              "peso_kg": 4,
-              "grupo": "Armadura",
-              "renderData": {
-                "tags": [
-                  "Armadura leve",
-                  "Furtividade: Desvantagem"
-                ],
-                "stats": [
-                  {
-                    "label": "CA",
-                    "value": "11 + modificador de Des"
-                  },
-                  {
-                    "label": "Força Mín.",
-                    "value": "-"
-                  },
-                  {
-                    "label": "Peso",
-                    "value": "4 kg"
-                  },
-                  {
-                    "label": "Custo",
-                    "value": "5 po"
-                  }
-                ]
-              },
-              "_folder": "objects",
-              "visible": true,
-              "quantity": 1
             }
           ]
         },
@@ -361,6 +170,167 @@
               "quantity": 1
             }
           ]
+        },
+        {
+          "id": "mob-1770055523101",
+          "name": "Bandidos",
+          "color": "#8B4513",
+          "maxHp": 11,
+          "currentHp": 11,
+          "damageDice": "1d6",
+          "toHit": 3,
+          "image": "",
+          "conditions": [],
+          "inventory": [
+            {
+              "tipo": "equipamento",
+              "categoria": "aventura",
+              "nome": "Ácido (vidro)",
+              "custo": {
+                "quant": 25,
+                "moeda": "po"
+              },
+              "peso_kg": 0.5,
+              "grupo": "Equipamento",
+              "renderData": {
+                "tags": [
+                  "Equipamento",
+                  "aventura"
+                ],
+                "stats": [
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "25 po"
+                  }
+                ]
+              },
+              "_folder": "objects",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "AÇÃO ARDILOSA",
+              "descricao": "A partir do 2º nível, seu pensamento rápido e agilidade faz você se mover e agir rapidamente. Você pode usar uma ação bônus durante cada um de seus turnos em combate. Esta ação pode ser usada somente para Disparada, Desengajar ou Esconder.",
+              "_folder": "habilidades",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Agarrão da Terra",
+              "nome_ingles": "Earthbind",
+              "caracteristicas": "2º Círculo, Transmutação (Bruxo, Druida, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:90m [300 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Escolha uma criatura que você possa ver, dentro do alcance. Laços amarelados de energia mágica rodeiam a criatura. O alvo deve ser bem sucedido em salvaguarda de Força ou seu deslocamento de voo (se possuir) será reduzido para 0m [0 ft.] pela duração da magia. Uma criatura voadora afetada por essa magia desce 18m [60 ft.] por turno até aterrissar no solo ou a magia acabar.\nXanathar's Guide to Everything, p. 154",
+              "_folder": "spells",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Adaga",
+              "custo": {
+                "quant": 2,
+                "moeda": "po"
+              },
+              "dano": "1d4 perfurante",
+              "peso_kg": 0.5,
+              "propriedades": [
+                "acuidade",
+                "leve",
+                "arremesso (distância 6/18)"
+              ],
+              "propriedades_texto": "acuidade, leve, arremesso (distância 6/18)",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "acuidade",
+                  "leve",
+                  "arremesso (distância 6/18)"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d4 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "2 po"
+                  }
+                ]
+              },
+              "_folder": "objects",
+              "visible": true,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "mob-1770055562605",
+          "name": "Robo",
+          "color": "fuchsia",
+          "maxHp": 10,
+          "currentHp": 10,
+          "damageDice": "1d6",
+          "toHit": 0,
+          "image": "",
+          "conditions": [],
+          "inventory": [
+            {
+              "nome": "Acalmar Emoções",
+              "nome_ingles": "Calm Emotions",
+              "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)",
+              "_folder": "spells",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Azagaia",
+              "custo": {
+                "quant": 5,
+                "moeda": "pp"
+              },
+              "dano": "1d6 perfurante",
+              "peso_kg": 1,
+              "propriedades": [
+                "arremesso (distância 9/36)"
+              ],
+              "propriedades_texto": "arremesso (distância 9/36)",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "arremesso (distância 9/36)"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d6 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "1 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "5 pp"
+                  }
+                ]
+              },
+              "_folder": "objects",
+              "visible": true,
+              "quantity": 1
+            }
+          ]
         }
       ],
       "players": [
@@ -368,7 +338,7 @@
           "id": "player-1770041562994",
           "playerName": "Felsky",
           "characterName": "Barril",
-          "photo": "",
+          "photo": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
           "maxHp": 27,
           "currentHp": 27,
           "accessUrl": "/p/34npa3l5kd8",
@@ -522,6 +492,24 @@
               },
               "visible": true,
               "quantity": 1
+            },
+            {
+              "nome": "Amigos",
+              "nome_ingles": "Friends",
+              "caracteristicas": "Truque de  Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:Pessoal\nComponentes:S M (uma pequena quantidade de maquiagem aplicada a rosto enquanto esta magia é conjurada)\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Enquanto a magia durar, você tem vantagem em todos os testes de Carisma dirigidos a uma criatura, à sua escolha e que não seja hostil a você. Ao término da magia, a criatura percebe que você usou magia para influenciar o humor dela, tornando-se hostil a você. Uma criatura propensa à violência pode lhe atacar. Criaturas não violentas podem buscar outras formas de retaliação (a critério do DM), dependendo da natureza da sua interação com ela.\nLivro do Jogador (PHB), p. 212 (244)",
+              "_folder": "spells",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Acalmar Emoções",
+              "nome_ingles": "Calm Emotions",
+              "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)",
+              "_folder": "spells",
+              "visible": true,
+              "quantity": 1
             }
           ]
         }
@@ -535,12 +523,22 @@
           "name": "Sereia de Murann",
           "type": "player",
           "maxHp": 150,
-          "currentHp": 145,
+          "currentHp": 150,
           "maxMorale": 100,
           "currentMorale": 100,
           "image": "",
           "conditions": [],
-          "inventory": []
+          "inventory": [
+            {
+              "nome": "Acudir os Moribundos",
+              "nome_ingles": "Spare the Dying",
+              "caracteristicas": "Truque de  Necromancia (Artífice, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Instantânea",
+              "descricao": "Você toca uma criatura viva que tenha 0 pontos de vida. A criatura se torna estável. Essa magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 211 (277)",
+              "_folder": "spells",
+              "visible": true,
+              "quantity": 1
+            }
+          ]
         }
       ]
     },
@@ -688,7 +686,7 @@
           "id": "player-1769996062689",
           "playerName": "Felsky",
           "characterName": "Barril",
-          "photo": "",
+          "photo": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
           "maxHp": 27,
           "currentHp": 27,
           "accessUrl": "/p/ok8emeqfty",
@@ -840,6 +838,24 @@
                   }
                 ]
               },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Amigos",
+              "nome_ingles": "Friends",
+              "caracteristicas": "Truque de  Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:Pessoal\nComponentes:S M (uma pequena quantidade de maquiagem aplicada a rosto enquanto esta magia é conjurada)\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Enquanto a magia durar, você tem vantagem em todos os testes de Carisma dirigidos a uma criatura, à sua escolha e que não seja hostil a você. Ao término da magia, a criatura percebe que você usou magia para influenciar o humor dela, tornando-se hostil a você. Uma criatura propensa à violência pode lhe atacar. Criaturas não violentas podem buscar outras formas de retaliação (a critério do DM), dependendo da natureza da sua interação com ela.\nLivro do Jogador (PHB), p. 212 (244)",
+              "_folder": "spells",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Acalmar Emoções",
+              "nome_ingles": "Calm Emotions",
+              "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)",
+              "_folder": "spells",
               "visible": true,
               "quantity": 1
             }
@@ -1050,13 +1066,13 @@
     "mobs": [
       {
         "id": "preset-mob-bandido",
-        "name": "Bandido",
+        "name": "Bandidos",
         "nameEnglish": "Bandit",
         "color": "#8B4513",
         "maxHp": 11,
         "damageDice": "1d6",
         "toHit": 3,
-        "image": "",
+        "image": "/images/gussbit_patient_progressing_through_rehabilitation_exercises__8eae2c36-a8c6-4b07-ac71-95d9069a7121_3-02-02-2026.webp",
         "cr": "1/8",
         "source": "MM p.343",
         "faction": "Piratas & Criminosos de Skaug",
@@ -1106,6 +1122,48 @@
             "caracteristicas": "2º Círculo, Transmutação (Bruxo, Druida, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:90m [300 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
             "descricao": "Escolha uma criatura que você possa ver, dentro do alcance. Laços amarelados de energia mágica rodeiam a criatura. O alvo deve ser bem sucedido em salvaguarda de Força ou seu deslocamento de voo (se possuir) será reduzido para 0m [0 ft.] pela duração da magia. Uma criatura voadora afetada por essa magia desce 18m [60 ft.] por turno até aterrissar no solo ou a magia acabar.\nXanathar's Guide to Everything, p. 154",
             "_folder": "spells",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "tipo": "arma",
+            "grupo": "Arma",
+            "nome": "Adaga",
+            "custo": {
+              "quant": 2,
+              "moeda": "po"
+            },
+            "dano": "1d4 perfurante",
+            "peso_kg": 0.5,
+            "propriedades": [
+              "acuidade",
+              "leve",
+              "arremesso (distância 6/18)"
+            ],
+            "propriedades_texto": "acuidade, leve, arremesso (distância 6/18)",
+            "renderData": {
+              "tags": [
+                "Arma",
+                "acuidade",
+                "leve",
+                "arremesso (distância 6/18)"
+              ],
+              "stats": [
+                {
+                  "label": "Dano",
+                  "value": "1d4 perfurante"
+                },
+                {
+                  "label": "Peso",
+                  "value": "0.5 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "2 po"
+                }
+              ]
+            },
+            "_folder": "objects",
             "visible": true,
             "quantity": 1
           }
@@ -1987,32 +2045,6 @@
         "faction": "Abismo das Águas Mortas",
         "role": "Boss Opcional - Entidade colecionadora de ilhas perdidas no plano",
         "createdAt": "2026-02-02T01:30:51.000Z"
-      },
-      {
-        "id": "preset-1770051519180",
-        "name": "Novo Mob",
-        "color": "#ef4444",
-        "maxHp": 10,
-        "ac": 10,
-        "damageDice": "1d6",
-        "toHit": 0,
-        "image": "",
-        "inventory": [],
-        "conditions": [],
-        "role": "",
-        "cr": "",
-        "faction": "",
-        "createdAt": "2026-02-02T16:58:39.180Z"
-      },
-      {
-        "id": "preset-1770051546341",
-        "name": "teste do mob",
-        "color": "red",
-        "maxHp": 10,
-        "damageDice": "1d6",
-        "toHit": 0,
-        "image": "",
-        "createdAt": "2026-02-02T16:59:06.341Z"
       }
     ],
     "players": [
@@ -2171,9 +2203,27 @@
             },
             "visible": true,
             "quantity": 1
+          },
+          {
+            "nome": "Amigos",
+            "nome_ingles": "Friends",
+            "caracteristicas": "Truque de  Encantamento (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:Pessoal\nComponentes:S M (uma pequena quantidade de maquiagem aplicada a rosto enquanto esta magia é conjurada)\nDuração:Concentração,\n                                         Até 1 minuto",
+            "descricao": "Enquanto a magia durar, você tem vantagem em todos os testes de Carisma dirigidos a uma criatura, à sua escolha e que não seja hostil a você. Ao término da magia, a criatura percebe que você usou magia para influenciar o humor dela, tornando-se hostil a você. Uma criatura propensa à violência pode lhe atacar. Criaturas não violentas podem buscar outras formas de retaliação (a critério do DM), dependendo da natureza da sua interação com ela.\nLivro do Jogador (PHB), p. 212 (244)",
+            "_folder": "spells",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Acalmar Emoções",
+            "nome_ingles": "Calm Emotions",
+            "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+            "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)",
+            "_folder": "spells",
+            "visible": true,
+            "quantity": 1
           }
         ],
-        "photo": "",
+        "photo": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
         "class": "Bardo",
         "level": 6,
         "race": "Humano",
@@ -2360,12 +2410,22 @@
         "name": "Sereia de Murann",
         "type": "player",
         "maxHp": 150,
-        "currentHp": 147,
+        "currentHp": 150,
         "maxMorale": 100,
         "currentMorale": 100,
         "image": "",
         "conditions": [],
-        "inventory": [],
+        "inventory": [
+          {
+            "nome": "Acudir os Moribundos",
+            "nome_ingles": "Spare the Dying",
+            "caracteristicas": "Truque de  Necromancia (Artífice, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Instantânea",
+            "descricao": "Você toca uma criatura viva que tenha 0 pontos de vida. A criatura se torna estável. Essa magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 211 (277)",
+            "_folder": "spells",
+            "visible": true,
+            "quantity": 1
+          }
+        ],
         "shipClass": "Caravela",
         "category": "Imenso",
         "speed": "50 ft (12 quadrados)",
