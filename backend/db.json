@@ -7,14 +7,16 @@
       "mobs": [
         {
           "id": "mob-1769997427626",
-          "name": "Tubarão de Recife",
-          "color": "#5F9EA0",
+          "name": "Tubarão de Recifes",
+          "color": "yellow",
           "maxHp": 22,
-          "currentHp": 22,
+          "currentHp": 17,
           "damageDice": "2d6",
           "toHit": 4,
           "image": "",
-          "conditions": [],
+          "conditions": [
+            "restrained"
+          ],
           "inventory": [
             {
               "tipo": "arma",
@@ -52,6 +54,45 @@
                   }
                 ]
               },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "equipamento",
+              "categoria": "aventura",
+              "nome": "Ácido (vidro)",
+              "custo": {
+                "quant": 25,
+                "moeda": "po"
+              },
+              "peso_kg": 0.5,
+              "grupo": "Equipamento",
+              "renderData": {
+                "tags": [
+                  "Equipamento",
+                  "aventura"
+                ],
+                "stats": [
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "25 po"
+                  }
+                ]
+              },
+              "_folder": "objects",
+              "visible": true,
+              "quantity": 2
+            },
+            {
+              "nome": "Agarrão da Terra",
+              "nome_ingles": "Earthbind",
+              "caracteristicas": "2º Círculo, Transmutação (Bruxo, Druida, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:90m [300 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Escolha uma criatura que você possa ver, dentro do alcance. Laços amarelados de energia mágica rodeiam a criatura. O alvo deve ser bem sucedido em salvaguarda de Força ou seu deslocamento de voo (se possuir) será reduzido para 0m [0 ft.] pela duração da magia. Uma criatura voadora afetada por essa magia desce 18m [60 ft.] por turno até aterrissar no solo ou a magia acabar.\nXanathar's Guide to Everything, p. 154",
+              "_folder": "spells",
               "visible": true,
               "quantity": 1
             }
@@ -111,6 +152,211 @@
               "caracteristicas": "2º Círculo, Transmutação (Bruxo, Druida, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:90m [300 ft.]\nComponentes:V\nDuração:Concentração,\n                                         Até 1 minuto",
               "descricao": "Escolha uma criatura que você possa ver, dentro do alcance. Laços amarelados de energia mágica rodeiam a criatura. O alvo deve ser bem sucedido em salvaguarda de Força ou seu deslocamento de voo (se possuir) será reduzido para 0m [0 ft.] pela duração da magia. Uma criatura voadora afetada por essa magia desce 18m [60 ft.] por turno até aterrissar no solo ou a magia acabar.\nXanathar's Guide to Everything, p. 154",
               "_folder": "spells",
+              "visible": true,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "mob-1770052850268",
+          "name": "Tubarão de Recife",
+          "color": "#5F9EA0",
+          "maxHp": 22,
+          "currentHp": 22,
+          "damageDice": "2d6",
+          "toHit": 4,
+          "image": "",
+          "conditions": [],
+          "inventory": [
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Espada Grande",
+              "custo": {
+                "quant": 50,
+                "moeda": "po"
+              },
+              "dano": "2d6 cortante",
+              "peso_kg": 3,
+              "propriedades": [
+                "pesada",
+                "duas mãos"
+              ],
+              "propriedades_texto": "pesada, duas mãos",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "pesada",
+                  "duas mãos"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "2d6 cortante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "3 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "50 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "equipamento",
+              "categoria": "aventura",
+              "nome": "Ácido (vidro)",
+              "custo": {
+                "quant": 25,
+                "moeda": "po"
+              },
+              "peso_kg": 0.5,
+              "grupo": "Equipamento",
+              "renderData": {
+                "tags": [
+                  "Equipamento",
+                  "aventura"
+                ],
+                "stats": [
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "25 po"
+                  }
+                ]
+              },
+              "_folder": "objects",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "armadura",
+              "categoria": "leve",
+              "nome": "Acolchoada",
+              "custo": {
+                "quant": 5,
+                "moeda": "po"
+              },
+              "ca": "11 + modificador de Des",
+              "forca_min": null,
+              "furtividade": "desvantagem",
+              "peso_kg": 4,
+              "grupo": "Armadura",
+              "renderData": {
+                "tags": [
+                  "Armadura leve",
+                  "Furtividade: Desvantagem"
+                ],
+                "stats": [
+                  {
+                    "label": "CA",
+                    "value": "11 + modificador de Des"
+                  },
+                  {
+                    "label": "Força Mín.",
+                    "value": "-"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "4 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "5 po"
+                  }
+                ]
+              },
+              "_folder": "objects",
+              "visible": true,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "mob-1770052863413",
+          "name": "Tubarão de Recife",
+          "color": "#5F9EA0",
+          "maxHp": 22,
+          "currentHp": 22,
+          "damageDice": "2d6",
+          "toHit": 4,
+          "image": "",
+          "conditions": [],
+          "inventory": [
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Espada Grande",
+              "custo": {
+                "quant": 50,
+                "moeda": "po"
+              },
+              "dano": "2d6 cortante",
+              "peso_kg": 3,
+              "propriedades": [
+                "pesada",
+                "duas mãos"
+              ],
+              "propriedades_texto": "pesada, duas mãos",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "pesada",
+                  "duas mãos"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "2d6 cortante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "3 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "50 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "equipamento",
+              "categoria": "aventura",
+              "nome": "Ácido (vidro)",
+              "custo": {
+                "quant": 25,
+                "moeda": "po"
+              },
+              "peso_kg": 0.5,
+              "grupo": "Equipamento",
+              "renderData": {
+                "tags": [
+                  "Equipamento",
+                  "aventura"
+                ],
+                "stats": [
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "25 po"
+                  }
+                ]
+              },
+              "_folder": "objects",
               "visible": true,
               "quantity": 1
             }
@@ -1343,7 +1589,119 @@
         "source": "MM p.328",
         "faction": "Monstros das Profundezas",
         "role": "Perigo em águas rasas/naufrágios",
-        "createdAt": "2026-02-02T01:30:32.000Z"
+        "createdAt": "2026-02-02T01:30:32.000Z",
+        "inventory": [
+          {
+            "tipo": "arma",
+            "grupo": "Arma",
+            "nome": "Espada Grande",
+            "custo": {
+              "quant": 50,
+              "moeda": "po"
+            },
+            "dano": "2d6 cortante",
+            "peso_kg": 3,
+            "propriedades": [
+              "pesada",
+              "duas mãos"
+            ],
+            "propriedades_texto": "pesada, duas mãos",
+            "renderData": {
+              "tags": [
+                "Arma",
+                "pesada",
+                "duas mãos"
+              ],
+              "stats": [
+                {
+                  "label": "Dano",
+                  "value": "2d6 cortante"
+                },
+                {
+                  "label": "Peso",
+                  "value": "3 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "50 po"
+                }
+              ]
+            },
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "tipo": "equipamento",
+            "categoria": "aventura",
+            "nome": "Ácido (vidro)",
+            "custo": {
+              "quant": 25,
+              "moeda": "po"
+            },
+            "peso_kg": 0.5,
+            "grupo": "Equipamento",
+            "renderData": {
+              "tags": [
+                "Equipamento",
+                "aventura"
+              ],
+              "stats": [
+                {
+                  "label": "Peso",
+                  "value": "0.5 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "25 po"
+                }
+              ]
+            },
+            "_folder": "objects",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "tipo": "armadura",
+            "categoria": "leve",
+            "nome": "Acolchoada",
+            "custo": {
+              "quant": 5,
+              "moeda": "po"
+            },
+            "ca": "11 + modificador de Des",
+            "forca_min": null,
+            "furtividade": "desvantagem",
+            "peso_kg": 4,
+            "grupo": "Armadura",
+            "renderData": {
+              "tags": [
+                "Armadura leve",
+                "Furtividade: Desvantagem"
+              ],
+              "stats": [
+                {
+                  "label": "CA",
+                  "value": "11 + modificador de Des"
+                },
+                {
+                  "label": "Força Mín.",
+                  "value": "-"
+                },
+                {
+                  "label": "Peso",
+                  "value": "4 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "5 po"
+                }
+              ]
+            },
+            "_folder": "objects",
+            "visible": true,
+            "quantity": 1
+          }
+        ]
       },
       {
         "id": "preset-mob-harpia",
@@ -1629,6 +1987,32 @@
         "faction": "Abismo das Águas Mortas",
         "role": "Boss Opcional - Entidade colecionadora de ilhas perdidas no plano",
         "createdAt": "2026-02-02T01:30:51.000Z"
+      },
+      {
+        "id": "preset-1770051519180",
+        "name": "Novo Mob",
+        "color": "#ef4444",
+        "maxHp": 10,
+        "ac": 10,
+        "damageDice": "1d6",
+        "toHit": 0,
+        "image": "",
+        "inventory": [],
+        "conditions": [],
+        "role": "",
+        "cr": "",
+        "faction": "",
+        "createdAt": "2026-02-02T16:58:39.180Z"
+      },
+      {
+        "id": "preset-1770051546341",
+        "name": "teste do mob",
+        "color": "red",
+        "maxHp": 10,
+        "damageDice": "1d6",
+        "toHit": 0,
+        "image": "",
+        "createdAt": "2026-02-02T16:59:06.341Z"
       }
     ],
     "players": [

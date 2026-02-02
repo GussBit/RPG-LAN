@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Square, Play, Pause,
-  Wind, Music, Zap, FolderOpen, Plus, Volume2, BookOpen, FileJson
+  Wind, Music, Zap, FolderOpen, Plus, Volume2, BookOpen, FileJson, Skull
 } from 'lucide-react';
 import PillButton from './ui/PillButton';
 
@@ -181,6 +181,14 @@ export default function Header({
       
 
       <div className="flex items-center gap-2">
+        <button 
+          onClick={() => navigate('/mobs')}
+          className="p-2 text-zinc-400 hover:text-white transition-colors bg-black/20 rounded-lg border border-white/5"
+          title="Editor de Mobs"
+        >
+          <Skull size={16} />
+        </button>
+
         <button 
           onClick={() => navigate('/editor')}
           className="p-2 text-zinc-400 hover:text-white transition-colors bg-black/20 rounded-lg border border-white/5"

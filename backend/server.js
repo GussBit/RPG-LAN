@@ -37,7 +37,8 @@ app.use(express.json({ limit: '50mb' }));
 const defaultData = { 
   scenes: [], 
   activeSceneId: null,
-  presets: { mobs: [], players: [] } 
+  presets: { mobs: [], players: [], ships: [] },
+  customItems: []
 };
 
 const db = await JSONFilePreset('db.json', defaultData);
@@ -223,10 +224,28 @@ app.post('/api/data/:filename', (req, res) => {
   }
 });
 
-// Serve arquivos estáticos (Imagens e Áudios)
-// Importante: Colocar isso APÓS as rotas da API para evitar conflitos
-app.use(express.static(publicDir));
+// --- CUSTOM ITEMS (COMPÊNDIO) ---
 
+app.get('/api/customItems', (req, res) => {
+  res.json(db.data.customItems || []);
+});
+
+app.post('/api/customItems', async (req, res) => {
+  const item = req.body;
+  const newItem = { ...item, id: `item-${Date.now()}` };
+  if (!db.data.customItems) db.data.customItems = [];
+  db.data.customItems.push(newItem);
+  await db.write();
+  res.json(newItem);
+});
+
+app.delete('/api/customItems/:id', async (req, res) => {
+  const { id } = req.params;
+  if (!db.data.customItems) return res.status(404).json({ error: 'Item não encontrado' });
+  db.data.customItems = db.data.customItems.filter(i => i.id !== id);
+  await db.write();
+  res.status(204).send();
+});
 
 // ====================================================================
 // --- LÓGICA DO JOGO (DB.JSON) ---
@@ -250,6 +269,33 @@ app.get('/api/state', (req, res) => {
   ensureActiveSceneValid();
   res.json(db.data);
 });
+
+// ... (outras rotas de presets)
+
+// Rota para ATUALIZAR um preset (PATCH)
+app.patch('/api/presets/:type/:presetId', async (req, res) => {
+  const { type, presetId } = req.params;
+  const updates = req.body;
+  
+  // Verifica se o tipo existe (mobs, players, ships)
+  if (!db.data.presets || !db.data.presets[type]) {
+    return res.status(404).json({ error: 'Tipo de preset não encontrado' });
+  }
+  
+  // Encontra o preset pelo ID
+  const preset = db.data.presets[type].find(p => p.id === presetId);
+  if (!preset) {
+    return res.status(404).json({ error: 'Preset não encontrado' });
+  }
+  
+  // Atualiza os dados e salva no banco
+  Object.assign(preset, updates);
+  await db.write();
+  res.json(preset);
+});
+
+// ... (rota delete, etc)
+
 
 // --- CENAS ---
 
@@ -685,18 +731,43 @@ app.post('/api/presets/:type', async (req, res) => {
   const { type } = req.params;
   const preset = req.body;
   
-  if (!db.data.presets) db.data.presets = { mobs: [], players: [] };
+  if (!db.data.presets) db.data.presets = { mobs: [], players: [], ships: [] };
   if (!db.data.presets[type]) db.data.presets[type] = [];
   
+  // PADRONIZE O FORMATO DO ID
   const newPreset = {
-    id: `preset-${Date.now()}`,
-    ...preset,
+    ...preset, // Mantém os dados enviados
+    id: `preset-${type}-${Date.now()}`, // Ex: preset-mobs-1738516800000
     createdAt: new Date().toISOString()
   };
   
   db.data.presets[type].push(newPreset);
   await db.write();
   res.json(newPreset);
+});
+
+app.patch('/api/presets/:type/:presetId', async (req, res) => {
+  const { type, presetId } = req.params;
+  console.log(`[PATCH] Recebido para: ${type}/${presetId}`); // Log para confirmar que a requisição chegou
+  const updates = req.body;
+  
+  if (!db.data.presets || !db.data.presets[type]) {
+    return res.status(404).json({ error: 'Tipo de preset não encontrado' });
+  }
+  
+  // BUSCA MAIS FLEXÍVEL - aceita ID ou nome
+  const preset = db.data.presets[type].find(p => 
+    p.id === presetId || p.id.includes(presetId)
+  );
+
+  if (!preset) {
+    console.log('Preset não encontrado. IDs disponíveis:', db.data.presets[type].map(p => p.id));
+    return res.status(404).json({ error: 'Preset não encontrado' });
+  }
+  
+  Object.assign(preset, updates);
+  await db.write();
+  res.json(preset);
 });
 
 app.delete('/api/presets/:type/:presetId', async (req, res) => {

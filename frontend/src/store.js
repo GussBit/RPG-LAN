@@ -618,6 +618,24 @@ export const useGameStore = create((set, get) => ({
     return newPreset;
   },
 
+  updatePreset: async (type, presetId, updates) => {
+    const url = `${API_URL}/presets/${type}/${encodeURIComponent(presetId)}`;
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    });
+    if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Falha ao atualizar (${res.status}): ${errorText}`);
+    }
+    const updated = await res.json();
+    set(state => ({
+        presets: { ...state.presets, [type]: (state.presets[type] || []).map(p => p.id === presetId ? updated : p) }
+    }));
+    return updated;
+  },
+
   deletePreset: async (type, presetId) => {
     await fetch(`${API_URL}/presets/${type}/${presetId}`, {
       method: 'DELETE'
