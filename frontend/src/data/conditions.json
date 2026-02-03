@@ -59,6 +59,32 @@
     "nome": "Inconsciente",
     "descricao": "Uma criatura inconsciente está incapacitada, não pode se mover ou falar, e não está ciente de seus arredores. A criatura larga o que estiver segurando e cai no chão. A criatura falha automaticamente em salvaguardas de Força e Destreza. Jogadas de ataque contra a criatura têm vantagem. Qualquer ataque que acerte a criatura é um acerto crítico se o atacante estiver a até 1,5m da criatura."
   },
+
+  {
+    "nome": "Terreno Difícil",
+    "descricao": "Cada 1,5 metro de movimento em terreno difícil custa 1,5 metro adicional. Essa regra se aplica mesmo com múltiplos obstáculos no mesmo espaço. Exemplos incluem mobílias baixas, escombros, vegetação rasteira, escadas íngremes, neve, pântanos rasos e espaços ocupados por outras criaturas, hostis ou não."
+  },
+  {
+    "nome": "Meia-Cobertura",
+    "descricao": "Um alvo com meia-cobertura recebe +2 de bônus na Classe de Armadura e nos testes de resistência de Destreza. Ocorre quando pelo menos metade do corpo é bloqueada por um obstáculo, como uma mureta, mobília grande, tronco estreito ou outra criatura."
+  },
+  {
+    "nome": "Cobertura de Três-Quartos",
+    "descricao": "Um alvo com três-quartos de cobertura recebe +5 de bônus na Classe de Armadura e nos testes de resistência de Destreza. Ocorre quando pelo menos três quartos do corpo estão protegidos por um obstáculo, como uma grade levadiça, seteira ou tronco robusto."
+  },
+  {
+    "nome": "Cobertura Total",
+    "descricao": "Um alvo com cobertura total não pode ser alvo direto de ataques ou magias, embora algumas magias de área ainda possam afetá-lo. Ocorre quando o alvo está completamente protegido por um obstáculo."
+  },
+  {
+    "nome": "Escuridão Leve",
+    "descricao": "Criaturas em áreas de escuridão leve têm desvantagem em testes de Sabedoria (Percepção) que dependam da visão. Exemplos incluem penumbra, névoa leve e folhagem moderada."
+  },
+  {
+    "nome": "Escuridão Densa",
+    "descricao": "Escuridão densa bloqueia completamente a visão. Uma criatura nessa área é considerada cega ao tentar ver algo obscurecido pela escuridão."
+  },
+  
   {
     "nome": "Invisível",
     "descricao": "Uma criatura invisível é impossível de ser vista sem ajuda de magia ou um sentido especial. Para propósitos de esconder-se, a criatura está totalmente obscurecida. A localização da criatura pode ser detectada por qualquer som que ela faça ou qualquer rastro que ela deixe. Jogadas de ataque contra a criatura têm desvantagem, e as jogadas de ataque da criatura têm vantagem."

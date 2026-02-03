@@ -1,8 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getImageUrl } from '../../constants';
-import { Plus, Minus, Trash2 } from 'lucide-react';
+import { Plus, Minus, Trash2, Loader } from 'lucide-react';
+
+// Funções auxiliares para imagens (mesma lógica do Compendium)
+const normalizeFilename = (text) => {
+  return text ? text.toString()
+    .replace(/'/g, '') // Remove apóstrofos
+    .replace(/\s+/g, '_') // Substitui espaços por underlines
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") : ""; // Remove acentos
+};
+
+// Função para normalizar nomes de itens (ex: "Couro Batido" -> "couro batido")
+const normalizeItemFilename = (text) => {
+  return text ? text.toString()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove acentos
+    .toLowerCase() : ""; // Tudo minúsculo
+};
+
+// Helper para identificar a pasta se _folder não existir
+const getFolder = (item) => {
+  if (item._folder) return item._folder;
+  if (item.caracteristicas) return 'spells';
+  if (item.tipo || item.custo || item.peso_kg) return 'itens';
+  return null;
+};
+
+const getSpellFallbackImage = (item) => {
+  const folder = getFolder(item);
+  if (folder !== 'spells' || !item.caracteristicas) return null;
+  const match = item.caracteristicas.match(/(\d+)º Círculo/);
+  if (match) {
+    return `/spells/${match[1]}c.png`;
+  }
+  if (item.caracteristicas.toLowerCase().includes('truque')) return `/spells/0c.png`;
+  return null;
+};
 
 export default function InventoryItemCard({ item, index, onClick, onUpdateQuantity, onRemove, viewMode = 'expanded' }) {
+  const [isLoading, setIsLoading] = useState(true);
+
   // Normaliza as tags
   const tags = item.renderData?.tags || 
     (item.caracteristicas ? item.caracteristicas.split('\n')[0].split(',') : []);
@@ -16,9 +52,12 @@ export default function InventoryItemCard({ item, index, onClick, onUpdateQuanti
   };
 
   // Resolve imagem
+  const folder = getFolder(item);
   const imageSrc = item.image 
     ? getImageUrl(item.image) 
-    : (item._folder ? `/${item._folder}/${item.nome_ingles || item.nome}.png` : null);
+    : (folder === 'itens' 
+        ? `/${folder}/${normalizeItemFilename(item.nome)}.jpg`
+        : (folder ? `/${folder}/${normalizeFilename(item.nome_ingles || item.nome)}.png` : null));
 
   const quantity = item.quantity || item.quantidade || 1;
 
@@ -45,14 +84,37 @@ export default function InventoryItemCard({ item, index, onClick, onUpdateQuanti
 
         {/* Imagem ou Iniciais - SEM PADDING, COLADO NO TOPO */}
         <div className="aspect-square w-full bg-gradient-to-br from-zinc-800 to-black relative overflow-hidden">
+          {isLoading && imageSrc && (
+            <div className="absolute inset-0 flex items-center justify-center bg-zinc-900 z-10">
+              <Loader className="w-5 h-5 text-zinc-600 animate-spin" />
+            </div>
+          )}
+          
           {imageSrc ? (
             <img
               src={imageSrc}
               alt={item.nome}
+              onLoad={() => setIsLoading(false)}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'flex';
+                if (folder === 'itens') {
+                  if (!e.target.src.includes('item_generico.jpg')) {
+                    e.target.src = '/itens/item_generico.jpg';
+                  } else {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                    setIsLoading(false);
+                  }
+                } else {
+                  const fallback = getSpellFallbackImage(item);
+                  if (fallback && !e.target.src.includes(fallback)) {
+                    e.target.src = fallback;
+                  } else {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                    setIsLoading(false);
+                  }
+                }
               }}
             />
           ) : null}
@@ -112,14 +174,37 @@ export default function InventoryItemCard({ item, index, onClick, onUpdateQuanti
 
       {/* Imagem ou Iniciais - SEM PADDING, COLADO NO TOPO */}
       <div className="aspect-square w-full bg-gradient-to-br from-zinc-800 to-black relative overflow-hidden flex-shrink-0">
+        {isLoading && imageSrc && (
+          <div className="absolute inset-0 flex items-center justify-center bg-zinc-900 z-10">
+            <Loader className="w-6 h-6 text-zinc-600 animate-spin" />
+          </div>
+        )}
+
         {imageSrc ? (
           <img
             src={imageSrc}
             alt={item.nome}
+            onLoad={() => setIsLoading(false)}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             onError={(e) => {
-              e.target.style.display = 'none';
-              e.target.nextSibling.style.display = 'flex';
+              if (folder === 'itens') {
+                if (!e.target.src.includes('item_generico.jpg')) {
+                  e.target.src = '/itens/item_generico.jpg';
+                } else {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                  setIsLoading(false);
+                }
+              } else {
+                const fallback = getSpellFallbackImage(item);
+                if (fallback && !e.target.src.includes(fallback)) {
+                  e.target.src = fallback;
+                } else {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                  setIsLoading(false);
+                }
+              }
             }}
           />
         ) : null}

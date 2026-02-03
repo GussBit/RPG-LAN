@@ -1,8 +1,34 @@
 import React, { useState } from 'react';
-import { Ship, ArrowLeft, Shield, Anchor, Box, Search, Grid3x3, LayoutGrid } from 'lucide-react';
+import { Ship, ArrowLeft, Shield, Anchor, Box, Search, Grid3x3, LayoutGrid, Loader } from 'lucide-react';
 import InventoryItemCard from './InventoryItemCard';
 import ItemDetailsModal from '../modals/ItemDetailsModal';
 import { getImageUrl } from '../../constants';
+
+const ShipListIcon = ({ ship }) => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [hasError, setHasError] = useState(false);
+
+    if (!ship.image || hasError) {
+        return <Ship size={24} className="text-cyan-400" />;
+    }
+
+    return (
+        <div className="relative w-full h-full">
+            {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-zinc-900 z-10 rounded-lg">
+                    <Loader className="w-4 h-4 text-cyan-600 animate-spin" />
+                </div>
+            )}
+            <img 
+                src={getImageUrl(ship.image)} 
+                alt={ship.name} 
+                className={`w-full h-full object-cover rounded-lg transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+                onLoad={() => setIsLoading(false)}
+                onError={() => { setIsLoading(false); setHasError(true); }}
+            />
+        </div>
+    );
+};
 
 export default function PlayerShips({
     ships,
@@ -21,6 +47,7 @@ export default function PlayerShips({
     const [searchTerm, setSearchTerm] = useState('');
     const [viewMode, setViewMode] = useState(() => localStorage.getItem('shipInventoryViewMode') || 'expanded');
     const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+    const [imageLoading, setImageLoading] = useState(true);
 
     const ship = ships.find(s => s.id === selectedShipId);
 
@@ -68,8 +95,8 @@ export default function PlayerShips({
                             onClick={() => setSelectedShipId(ship.id)}
                             className="bg-zinc-900/80 border border-white/10 p-4 rounded-xl flex items-center gap-4 hover:border-cyan-500/50 transition-all text-left group"
                         >
-                            <div className="h-12 w-12 rounded-lg bg-cyan-950/30 flex items-center justify-center border border-cyan-500/20 group-hover:bg-cyan-900/50">
-                                <Ship size={24} className="text-cyan-400" />
+                            <div className="h-12 w-12 rounded-lg bg-cyan-950/30 flex items-center justify-center border border-cyan-500/20 group-hover:bg-cyan-900/50 p-0.5">
+                                <ShipListIcon ship={ship} />
                             </div>
                             <div>
                                 <div className="font-bold text-zinc-200">{ship.name}</div>
@@ -147,7 +174,20 @@ export default function PlayerShips({
                                 {/* Foto */}
                                 <div className="h-48 sm:h-56 relative bg-gradient-to-br from-cyan-900/40 to-blue-900/40">
                                     {ship.image ? (
-                                        <img src={getImageUrl(ship.image)} alt={ship.name} className="absolute inset-0 w-full h-full object-cover" />
+                                        <>
+                                            {imageLoading && (
+                                                <div className="absolute inset-0 flex items-center justify-center bg-zinc-900 z-10">
+                                                    <Loader className="w-8 h-8 text-cyan-600 animate-spin" />
+                                                </div>
+                                            )}
+                                            <img 
+                                                src={getImageUrl(ship.image)} 
+                                                alt={ship.name} 
+                                                className="absolute inset-0 w-full h-full object-cover"
+                                                onLoad={() => setImageLoading(false)}
+                                                onError={(e) => { e.target.style.display = 'none'; setImageLoading(false); }}
+                                            />
+                                        </>
                                     ) : (
                                         <div className="absolute inset-0 flex items-center justify-center">
                                             <Ship className="w-20 h-20 text-cyan-700" />

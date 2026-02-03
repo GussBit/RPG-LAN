@@ -59,6 +59,70 @@
     "caracteristicas": "Ação de combate",
     "descricao": "Você faz um ataque corpo a corpo especial para empurrar uma criatura. Se acertar, você pode empurrar a criatura 1,5 m ou derrubá‑la no chão."
   },
+
+  {
+    "nome": "Agarrão",
+    "nome_ingles": "Grapple",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Você realiza um ataque corpo-a-corpo especial como parte da ação Atacar para tentar agarrar uma criatura até uma categoria de tamanho maior que a sua, ao seu alcance. Faça um teste de Força (Atletismo) resistido por Força (Atletismo) ou Destreza (Acrobacia) do alvo. Em caso de sucesso, o alvo fica agarrado."
+  },
+  {
+    "nome": "Escapar de Agarrão",
+    "nome_ingles": "Escape Grapple",
+    "caracteristicas": "Ação de combate",
+    "descricao": "Uma criatura agarrada pode usar sua ação para tentar escapar, realizando um teste de Força (Atletismo) ou Destreza (Acrobacia) resistido pelo teste de Força (Atletismo) do agarrador."
+  },
+  {
+    "nome": "Mover Criatura Agarrada",
+    "nome_ingles": "Move Grappled Creature",
+    "caracteristicas": "Ação de movimento",
+    "descricao": "Ao se mover enquanto agarra uma criatura, você pode arrastá-la ou carregá-la, mas seu deslocamento é reduzido à metade, a menos que a criatura seja duas ou mais categorias de tamanho menor que você."
+  },
+  {
+    "nome": "Marcha Forçada",
+    "nome_ingles": "Forced March",
+    "caracteristicas": "Ação de viagem",
+    "descricao": "Após 8 horas de viagem em um dia, cada hora adicional exige um teste de resistência de Constituição com CD 10 +1 por hora extra. Em caso de falha, o personagem sofre um nível de exaustão."
+  },
+  {
+    "nome": "Escalada",
+    "nome_ingles": "Climbing",
+    "caracteristicas": "Ação de movimento",
+    "descricao": "Enquanto escala, cada 1,5 metro de deslocamento custa 1,5 metro adicional, ou 3 metros adicionais em terreno difícil, a menos que a criatura possua deslocamento de escalada. O Mestre pode exigir um teste de Força (Atletismo)."
+  },
+  {
+    "nome": "Natação",
+    "nome_ingles": "Swimming",
+    "caracteristicas": "Ação de movimento",
+    "descricao": "Enquanto nada, cada 1,5 metro de deslocamento custa 1,5 metro adicional, ou 3 metros adicionais em terreno difícil, a menos que a criatura possua deslocamento de natação. Águas agitadas podem exigir teste de Força (Atletismo)."
+  },
+  {
+    "nome": "Rastejar",
+    "nome_ingles": "Crawling",
+    "caracteristicas": "Ação de movimento",
+    "descricao": "Ao rastejar, o deslocamento é tratado como terreno difícil, aumentando o custo de movimento conforme as regras de deslocamento."
+  },
+  {
+    "nome": "Salto em Distância",
+    "nome_ingles": "Long Jump",
+    "caracteristicas": "Ação de movimento",
+    "descricao": "Com pelo menos 3 metros de corrida, você salta uma distância igual ao valor de Força multiplicado por 0,3 metros. Sem corrida, salta metade dessa distância. Cada metro saltado consome 1 metro de deslocamento."
+  },
+  {
+    "nome": "Salto em Altura",
+    "nome_ingles": "High Jump",
+    "caracteristicas": "Ação de movimento",
+    "descricao": "Com pelo menos 3 metros de corrida, você salta uma altura de 0,3 x (3 + modificador de Força). Sem corrida, salta metade. Cada metro do salto consome 1 metro de deslocamento."
+  },
+  {
+    "nome": "Caminhar Furtivamente",
+    "nome_ingles": "Stealth Travel",
+    "caracteristicas": "Ação de viagem",
+    "descricao": "Ao viajar em ritmo lento, os personagens podem usar furtividade para tentar surpreender ou se esgueirar de outras criaturas, desde que não estejam em áreas abertas."
+  },
+
+
+  
   {
     "nome": "Estabilizar",
     "nome_ingles": "Stabilize a Dying Creature",

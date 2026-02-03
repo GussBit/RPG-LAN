@@ -10,10 +10,45 @@ import {
   Package,
   Info,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Loader
 } from 'lucide-react';
 import Modal from '../ui/Modal';
 import { getImageUrl } from '../../constants';
+
+// Funções auxiliares para imagens (mesma lógica do Compendium)
+const normalizeFilename = (text) => {
+  return text ? text.toString()
+    .replace(/'/g, '') // Remove apóstrofos
+    .replace(/\s+/g, '_') // Substitui espaços por underlines
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") : ""; // Remove acentos
+};
+
+// Função para normalizar nomes de itens (ex: "Couro Batido" -> "couro batido")
+const normalizeItemFilename = (text) => {
+  return text ? text.toString()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove acentos
+    .toLowerCase() : ""; // Tudo minúsculo
+};
+
+// Helper para identificar a pasta se _folder não existir
+const getFolder = (item) => {
+  if (item._folder) return item._folder;
+  if (item.caracteristicas) return 'spells';
+  if (item.tipo || item.custo || item.peso_kg) return 'itens';
+  return null;
+};
+
+const getSpellFallbackImage = (item) => {
+  const folder = getFolder(item);
+  if (folder !== 'spells' || !item.caracteristicas) return null;
+  const match = item.caracteristicas.match(/(\d+)º Círculo/);
+  if (match) {
+    return `/spells/${match[1]}c.png`;
+  }
+  if (item.caracteristicas.toLowerCase().includes('truque')) return `/spells/0c.png`;
+  return null;
+};
 
 export default function ItemDetailsModal({ 
   item, 
@@ -26,6 +61,7 @@ export default function ItemDetailsModal({
 }) {
   const [isRemoving, setIsRemoving] = useState(false);
   const [compactView, setCompactView] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   if (!item) return null;
 
@@ -33,9 +69,12 @@ export default function ItemDetailsModal({
   const quantity = item.quantity || item.quantidade || 1;
   const isHidden = item.visible === false || item.invisivel;
 
+  const folder = getFolder(item);
   const imageSrc = item.image
     ? getImageUrl(item.image)
-    : (item._folder ? `/${item._folder}/${item.nome_ingles || item.nome}.png` : null);
+    : (folder === 'itens'
+        ? `/${folder}/${normalizeItemFilename(item.nome)}.jpg`
+        : (folder ? `/${folder}/${normalizeFilename(item.nome_ingles || item.nome)}.png` : null));
 
   const tags = item.renderData?.tags || 
     (item.caracteristicas ? item.caracteristicas.split('\n')[0].split(',') : []);
@@ -105,14 +144,36 @@ export default function ItemDetailsModal({
           <div className="space-y-3 pt-10">
             {/* Imagem Compacta */}
             {imageSrc ? (
-              <div className="relative w-full aspect-square max-h-[40vh] rounded-lg overflow-hidden bg-gradient-to-br from-zinc-900 to-black">
+              <div className="relative w-full aspect-square max-h-[40vh] rounded-lg overflow-hidden bg-gradient-to-br from-zinc-900 to-black group">
+                {isLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-zinc-900 z-10">
+                    <Loader className="w-8 h-8 text-zinc-600 animate-spin" />
+                  </div>
+                )}
                 <img
                   src={imageSrc}
                   alt={item.nome}
+                  onLoad={() => setIsLoading(false)}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextElementSibling.style.display = 'flex';
+                    if (folder === 'itens') {
+                      if (!e.target.src.includes('item_generico.jpg')) {
+                        e.target.src = '/itens/item_generico.jpg';
+                      } else {
+                        e.target.style.display = 'none';
+                        e.target.nextElementSibling.style.display = 'flex';
+                        setIsLoading(false);
+                      }
+                    } else {
+                      const fallback = getSpellFallbackImage(item);
+                      if (fallback && !e.target.src.includes(fallback)) {
+                        e.target.src = fallback;
+                      } else {
+                        e.target.style.display = 'none';
+                        e.target.nextElementSibling.style.display = 'flex';
+                        setIsLoading(false);
+                      }
+                    }
                   }}
                 />
                 <div className="absolute inset-0 hidden flex-col items-center justify-center bg-zinc-900">
@@ -222,16 +283,38 @@ export default function ItemDetailsModal({
           /* MODO COMPLETO */
           <div className="pt-10">
             {/* Header com Imagem */}
-            <div className="relative mb-3 sm:mb-4">
+            <div className="relative mb-3 sm:mb-4 group">
               {imageSrc ? (
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gradient-to-br from-zinc-900 to-black">
+                  {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-zinc-900 z-10">
+                      <Loader className="w-10 h-10 text-zinc-600 animate-spin" />
+                    </div>
+                  )}
                   <img
                     src={imageSrc}
                     alt={item.nome}
+                    onLoad={() => setIsLoading(false)}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.parentElement.querySelector('.fallback').style.display = 'flex';
+                      if (folder === 'itens') {
+                        if (!e.target.src.includes('item_generico.jpg')) {
+                          e.target.src = '/itens/item_generico.jpg';
+                        } else {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.querySelector('.fallback').style.display = 'flex';
+                          setIsLoading(false);
+                        }
+                      } else {
+                        const fallback = getSpellFallbackImage(item);
+                        if (fallback && !e.target.src.includes(fallback)) {
+                          e.target.src = fallback;
+                        } else {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.querySelector('.fallback').style.display = 'flex';
+                          setIsLoading(false);
+                        }
+                      }
                     }}
                   />
                   <div className="fallback absolute inset-0 hidden flex-col items-center justify-center">
