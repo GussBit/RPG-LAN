@@ -28,6 +28,7 @@ import Modal from './components/ui/Modal'; // Ainda usado para o Mapa
 import { CONDITIONS, getImageUrl } from './constants';
 import { API_URL } from './api';
 import PillButton from './components/ui/PillButton';
+import CharacterSheetModal from './components/character/CharacterSheetModal';
 import InitiativeTracker from './components/InitiativeTracker';
 import InitiativeButton from './components/InitiativeButton';
 
@@ -39,7 +40,8 @@ export default function App() {
     createPlayer, updatePlayerHp, deletePlayer, updatePlayer, togglePlayerCondition, toggleMobCondition, syncPlayers,
     updateSceneBackground, updateScene, updateMob, presets, fetchPresets, deletePreset, createPreset, addTrackFromUrl, updatePlayer: updatePlayerStore,
     createShip, updateShip, deleteShip, toggleShipCondition,
-    customItems, fetchCustomItems, createCustomItem, deleteCustomItem
+    customItems, fetchCustomItems, createCustomItem, deleteCustomItem,
+    expandedCharacter, closeCharacterSheet
   } = useGameStore();
 
   // --- ESTADOS DE UI E FORMULÁRIOS ---
@@ -825,6 +827,17 @@ export default function App() {
         url={qrCodeData?.url} 
         title={qrCodeData?.title} 
       />
+
+      {/* Ficha Expandida (GM) */}
+      {expandedCharacter && (
+        <CharacterSheetModal
+          entity={expandedCharacter.type === 'mob' 
+            ? activeScene.mobs.find(m => m.id === expandedCharacter.id)
+            : activeScene.players.find(p => p.id === expandedCharacter.id)}
+          type={expandedCharacter.type}
+          onClose={closeCharacterSheet}
+        />
+      )}
 
     </div>
   );

@@ -10,7 +10,7 @@
           "name": "Tubarão de Recifes",
           "color": "yellow",
           "maxHp": 22,
-          "currentHp": 17,
+          "currentHp": 21,
           "damageDice": "2d6",
           "toHit": 4,
           "image": "",

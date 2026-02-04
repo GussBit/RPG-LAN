@@ -14,6 +14,7 @@ export const useGameStore = create((set, get) => ({
   presets: { mobs: [], players: [], ships: [] },
   customItems: [],
   initiativeTrackerOpen: false,
+  expandedCharacter: null, // { type: 'mob'|'player', id: string }
 
   // --- CENAS (SCENES) ---
 
@@ -756,5 +757,39 @@ export const useGameStore = create((set, get) => ({
         scenes: scenes.map(s => s.id === activeScene.id ? updatedSceneData : s)
     });
   },
+
+  // --- FICHA EXPANDIDA (GM) ---
+
+  openCharacterSheet: (type, id) => {
+    set({ expandedCharacter: { type, id } });
+  },
+
+  closeCharacterSheet: () => {
+    set({ expandedCharacter: null });
+  },
+
+  updateCharacterField: async (type, id, field, value) => {
+    const { activeScene, updateMob, updatePlayer } = get();
+    if (!activeScene) return;
+
+    const updates = { [field]: value };
+
+    // Validações específicas
+    if (field === 'currentHp') {
+        const entity = type === 'mob' 
+            ? activeScene.mobs.find(m => m.id === id)
+            : activeScene.players.find(p => p.id === id);
+        
+        if (entity) {
+            updates.currentHp = Math.max(0, Math.min(entity.maxHp, value));
+        }
+    }
+
+    if (type === 'mob') {
+        await updateMob(activeScene.id, id, updates);
+    } else {
+        await updatePlayer(activeScene.id, id, updates);
+    }
+  }
 
 }));

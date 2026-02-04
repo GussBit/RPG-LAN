@@ -483,6 +483,9 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
     characterName: player.characterName || 'Personagem',
     photo: baseData.photo,
     maxHp: baseData.maxHp,
+    ac: Number(player.ac || 10), // Novo: Classe de Armadura
+    damageDice: player.damageDice || '1d4', // Novo: Dano base
+    toHit: Number(player.toHit || 0), // Novo: Bônus de acerto
     currentHp: baseData.currentHp,
     accessUrl: `/p/${token}`,
     initiative: Number(player.initiative || 0),
@@ -536,6 +539,9 @@ app.patch('/api/scenes/:sceneId/players/:playerId', async (req, res) => {
           maxHp: player.maxHp,
           currentHp: player.currentHp,
           conditions: player.conditions,
+          ac: player.ac,
+          damageDice: player.damageDice,
+          toHit: player.toHit,
           inventory: player.inventory,
           photo: player.photo,
           playerName: player.playerName

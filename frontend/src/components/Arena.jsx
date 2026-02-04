@@ -6,6 +6,7 @@ import ShipCard from '../ShipCard'; // Importar o novo card
 import { getImageUrl } from '../constants';
 import { toast } from 'react-toastify';
 import { clsx } from 'clsx';
+import { useGameStore } from '../store';
 
 export default function Arena({
   activeScene,
@@ -15,6 +16,7 @@ export default function Arena({
   onAddShip, updateShip, deleteShip, onEditShip, onToggleShipCondition
 }) {
   const [battleMode, setBattleMode] = useState('normal'); // 'normal' | 'naval'
+  const { openCharacterSheet } = useGameStore();
 
   // Helpers para atualizar Moral (usando as funções genéricas de update)
   const handleUpdatePlayerMorale = (id, delta) => {
@@ -95,7 +97,8 @@ export default function Arena({
               "relative w-full rounded-xl shadow-lg transition-all duration-500",
               "bg-gradient-to-br from-zinc-900/80 to-zinc-900/60 backdrop-blur-sm",
               "border-2",
-              "group hover:shadow-2xl"
+              "group hover:shadow-2xl",
+              "cursor-pointer hover:ring-2 hover:ring-indigo-500/50" // Indicador visual de clique
             );
 
             // Border effects baseado em condições
@@ -121,7 +124,11 @@ export default function Arena({
             if (conditions.includes('restrained')) imgClasses += " border-2 border-dashed border-zinc-500";
 
             return (
-              <div key={p.id} className={cardClasses}>
+              <div 
+                key={p.id} 
+                className={cardClasses}
+                onClick={() => openCharacterSheet('player', p.id)}
+              >
                 
                 {/* LAYOUT VERTICAL (base até lg) */}
                 <div className="lg:hidden overflow-visible">
@@ -170,7 +177,7 @@ export default function Arena({
                     </div>
 
                     {/* Botões de Ação NO HEADER - SEMPRE VISÍVEL */}
-                    <div className="flex flex-col gap-1 shrink-0">
+                    <div className="flex flex-col gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
                       <button 
                         onClick={() => onOpenInventory(p)}
                         className="p-1 text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 rounded transition-colors"
@@ -196,7 +203,7 @@ export default function Arena({
                   </div>
 
                   {/* Condições - Z-INDEX MUITO ALTO */}
-                  <div className="relative z-[200] px-3 pt-3 overflow-visible">
+                  <div className="relative z-[200] px-3 pt-3 overflow-visible" onClick={(e) => e.stopPropagation()}>
                     <ConditionsBar 
                       conditions={conditions} 
                       onToggle={(cId) => onTogglePlayerCondition(p.id, cId)} 
@@ -204,7 +211,7 @@ export default function Arena({
                   </div>
 
                   {/* Botões de HP */}
-                  <div className="px-3 py-3 space-y-1.5">
+                  <div className="px-3 py-3 space-y-1.5" onClick={(e) => e.stopPropagation()}>
                     <div className="flex gap-1">
                       {[-10, -5, -1].map(v => (
                         <button 
@@ -230,7 +237,7 @@ export default function Arena({
                   </div>
 
                   {/* Link e QR Code */}
-                  <div className="px-3 pb-3">
+                  <div className="px-3 pb-3" onClick={(e) => e.stopPropagation()}>
                     <div className="flex gap-1.5">
                       <div 
                         className="flex-1 bg-black/40 px-2 py-1.5 rounded-lg border border-white/10 text-[9px] text-zinc-500 font-mono truncate cursor-pointer hover:bg-black/60 transition-colors"
@@ -306,7 +313,7 @@ export default function Arena({
                         Controles
                       </div>
                       {/* Botões de Ação - SEMPRE VISÍVEL */}
-                      <div className="flex gap-1 shrink-0">
+                      <div className="flex gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
                         <button 
                           onClick={() => onOpenInventory(p)}
                           className="p-1.5 text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 rounded transition-colors"
@@ -332,7 +339,7 @@ export default function Arena({
                     </div>
 
                     {/* Condições - Z-INDEX MUITO ALTO */}
-                    <div className="relative z-[200] px-3 py-2 bg-black/20 border-b border-white/10 overflow-visible">
+                    <div className="relative z-[200] px-3 py-2 bg-black/20 border-b border-white/10 overflow-visible" onClick={(e) => e.stopPropagation()}>
                       <ConditionsBar 
                         conditions={conditions} 
                         onToggle={(cId) => onTogglePlayerCondition(p.id, cId)} 
@@ -342,7 +349,7 @@ export default function Arena({
                     {/* HP e Controles */}
                     <div className="flex-1 px-3 py-3 xl:px-4 xl:py-4 space-y-3 overflow-visible">
                       {/* Botões de Ajuste HP - 2 LINHAS */}
-                      <div>
+                      <div onClick={(e) => e.stopPropagation()}>
                         <div className="text-[9px] xl:text-[10px] text-zinc-500 uppercase tracking-wider font-semibold mb-1.5">
                           Ajustar HP
                         </div>
@@ -375,7 +382,7 @@ export default function Arena({
                       </div>
 
                       {/* Link e QR */}
-                      <div className="flex gap-1.5">
+                      <div className="flex gap-1.5" onClick={(e) => e.stopPropagation()}>
                         <div 
                           className="flex-1 bg-black/40 px-2 py-1.5 rounded-lg border border-white/10 text-[10px] text-zinc-500 font-mono truncate cursor-pointer hover:bg-black/60 transition-colors"
                           onClick={() => {

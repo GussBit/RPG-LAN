@@ -3,6 +3,7 @@ import { Shield, Heart, Skull, Trash2, Edit2, Swords, Target, Backpack, Zap } fr
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import ConditionsBar from './components/players/ConditionsBar';
+import { useGameStore } from './store';
 
 const COLORS = {
   red: { bg: 'bg-red-950/40', border: 'border-red-500/50', text: 'text-red-400', dot: 'bg-red-500' },
@@ -19,6 +20,7 @@ const COLORS = {
 
 export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondition, onOpenInventory }) {
   const theme = COLORS[mob.color] || COLORS.red;
+  const { openCharacterSheet } = useGameStore();
   
   const hp = mob.currentHp ?? mob.maxHp;
   const isDead = hp <= 0;
@@ -36,8 +38,11 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
       <div className={twMerge(
         "lg:hidden relative w-full rounded-xl border-2 transition-all duration-300 flex flex-col backdrop-blur-sm",
         theme.bg, theme.border,
-        isDead ? "opacity-60 grayscale scale-95" : "opacity-100 shadow-lg hover:shadow-xl"
-      )}>
+        isDead ? "opacity-60 grayscale scale-95" : "opacity-100 shadow-lg hover:shadow-xl",
+        "cursor-pointer hover:ring-2 hover:ring-indigo-500/50"
+      )}
+      onClick={() => openCharacterSheet('mob', mob.id)}
+      >
         
         {/* Header */}
         <div className="flex justify-between items-center px-2.5 py-2 border-b border-white/10 bg-black/30 rounded-t-[10px]">
@@ -48,7 +53,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
              </h3>
           </div>
 
-          <div className="flex items-center gap-0.5 shrink-0">
+        <div className="flex items-center gap-0.5 shrink-0" onClick={(e) => e.stopPropagation()}>
             <button 
               onClick={() => onOpenInventory && onOpenInventory(mob)}
               className="text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 p-1 rounded transition-all"
@@ -124,14 +129,14 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
           </div>
 
           {/* Container de Condições - Z-INDEX ALTO */}
-          <div className="relative z-[200] min-h-[24px]">
+          <div className="relative z-[200] min-h-[24px]" onClick={(e) => e.stopPropagation()}>
             <ConditionsBar 
               conditions={mob.conditions || []} 
               onToggle={(cId) => onToggleCondition && onToggleCondition(mob.id, cId)} 
             />
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-1" onClick={(e) => e.stopPropagation()}>
             <div className="grid grid-cols-4 gap-1">
               {[-1, -5, -10, -20].map(val => (
                 <button 
@@ -163,8 +168,11 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
       <div className={twMerge(
         "hidden lg:flex 2xl:hidden relative w-full rounded-xl border-2 transition-all duration-300 backdrop-blur-sm",
         theme.bg, theme.border,
-        isDead ? "opacity-60 grayscale" : "opacity-100 shadow-lg hover:shadow-xl"
-      )}>
+        isDead ? "opacity-60 grayscale" : "opacity-100 shadow-lg hover:shadow-xl",
+        "cursor-pointer hover:ring-2 hover:ring-indigo-500/50"
+      )}
+      onClick={() => openCharacterSheet('mob', mob.id)}
+      >
         
         {/* Seção Esquerda: Imagem Compacta */}
         <div className="relative w-28 shrink-0 flex flex-col overflow-hidden rounded-l-[10px]">
@@ -221,7 +229,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
         {/* Seção Direita: Controles Compactos */}
         <div className="flex-1 flex flex-col min-w-0 overflow-visible">
           {/* Botões de Ação */}
-          <div className="flex items-center justify-end gap-0.5 px-2 py-1.5 border-b border-white/10 bg-black/20">
+          <div className="flex items-center justify-end gap-0.5 px-2 py-1.5 border-b border-white/10 bg-black/20" onClick={(e) => e.stopPropagation()}>
             <button 
               onClick={() => onOpenInventory && onOpenInventory(mob)}
               className="text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 p-1 rounded transition-all"
@@ -259,7 +267,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
             </div>
 
             {/* Condições Compactas - Z-INDEX ALTO */}
-            <div className="relative z-[200] bg-black/40 border border-white/10 rounded-lg p-1.5 min-h-[28px]">
+            <div className="relative z-[200] bg-black/40 border border-white/10 rounded-lg p-1.5 min-h-[28px]" onClick={(e) => e.stopPropagation()}>
               <ConditionsBar 
                 conditions={mob.conditions || []} 
                 onToggle={(cId) => onToggleCondition && onToggleCondition(mob.id, cId)} 
@@ -267,7 +275,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
             </div>
 
             {/* Botões de Ajuste HP Compactos - 2 LINHAS */}
-            <div>
+            <div onClick={(e) => e.stopPropagation()}>
               <div className="text-[9px] text-zinc-500 uppercase tracking-wider font-semibold mb-1">Ajustar HP</div>
               
               <div className="space-y-1">
@@ -305,8 +313,11 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
       <div className={twMerge(
         "hidden 2xl:flex relative w-full rounded-xl border-2 transition-all duration-300 backdrop-blur-sm",
         theme.bg, theme.border,
-        isDead ? "opacity-60 grayscale" : "opacity-100 shadow-lg hover:shadow-xl"
-      )}>
+        isDead ? "opacity-60 grayscale" : "opacity-100 shadow-lg hover:shadow-xl",
+        "cursor-pointer hover:ring-2 hover:ring-indigo-500/50"
+      )}
+      onClick={() => openCharacterSheet('mob', mob.id)}
+      >
         
         {/* Seção Esquerda: Imagem + Header */}
         <div className="relative w-44 shrink-0 flex flex-col overflow-hidden rounded-l-[10px]">
@@ -367,7 +378,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
         {/* Seção Direita: Controles */}
         <div className="flex-1 flex flex-col min-w-0 overflow-visible">
           {/* Botões de Ação */}
-          <div className="flex items-center justify-end gap-1 px-3 py-2 border-b border-white/10 bg-black/20">
+          <div className="flex items-center justify-end gap-1 px-3 py-2 border-b border-white/10 bg-black/20" onClick={(e) => e.stopPropagation()}>
             <button 
               onClick={() => onOpenInventory && onOpenInventory(mob)}
               className="text-zinc-500 hover:text-indigo-400 hover:bg-indigo-500/10 p-1.5 rounded-lg transition-all"
@@ -405,7 +416,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
             </div>
 
             {/* Condições - Z-INDEX ALTO */}
-            <div className="relative z-[200] bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-2">
+            <div className="relative z-[200] bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-2" onClick={(e) => e.stopPropagation()}>
               <ConditionsBar 
                 conditions={mob.conditions || []} 
                 onToggle={(cId) => onToggleCondition && onToggleCondition(mob.id, cId)} 
@@ -413,7 +424,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
             </div>
 
             {/* Botões de Ajuste HP - 2 LINHAS */}
-            <div>
+            <div onClick={(e) => e.stopPropagation()}>
               <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold mb-2">Ajustar HP</div>
               
               <div className="space-y-2">
