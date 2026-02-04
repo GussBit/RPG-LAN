@@ -88,9 +88,9 @@
               "quantity": 2
             }
           ],
-          "initiative": 17,
+          "initiative": 15,
           "hidden": true,
-          "hiddenInInitiative": true
+          "hiddenInInitiative": false
         },
         {
           "id": "mob-1770052863413",
@@ -173,8 +173,8 @@
               "quantity": 1
             }
           ],
-          "initiative": 11,
-          "hiddenInInitiative": false,
+          "initiative": 17,
+          "hiddenInInitiative": true,
           "hidden": false
         },
         {
@@ -277,7 +277,7 @@
               "quantity": 1
             }
           ],
-          "initiative": 7,
+          "initiative": 5,
           "hidden": true,
           "hiddenInInitiative": true
         },
@@ -340,8 +340,8 @@
               "quantity": 1
             }
           ],
-          "initiative": 5,
-          "hiddenInInitiative": true,
+          "initiative": 3,
+          "hiddenInInitiative": false,
           "hidden": true
         }
       ],
@@ -352,7 +352,7 @@
           "characterName": "Barril",
           "photo": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
           "maxHp": 27,
-          "currentHp": 15,
+          "currentHp": 27,
           "accessUrl": "/p/34npa3l5kd8",
           "accessToken": "34npa3l5kd8",
           "conditions": [],
@@ -524,8 +524,9 @@
               "quantity": 1
             }
           ],
-          "initiative": 15,
-          "hidden": true
+          "initiative": 10,
+          "hidden": true,
+          "hiddenInInitiative": false
         }
       ],
       "playlist": [
@@ -768,7 +769,7 @@
           "characterName": "Barril",
           "photo": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
           "maxHp": 27,
-          "currentHp": 15,
+          "currentHp": 27,
           "accessUrl": "/p/ok8emeqfty",
           "accessToken": "ok8emeqfty",
           "conditions": [],
@@ -2133,7 +2134,7 @@
         "characterName": "Barril",
         "playerName": "Felsky",
         "maxHp": 27,
-        "currentHp": 15,
+        "currentHp": 27,
         "conditions": [],
         "inventory": [
           {

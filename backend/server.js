@@ -670,6 +670,8 @@ app.get('/api/players/token/:token', (req, res) => {
           name: scene.name,
           background: scene.background,
           initiativeActive: scene.initiativeActive,
+          mobs: scene.mobs || [], // Adicionado: Envia os mobs
+          players: scene.players || [], // Adicionado: Envia os outros jogadores
           ships: scene.ships || [] // Adicionado: Envia os navios para o jogador
         }
       });

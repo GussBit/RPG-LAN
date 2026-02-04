@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { X, RefreshCw, Eye, EyeOff } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { X, RefreshCw, Eye, EyeOff, User } from 'lucide-react';
 import { useGameStore } from '../store';
 
 const COLORS = {
@@ -15,8 +15,11 @@ const COLORS = {
   white: 'bg-white text-black',
 };
 
-export default function InitiativeTracker({ isGM = false }) {
-  const { activeScene, initiativeTrackerOpen, toggleInitiativeTracker, rollInitiativeForAll, updateMob, updatePlayer } = useGameStore();
+export default function InitiativeTracker({ isGM = false, sceneOverride = null, playerId = null }) {
+  const { activeScene: storeScene, initiativeTrackerOpen, toggleInitiativeTracker, rollInitiativeForAll, updateMob, updatePlayer } = useGameStore();
+
+  const activeScene = sceneOverride || storeScene;
+  const [edits, setEdits] = useState({});
 
   const sortedList = useMemo(() => {
     if (!activeScene) return [];
@@ -43,6 +46,34 @@ export default function InitiativeTracker({ isGM = false }) {
       }
   };
 
+  const handleInputChange = (id, value) => {
+      setEdits(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleCommit = (item) => {
+      const val = edits[item.id];
+      if (val === undefined) return; 
+
+      const newVal = parseInt(val);
+      if (!isNaN(newVal) && newVal !== item.initiative) {
+          if (item.type === 'mob') {
+              updateMob(activeScene.id, item.id, { initiative: newVal });
+          } else {
+              updatePlayer(activeScene.id, item.id, { initiative: newVal });
+          }
+      }
+      
+      setEdits(prev => {
+          const next = { ...prev };
+          delete next[item.id];
+          return next;
+      });
+  };
+
+  const handleKeyDown = (e) => {
+      if (e.key === 'Enter') e.target.blur();
+  };
+
   // Posição: Esquerda para GM, Direita para Player
   const positionClasses = isGM ? 'left-0 border-r' : 'right-0 border-l';
 
@@ -60,31 +91,52 @@ export default function InitiativeTracker({ isGM = false }) {
 
       {/* Lista */}
       <div className="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar">
-        {sortedList.map((item) => (
-          <div key={item.id} className={`flex items-center gap-3 p-2 rounded border ${item.hiddenInInitiative ? 'bg-zinc-800/50 border-zinc-700 opacity-60' : 'bg-white/5 border-white/5'}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${COLORS[item.color] || 'bg-zinc-600'}`}>
-              {item.name.substring(0, 2).toUpperCase()}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-zinc-200 truncate">{item.name}</div>
-              <div className="text-xs text-zinc-500">{item.type === 'player' ? 'Jogador' : 'Mob'}</div>
-            </div>
-            <div className="text-xl font-bold text-indigo-400 tabular-nums">
-              {item.initiative || 0}
-            </div>
+        {sortedList.map((item) => {
+            const canEdit = isGM || (item.type === 'player' && item.id === playerId);
+            const isHidden = item.hiddenInInitiative;
+            const inputValue = edits[item.id] !== undefined ? edits[item.id] : (item.initiative || 0);
 
-            {/* Botão de Visibilidade (Apenas GM) */}
-            {isGM && (
-                <button 
-                    onClick={(e) => toggleVisibility(e, item)}
-                    className="text-zinc-500 hover:text-zinc-300 p-1"
-                    title={item.hiddenInInitiative ? "Mostrar para jogadores" : "Esconder de jogadores"}
-                >
-                    {item.hiddenInInitiative ? <EyeOff size={14} /> : <Eye size={14} />}
-                </button>
-            )}
-          </div>
-        ))}
+            return (
+              <div key={item.id} className={`flex items-center gap-3 p-2 rounded border ${isHidden ? 'bg-zinc-800/50 border-zinc-700 opacity-60' : 'bg-white/5 border-white/5'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${COLORS[item.color] || 'bg-zinc-600'}`}>
+                  {item.name.substring(0, 2).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-zinc-200 truncate flex items-center gap-1">
+                      {item.name}
+                      {item.type === 'player' && <User size={10} className="text-zinc-500" />}
+                  </div>
+                  <div className="text-xs text-zinc-500">{item.type === 'player' ? 'Jogador' : 'Mob'}</div>
+                </div>
+                
+                {canEdit ? (
+                    <input 
+                        type="number"
+                        className="w-12 bg-black/30 border border-white/10 rounded text-center text-lg font-bold text-indigo-400 outline-none focus:border-indigo-500 focus:bg-black/50 transition-all p-0"
+                        value={inputValue}
+                        onChange={(e) => handleInputChange(item.id, e.target.value)}
+                        onBlur={() => handleCommit(item)}
+                        onKeyDown={handleKeyDown}
+                        onClick={(e) => e.target.select()}
+                    />
+                ) : (
+                    <div className="text-xl font-bold text-indigo-400 tabular-nums w-12 text-center">
+                      {item.initiative || 0}
+                    </div>
+                )}
+
+                {isGM && (
+                    <button 
+                        onClick={(e) => toggleVisibility(e, item)}
+                        className="text-zinc-500 hover:text-zinc-300 p-1"
+                        title={isHidden ? "Mostrar para jogadores" : "Esconder de jogadores"}
+                    >
+                        {isHidden ? <EyeOff size={14} /> : <Eye size={14} />}
+                    </button>
+                )}
+              </div>
+            );
+        })}
         
         {sortedList.length === 0 && (
             <div className="text-center text-zinc-500 text-sm py-4">Nenhum combatente</div>

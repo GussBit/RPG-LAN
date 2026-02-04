@@ -405,7 +405,7 @@ export default function PlayerPrivateView() {
     const visibleShips = ships.map(s => ({ ...s, inventory: (s.inventory || []).filter(i => i.visible !== false) }));
 
     return (
-        <div className="min-h-screen bg-zinc-950 relative overflow-hidden pb-16">
+        <div className="h-dvh w-full bg-zinc-950 relative overflow-hidden flex flex-col">
             <ToastContainer
                 position="top-center"
                 autoClose={2000}
@@ -421,7 +421,7 @@ export default function PlayerPrivateView() {
             />
 
             {/* Tracker e Botão para o Jogador */}
-            <InitiativeTracker isGM={false} playerId={player.id} />
+            <InitiativeTracker isGM={false} playerId={player.id} sceneOverride={data.scene} />
             <InitiativeButton side="right" />
 
             <InitiativeModal 
@@ -432,14 +432,14 @@ export default function PlayerPrivateView() {
             {/* Background da cena (blur) */}
             {scene.background && (
                 <div
-                    className="fixed inset-0 opacity-20 blur-2xl bg-cover bg-center"
+                    className="absolute inset-0 opacity-20 blur-2xl bg-cover bg-center pointer-events-none"
                     style={{ backgroundImage: `url(${BACKEND_URL}${scene.background})` }}
                 />
             )}
 
-            <div className="relative z-10 min-h-screen">
-                {/* Conteúdo Principal */}
-                <main className="overflow-y-auto custom-scrollbar p-3 sm:p-4">
+            {/* Conteúdo Principal - Área de Scroll */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar relative z-10 p-3 sm:p-4 pb-24">
+                <main>
                     {viewMode === 'sheet' ? (
                         <PlayerSheet 
                             player={player} 
@@ -473,20 +473,8 @@ export default function PlayerPrivateView() {
                 </main>
             </div>
 
-            {/* Input Flutuante de Iniciativa (Canto Inferior Esquerdo) */}
-            <div className="fixed bottom-20 left-4 z-50 flex flex-col items-center gap-1 bg-zinc-900/90 p-2 rounded-xl border border-white/10 shadow-xl backdrop-blur-md">
-                <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Iniciativa</span>
-                <input 
-                    type="number" 
-                    className="w-12 h-10 bg-black/50 border border-zinc-700 rounded-lg text-center text-xl font-bold text-indigo-400 outline-none focus:border-indigo-500 transition-colors"
-                    value={player.initiative || 0}
-                    onChange={(e) => handleSetInitiative(parseInt(e.target.value) || 0)}
-                    onClick={(e) => e.target.select()}
-                />
-            </div>
-
             {/* Menu Inferior */}
-            <nav className="fixed bottom-0 left-0 right-0 bg-zinc-900/90 backdrop-blur-lg border-t border-white/10 z-50">
+            <nav className="absolute bottom-0 left-0 right-0 bg-zinc-900/90 backdrop-blur-lg border-t border-white/10 z-50">
                 <div className="flex justify-around items-center h-14 sm:h-16">
                     <button 
                         onClick={() => setViewMode('sheet')} 
