@@ -522,8 +522,8 @@
           "type": "sfx",
           "volume": 0.5,
           "ambienceMode": "exploration",
-          "pulseInterval": 20,
-          "pulseActive": true
+          "pulseInterval": 0,
+          "pulseActive": false
         },
         {
           "id": "track-1770172941835",
