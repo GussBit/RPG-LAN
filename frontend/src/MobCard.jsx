@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Heart, Skull, Trash2, Edit2, Swords, Target, Backpack } from 'lucide-react';
+import { Shield, Heart, Skull, Trash2, Edit2, Swords, Target, Backpack, Zap } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import ConditionsBar from './components/players/ConditionsBar';

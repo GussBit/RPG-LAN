@@ -87,12 +87,15 @@
               "visible": true,
               "quantity": 2
             }
-          ]
+          ],
+          "initiative": 17,
+          "hidden": true,
+          "hiddenInInitiative": true
         },
         {
           "id": "mob-1770052863413",
           "name": "Tubarão de Recife",
-          "color": "#5F9EA0",
+          "color": "white",
           "maxHp": 22,
           "currentHp": 22,
           "damageDice": "2d6",
@@ -169,7 +172,10 @@
               "visible": true,
               "quantity": 1
             }
-          ]
+          ],
+          "initiative": 11,
+          "hiddenInInitiative": false,
+          "hidden": false
         },
         {
           "id": "mob-1770055523101",
@@ -270,7 +276,10 @@
               "visible": true,
               "quantity": 1
             }
-          ]
+          ],
+          "initiative": 7,
+          "hidden": true,
+          "hiddenInInitiative": true
         },
         {
           "id": "mob-1770055562605",
@@ -330,7 +339,10 @@
               "visible": true,
               "quantity": 1
             }
-          ]
+          ],
+          "initiative": 5,
+          "hiddenInInitiative": true,
+          "hidden": true
         }
       ],
       "players": [
@@ -511,7 +523,9 @@
               "visible": true,
               "quantity": 1
             }
-          ]
+          ],
+          "initiative": 15,
+          "hidden": true
         }
       ],
       "playlist": [
@@ -605,7 +619,8 @@
             }
           ]
         }
-      ]
+      ],
+      "initiativeActive": true
     },
     {
       "id": "cena-herois-viloes",

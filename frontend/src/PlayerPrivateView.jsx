@@ -10,6 +10,9 @@ import Compendium from './components/Compendium';
 import PlayerSheet from './components/player/PlayerSheet';
 import PlayerInventory from './components/player/PlayerInventory';
 import PlayerShips from './components/player/PlayerShips';
+import InitiativeModal from './components/modals/InitiativeModal';
+import InitiativeTracker from './components/InitiativeTracker';
+import InitiativeButton from './components/InitiativeButton';
 
 const BACKEND_URL = `http://${window.location.hostname}:3333`;
 
@@ -46,6 +49,7 @@ export default function PlayerPrivateView() {
     const [selectedShipId, setSelectedShipId] = useState(null);
     const [shipTab, setShipTab] = useState('controls'); // 'controls' | 'cargo'
     const [customItems, setCustomItems] = useState([]);
+    const [showInitModal, setShowInitModal] = useState(false);
 
     useEffect(() => {
         fetchPlayerData();
@@ -59,6 +63,12 @@ export default function PlayerPrivateView() {
             if (!res.ok) throw new Error('Token inválido ou jogador não encontrado');
             const json = await res.json();
             setData(json);
+            
+            // Lógica de Iniciativa: Se a cena está em modo de iniciativa e o jogador tem iniciativa 0, abre o modal
+            if (json.scene.initiativeActive && json.player.initiative === 0) {
+                setShowInitModal(true);
+            }
+
             setError(null);
         } catch (err) {
             setError(err.message);
@@ -335,6 +345,19 @@ export default function PlayerPrivateView() {
         } catch (err) { console.error(err); }
     };
 
+    const handleSetInitiative = async (value) => {
+        if (!data) return;
+        try {
+            await fetch(`${BACKEND_URL}/api/scenes/${data.scene.id}/players/${data.player.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ initiative: value })
+            });
+            setShowInitModal(false);
+            fetchPlayerData();
+            toast.success(`Iniciativa ${value} definida!`);
+        } catch (err) { toast.error('Erro ao salvar iniciativa'); }
+    };
 
     if (loading) {
         return (
@@ -397,6 +420,15 @@ export default function PlayerPrivateView() {
                 style={{ zIndex: 99999 }}
             />
 
+            {/* Tracker e Botão para o Jogador */}
+            <InitiativeTracker isGM={false} playerId={player.id} />
+            <InitiativeButton side="right" />
+
+            <InitiativeModal 
+                open={showInitModal} 
+                onConfirm={handleSetInitiative} 
+            />
+
             {/* Background da cena (blur) */}
             {scene.background && (
                 <div
@@ -439,6 +471,18 @@ export default function PlayerPrivateView() {
                         />
                     )}
                 </main>
+            </div>
+
+            {/* Input Flutuante de Iniciativa (Canto Inferior Esquerdo) */}
+            <div className="fixed bottom-20 left-4 z-50 flex flex-col items-center gap-1 bg-zinc-900/90 p-2 rounded-xl border border-white/10 shadow-xl backdrop-blur-md">
+                <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Iniciativa</span>
+                <input 
+                    type="number" 
+                    className="w-12 h-10 bg-black/50 border border-zinc-700 rounded-lg text-center text-xl font-bold text-indigo-400 outline-none focus:border-indigo-500 transition-colors"
+                    value={player.initiative || 0}
+                    onChange={(e) => handleSetInitiative(parseInt(e.target.value) || 0)}
+                    onClick={(e) => e.target.select()}
+                />
             </div>
 
             {/* Menu Inferior */}

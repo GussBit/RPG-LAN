@@ -28,6 +28,8 @@ import Modal from './components/ui/Modal'; // Ainda usado para o Mapa
 import { CONDITIONS, getImageUrl } from './constants';
 import { API_URL } from './api';
 import PillButton from './components/ui/PillButton';
+import InitiativeTracker from './components/InitiativeTracker';
+import InitiativeButton from './components/InitiativeButton';
 
 
 export default function App() {
@@ -596,6 +598,9 @@ export default function App() {
       {activeScene.background && (
         <div className="fixed inset-0 z-0 opacity-10 bg-cover bg-center" style={{ backgroundImage: `url(${getImageUrl(activeScene.background)})` }} />
       )}
+
+      <InitiativeTracker isGM={true} />
+      <InitiativeButton side="left" />
 
       <div className="relative z-10 h-full grid grid-rows-[56px_1fr]">
         {/* Topbar Renovada */}

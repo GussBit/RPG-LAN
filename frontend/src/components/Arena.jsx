@@ -457,6 +457,7 @@ export default function Arena({
                 key={mob.id}
                 mob={mob} 
                 onUpdate={(mobId, delta) => updateMobHp(activeScene.id, mobId, delta)} 
+                onUpdateMob={(mobId, data) => updateMob(activeScene.id, mobId, data)}
                 onDelete={(mobId) => window.confirm(`Remover ${mob.name}?`) && deleteMob(activeScene.id, mobId)}
                 onEdit={(mob) => onEditMob(mob)}
                 onToggleCondition={(mobId, cId) => onToggleMobCondition(mobId, cId)}

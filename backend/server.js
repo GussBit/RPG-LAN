@@ -309,6 +309,7 @@ app.post('/api/scenes', async (req, res) => {
     mobs: [],
     players: [],
     ships: [],
+    initiativeActive: false,
     playlist: []
   };
   db.data.scenes.push(newScene);
@@ -331,6 +332,7 @@ app.patch('/api/scenes/:id', async (req, res) => {
     if (req.body.background !== undefined) scene.background = req.body.background;
     if (req.body.notes !== undefined) scene.notes = req.body.notes;
     if (req.body.images !== undefined) scene.images = req.body.images;
+    if (req.body.initiativeActive !== undefined) scene.initiativeActive = req.body.initiativeActive;
     await db.write();
     res.json(scene);
   } else {
@@ -386,6 +388,8 @@ app.post('/api/scenes/:sceneId/mobs', async (req, res) => {
     damageDice: mob.damageDice || '1d6',
     toHit: Number(mob.toHit ?? 0),
     image: mob.image || '',
+    initiative: Number(mob.initiative || 0),
+    hiddenInInitiative: true, // Padrão: Oculto no tracker
     conditions: [],
     inventory: mob.inventory || [],
   };
@@ -481,6 +485,7 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
     maxHp: baseData.maxHp,
     currentHp: baseData.currentHp,
     accessUrl: `/p/${token}`,
+    initiative: Number(player.initiative || 0),
     accessToken: token,
     conditions: baseData.conditions,
     inventory: baseData.inventory,
@@ -601,6 +606,7 @@ app.post('/api/scenes/:sceneId/ships', async (req, res) => {
     currentMorale: Number(globalPreset?.currentMorale ?? shipData.currentMorale ?? shipData.maxMorale ?? 10),
     image: globalPreset?.image || shipData.image || '',
     conditions: globalPreset?.conditions || [],
+    initiative: Number(shipData.initiative || 0),
     inventory: globalPreset?.inventory || shipData.inventory || [],
   };
 
@@ -663,6 +669,7 @@ app.get('/api/players/token/:token', (req, res) => {
           id: scene.id,
           name: scene.name,
           background: scene.background,
+          initiativeActive: scene.initiativeActive,
           ships: scene.ships || [] // Adicionado: Envia os navios para o jogador
         }
       });
@@ -676,7 +683,7 @@ app.get('/api/sync/players/:sceneId', (req, res) => {
   const { sceneId } = req.params;
   const scene = db.data.scenes.find(s => s.id === sceneId);
   if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
-  res.json({ players: scene.players || [] });
+  res.json({ players: scene.players || [], mobs: scene.mobs || [], initiativeActive: scene.initiativeActive });
 });
 
 
@@ -812,6 +819,22 @@ app.delete('/api/presets/:type/:presetId', async (req, res) => {
   db.data.presets[type] = db.data.presets[type].filter(p => p.id !== presetId);
   await db.write();
   res.status(204).send();
+});
+
+// --- INICIATIVA ---
+
+app.post('/api/scenes/:sceneId/initiative/reset', async (req, res) => {
+  const { sceneId } = req.params;
+  const scene = db.data.scenes.find(s => s.id === sceneId);
+  if (!scene) return res.status(404).json({ error: 'Cena não encontrada' });
+
+  // Reseta iniciativas e ativa o modo de combate
+  if (scene.mobs) scene.mobs.forEach(m => m.initiative = Math.floor(Math.random() * 20) + 1);
+  if (scene.players) scene.players.forEach(p => p.initiative = 0);
+  scene.initiativeActive = true;
+
+  await db.write();
+  res.json(scene);
 });
 
 // --- INICIALIZAÇÃO ---

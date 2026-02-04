@@ -13,6 +13,7 @@ export const useGameStore = create((set, get) => ({
   gallery: { images: [], audio: [] },
   presets: { mobs: [], players: [], ships: [] },
   customItems: [],
+  initiativeTrackerOpen: false,
 
   // --- CENAS (SCENES) ---
 
@@ -463,11 +464,10 @@ export const useGameStore = create((set, get) => ({
     try {
       const res = await fetch(`${API_URL}/sync/players/${activeScene.id}`);
       if (!res.ok) return;
+      const { players, mobs, initiativeActive } = await res.json();
       
-      const { players } = await res.json();
-      
-      // Atualiza apenas os players da cena ativa
-      const updatedScene = { ...activeScene, players };
+      // Atualiza players, mobs e estado de iniciativa da cena ativa
+      const updatedScene = { ...activeScene, players, mobs, initiativeActive };
       
       set({
         activeScene: updatedScene,
@@ -737,6 +737,24 @@ export const useGameStore = create((set, get) => ({
     } catch (error) {
       console.error('Erro ao deletar item customizado:', error);
     }
+  },
+
+  // --- INICIATIVA ---
+
+  toggleInitiativeTracker: () => set(state => ({ initiativeTrackerOpen: !state.initiativeTrackerOpen })),
+
+  rollInitiativeForAll: async () => {
+    const { activeScene, scenes } = get();
+    if (!activeScene) return;
+
+    // Reseta no servidor e ativa o flag initiativeActive
+    const res = await fetch(`${API_URL}/scenes/${activeScene.id}/initiative/reset`, { method: 'POST' });
+    const updatedSceneData = await res.json();
+
+    set({
+        activeScene: updatedSceneData,
+        scenes: scenes.map(s => s.id === activeScene.id ? updatedSceneData : s)
+    });
   },
 
 }));
