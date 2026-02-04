@@ -340,7 +340,7 @@
           "characterName": "Barril",
           "photo": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
           "maxHp": 27,
-          "currentHp": 27,
+          "currentHp": 15,
           "accessUrl": "/p/34npa3l5kd8",
           "accessToken": "34npa3l5kd8",
           "conditions": [],
@@ -514,7 +514,33 @@
           ]
         }
       ],
-      "playlist": [],
+      "playlist": [
+        {
+          "id": "track-1770172625800",
+          "name": "powerful-cannon-shot-352459-31-01-2026.mp3",
+          "url": "/audio/powerful-cannon-shot-352459-31-01-2026.mp3",
+          "type": "sfx",
+          "volume": 0.5,
+          "ambienceMode": "exploration",
+          "pulseInterval": 20,
+          "pulseActive": true
+        },
+        {
+          "id": "track-1770172941835",
+          "name": "D&D Ambient Music - Inside the Goblin's Lair [YHpgAn1G1Hs].mp3",
+          "url": "/audio/D&D Ambient Music - Inside the Goblin's Lair [YHpgAn1G1Hs].mp3",
+          "type": "ambiente",
+          "volume": 0.5,
+          "ambienceMode": "exploration"
+        },
+        {
+          "id": "track-1770172994940",
+          "name": "Karliene - The Vampire.mp3",
+          "url": "/audio/Karliene - The Vampire.mp3",
+          "type": "musica",
+          "volume": 0.24
+        }
+      ],
       "notes": "Os jogadores sobrevivem a um naufrágio na costa oeste de Skaug. Procurando abrigo, encontram a caverna do Santuário Esquecido e Nhal'zar, o último Eshar'kai livre. Ao final, são resgatados pelo Capitão Torvald.",
       "images": [],
       "ships": [
@@ -534,6 +560,45 @@
               "nome_ingles": "Spare the Dying",
               "caracteristicas": "Truque de  Necromancia (Artífice, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Instantânea",
               "descricao": "Você toca uma criatura viva que tenha 0 pontos de vida. A criatura se torna estável. Essa magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 211 (277)",
+              "_folder": "spells",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "equipamento",
+              "categoria": "aventura",
+              "nome": "Ábaco",
+              "custo": {
+                "quant": 2,
+                "moeda": "po"
+              },
+              "peso_kg": 1,
+              "grupo": "Equipamento",
+              "renderData": {
+                "tags": [
+                  "Equipamento",
+                  "aventura"
+                ],
+                "stats": [
+                  {
+                    "label": "Peso",
+                    "value": "1 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "2 po"
+                  }
+                ]
+              },
+              "_folder": "itens",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Acalmar Emoções",
+              "nome_ingles": "Calm Emotions",
+              "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+              "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)",
               "_folder": "spells",
               "visible": true,
               "quantity": 1
@@ -688,7 +753,7 @@
           "characterName": "Barril",
           "photo": "/images/gussbit_1._Zaurak_the_Abyss-Marked_Prompt_Gaunt_yet_strong_hu_c376ad82-9784-4fb9-a49b-2b795f5a28ca_3 1-11-01-2026.webp",
           "maxHp": 27,
-          "currentHp": 27,
+          "currentHp": 15,
           "accessUrl": "/p/ok8emeqfty",
           "accessToken": "ok8emeqfty",
           "conditions": [],
@@ -2053,7 +2118,7 @@
         "characterName": "Barril",
         "playerName": "Felsky",
         "maxHp": 27,
-        "currentHp": 27,
+        "currentHp": 15,
         "conditions": [],
         "inventory": [
           {
@@ -2421,6 +2486,45 @@
             "nome_ingles": "Spare the Dying",
             "caracteristicas": "Truque de  Necromancia (Artífice, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:Toque\nComponentes:V S\nDuração:Instantânea",
             "descricao": "Você toca uma criatura viva que tenha 0 pontos de vida. A criatura se torna estável. Essa magia não tem efeito sobre mortos-vivos ou constructos.\nLivro do Jogador (PHB), p. 211 (277)",
+            "_folder": "spells",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "tipo": "equipamento",
+            "categoria": "aventura",
+            "nome": "Ábaco",
+            "custo": {
+              "quant": 2,
+              "moeda": "po"
+            },
+            "peso_kg": 1,
+            "grupo": "Equipamento",
+            "renderData": {
+              "tags": [
+                "Equipamento",
+                "aventura"
+              ],
+              "stats": [
+                {
+                  "label": "Peso",
+                  "value": "1 kg"
+                },
+                {
+                  "label": "Custo",
+                  "value": "2 po"
+                }
+              ]
+            },
+            "_folder": "itens",
+            "visible": true,
+            "quantity": 1
+          },
+          {
+            "nome": "Acalmar Emoções",
+            "nome_ingles": "Calm Emotions",
+            "caracteristicas": "2º Círculo, Encantamento (Bardo, Clérigo)\nTempo de Conjuração:Uma ação\nAlcance:18m [60 ft.]\nComponentes:V S\nDuração:Concentração,\n                                         Até 1 minuto",
+            "descricao": "Você tenta suprimir emoções fortes em um grupo de criaturas. Cada humanoide dentro de uma esfera de 6 metros de raio [20-foot-radius sphere] centrada em um ponto dentro do alcance da magia deve fazer uma salvaguarda de Carisma; uma criatura pode escolher falhar nesta salvaguarda, caso deseje. Se uma criatura falhar na salvaguarda, escolha um dos dois efeitos a seguir.Você pode suprimir qualquer efeito que cause a um alvo as condições enfeitiçado ou amedrontado. Quando esta magia termina, qualquer efeito suprimido retorna, caso a duração não tenha expirado nesse meio-tempo.Como alternativa, você pode tornar o alvo indiferente a criaturas, à sua escolha, contra as quais o alvo era hostil. Tal indiferença termina se o alvo for atacado ou ferido por uma magia, ou se testemunhar quaisquer de seus próprios amigos sendo feridos. Quando a magia termina, a criatura torna-se hostil novamente, a menos que o DM decida de outra forma.\nLivro do Jogador (PHB), p. 211 (221)",
             "_folder": "spells",
             "visible": true,
             "quantity": 1

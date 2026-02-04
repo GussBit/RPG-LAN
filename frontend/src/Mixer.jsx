@@ -4,7 +4,7 @@ import { Howl, Howler } from 'howler';
 import {
   Volume2, Play, Pause, Square, Wind, Zap, UploadCloud,
   Trash2, Music, SkipForward, SkipBack,
-  Swords, Map as MapIcon, Trophy, GripVertical, Plus, Clock, MoreVertical, ArrowRight, Repeat, Repeat1
+  Swords, Map as MapIcon, Trophy, GripVertical, Plus, Clock, MoreVertical, ArrowRight, Repeat, Repeat1, Maximize2, Minimize2
 } from 'lucide-react';
 import { useGameStore } from './store';
 import { getImageUrl } from './constants';
@@ -219,7 +219,7 @@ function AmbienceTrack({ track, masterVolume, onDelete, onChangeCategory }) {
 }
 
 // --- MÚSICA (PLAYER COM PLAYLIST E LOOP) ---
-function MusicPlayer({ tracks, masterVolume, onUpdate, onDelete, onChangeCategory }) {
+function MusicPlayer({ tracks, masterVolume, onUpdate, onDelete, onChangeCategory, isExpanded }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [loopMode, setLoopMode] = useState('none'); // 'none', 'one', 'all'
@@ -323,7 +323,7 @@ function MusicPlayer({ tracks, masterVolume, onUpdate, onDelete, onChangeCategor
 
   return (
     <>
-      <div className="space-y-3">
+      <div className={`space-y-3 ${isExpanded ? 'h-full flex flex-col' : ''}`}>
         {/* Player Principal */}
         <div className="flex items-center gap-2 p-2 2xl:p-3 bg-zinc-900/80 rounded-lg border border-indigo-500/30">
           <button onClick={handlePrev} className="p-1.5 hover:bg-zinc-700/50 rounded transition-colors shrink-0">
@@ -367,7 +367,7 @@ function MusicPlayer({ tracks, masterVolume, onUpdate, onDelete, onChangeCategor
         </div>
 
         {/* Lista de Faixas - COM SCROLL */}
-        <div className="space-y-1 max-h-32 2xl:max-h-48 overflow-y-auto custom-scrollbar pr-1">
+        <div className={`space-y-1 overflow-y-auto custom-scrollbar pr-1 ${isExpanded ? 'flex-1 min-h-0' : 'max-h-32 2xl:max-h-48'}`}>
           {tracks.map((track, idx) => (
             <div
               key={track.id}
@@ -436,7 +436,7 @@ function MusicPlayer({ tracks, masterVolume, onUpdate, onDelete, onChangeCategor
 }
 
 // --- SFX (NOVO FORMATO 3/4 COM BOTÕES VISÍVEIS) ---
-function SfxGrid({ tracks, masterVolume, onDelete, onUpdate, onChangeCategory }) {
+function SfxGrid({ tracks, masterVolume, onDelete, onUpdate, onChangeCategory, isExpanded }) {
   const [playingId, setPlayingId] = useState(null);
   const soundsRef = useRef({});
   const intervalsRef = useRef({});
@@ -521,7 +521,7 @@ function SfxGrid({ tracks, masterVolume, onDelete, onUpdate, onChangeCategory })
 
   return (
     <>
-      <div className="grid grid-cols-2 2xl:grid-cols-2 gap-2 max-h-80 overflow-y-auto custom-scrollbar pr-1">
+      <div className={`grid gap-2 overflow-y-auto custom-scrollbar pr-1 ${isExpanded ? 'grid-cols-3 2xl:grid-cols-4 flex-1 min-h-0' : 'grid-cols-2 2xl:grid-cols-2 max-h-80'}`}>
         {tracks.map(track => (
           <div
             key={track.id}
@@ -675,7 +675,7 @@ function SfxGrid({ tracks, masterVolume, onDelete, onUpdate, onChangeCategory })
 }
 
 // --- COMPONENTE PRINCIPAL ---
-export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMusic, volSfx }) {
+export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMusic, volSfx, isExpanded, onToggleExpanded }) {
   const { activeScene, updateTrack, addTrackToActiveScene, deleteTrack } = useGameStore();
   
   const [activeTab, setActiveTab] = useState('exploration');
@@ -725,10 +725,13 @@ export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMu
   };
 
   return (
-    <div className="h-full flex flex-col bg-black/20 backdrop-blur-sm">
+    <div className={isExpanded 
+      ? "h-full flex flex-col bg-zinc-950/95 backdrop-blur-xl p-4 transition-all duration-300" 
+      : "h-full flex flex-col bg-black/20 backdrop-blur-sm transition-all duration-300"
+    }>
         
         {/* Header / Abas Principais - Responsivo */}
-        <div className="flex items-center p-1.5 gap-1 border-b border-white/5 bg-zinc-950/40 shrink-0">
+        <div className={`flex items-center p-1.5 gap-1 border-b border-white/5 bg-zinc-950/40 shrink-0 ${isExpanded ? 'rounded-xl mb-4 px-3 py-2' : ''}`}>
             {[
                 { id: 'exploration', icon: MapIcon, label: 'Exploração' },
                 { id: 'combat', icon: Swords, label: 'Combate' },
@@ -743,18 +746,30 @@ export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMu
                     <span className="hidden sm:inline">{mode.label}</span>
                 </button>
             ))}
+
+            {/* Botão de Expandir/Restaurar */}
+            <button 
+                onClick={onToggleExpanded}
+                className={`ml-auto p-1.5 rounded-lg transition-all ${isExpanded ? 'bg-white/10 text-white hover:bg-white/20' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
+                title={isExpanded ? "Restaurar" : "Expandir"}
+            >
+                {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            </button>
         </div>
 
         {/* Área de Conteúdo com Scroll - Padding Responsivo */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-3 2xl:space-y-6">
+        <div className={isExpanded 
+            ? "flex-1 min-h-0 grid grid-cols-1 md:grid-cols-3 gap-6 overflow-hidden" 
+            : "flex-1 overflow-y-auto custom-scrollbar p-2 space-y-3 2xl:space-y-6"
+        }>
             
             {/* SEÇÃO 1: AMBIENTE (Filtrado pela Aba) */}
             <div 
-                className="space-y-1 2xl:space-y-2"
+                className={`space-y-1 2xl:space-y-2 ${isExpanded ? 'flex flex-col h-full min-h-0' : ''}`}
                 onDragOver={allowDrop} 
                 onDrop={(e) => handleDrop(e, 'ambiente', activeTab)}
             >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-1.5 2xl:gap-2 text-[10px] 2xl:text-xs font-bold text-emerald-500 uppercase tracking-wider">
                         <Wind size={12} className="2xl:w-3.5 2xl:h-3.5" />
                         <span>Ambiente</span>
@@ -769,7 +784,7 @@ export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMu
                     </div>
                 </div>
                 
-                <div className="space-y-1 2xl:space-y-2 min-h-[60px] max-h-40 2xl:max-h-64 overflow-y-auto custom-scrollbar bg-emerald-900/5 rounded-lg p-1.5 2xl:p-2 border border-emerald-500/10 border-dashed">
+                <div className={`space-y-1 2xl:space-y-2 overflow-y-auto custom-scrollbar bg-emerald-900/5 rounded-lg p-1.5 2xl:p-2 border border-emerald-500/10 border-dashed ${isExpanded ? 'flex-1 min-h-0' : 'min-h-[60px] max-h-40 2xl:max-h-64'}`}>
                     {currentAmbienceTracks.map(track => (
                         <AmbienceTrack 
                             key={track.id} 
@@ -787,11 +802,11 @@ export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMu
 
             {/* SEÇÃO 2: MÚSICA (Global) */}
             <div 
-                className="space-y-1 2xl:space-y-2"
+                className={`space-y-1 2xl:space-y-2 ${isExpanded ? 'flex flex-col h-full min-h-0' : ''}`}
                 onDragOver={allowDrop} 
                 onDrop={(e) => handleDrop(e, 'musica')}
             >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-1.5 2xl:gap-2 text-[10px] 2xl:text-xs font-bold text-indigo-400 uppercase tracking-wider">
                         <Music size={12} className="2xl:w-3.5 2xl:h-3.5" />
                         <span>Playlist</span>
@@ -804,24 +819,25 @@ export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMu
                         </button>
                     </div>
                 </div>
-                <div className="bg-indigo-900/5 rounded-lg p-1.5 2xl:p-2 border border-indigo-500/10 border-dashed">
+                <div className={`bg-indigo-900/5 rounded-lg p-1.5 2xl:p-2 border border-indigo-500/10 border-dashed ${isExpanded ? 'flex-1 min-h-0 flex flex-col' : ''}`}>
                     <MusicPlayer 
                         tracks={musicTracks} 
                         masterVolume={volMusic} 
                         onUpdate={(tid, data) => updateTrack(activeScene.id, tid, data)} 
                         onDelete={(id) => deleteTrack(activeScene.id, id)}
                         onChangeCategory={handleChangeCategory}
+                        isExpanded={isExpanded}
                     />
                 </div>
             </div>
 
             {/* SEÇÃO 3: SFX (Global) */}
             <div 
-                className="space-y-1 2xl:space-y-2"
+                className={`space-y-1 2xl:space-y-2 ${isExpanded ? 'flex flex-col h-full min-h-0' : ''}`}
                 onDragOver={allowDrop} 
                 onDrop={(e) => handleDrop(e, 'sfx')}
             >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-1.5 2xl:gap-2 text-[10px] 2xl:text-xs font-bold text-amber-400 uppercase tracking-wider">
                         <Zap size={12} className="2xl:w-3.5 2xl:h-3.5" />
                         <span>Efeitos</span>
@@ -834,13 +850,14 @@ export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMu
                         </button>
                     </div>
                 </div>
-                <div className="bg-amber-900/5 rounded-lg p-1.5 2xl:p-2 border border-amber-500/10 border-dashed">
+                <div className={`bg-amber-900/5 rounded-lg p-1.5 2xl:p-2 border border-amber-500/10 border-dashed ${isExpanded ? 'flex-1 min-h-0 flex flex-col' : ''}`}>
                     <SfxGrid 
                         tracks={sfxTracks} 
                         masterVolume={volSfx} 
                         onDelete={(id) => deleteTrack(activeScene.id, id)} 
                         onUpdate={(tid, data) => updateTrack(activeScene.id, tid, data)}
                         onChangeCategory={handleChangeCategory}
+                        isExpanded={isExpanded}
                     />
                     {sfxTracks.length === 0 && (
                         <div className="text-center text-[10px] text-zinc-600 py-4">Arraste ou clique + para adicionar</div>

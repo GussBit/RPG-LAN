@@ -84,6 +84,7 @@ export default function App() {
   const [leftSidebarWidth, setLeftSidebarWidth] = useState(320);
   const [isResizingMixer, setIsResizingMixer] = useState(false);
   const [isResizingLeft, setIsResizingLeft] = useState(false);
+  const [mixerExpanded, setMixerExpanded] = useState(false);
   
   const [showLeftSidebar, setShowLeftSidebar] = useState(true);
   const [showRightSidebar, setShowRightSidebar] = useState(true);
@@ -617,7 +618,9 @@ export default function App() {
         <div 
           className="h-full grid overflow-hidden transition-all duration-300 ease-in-out"
           style={{ 
-            gridTemplateColumns: `${showLeftSidebar ? leftSidebarWidth : 0}px ${showLeftSidebar ? 4 : 0}px minmax(0, 1fr) ${showRightSidebar ? 4 : 0}px ${showRightSidebar ? mixerWidth : 0}px` 
+            gridTemplateColumns: mixerExpanded 
+              ? '0px 0px 0px 0px 100%' 
+              : `${showLeftSidebar ? leftSidebarWidth : 0}px ${showLeftSidebar ? 4 : 0}px minmax(0, 1fr) ${showRightSidebar ? 4 : 0}px ${showRightSidebar ? mixerWidth : 0}px` 
           }}
         >
           
@@ -694,6 +697,8 @@ export default function App() {
                volMusic={volMusic}
                volSfx={volSfx}
                onOpenGallery={openGalleryForAudio} 
+               isExpanded={mixerExpanded}
+               onToggleExpanded={() => setMixerExpanded(!mixerExpanded)}
              />
           </aside>
         </div>

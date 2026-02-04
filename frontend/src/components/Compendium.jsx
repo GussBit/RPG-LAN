@@ -45,6 +45,40 @@ const normalizeItemFilename = (text) => {
     .toLowerCase() : "";
 };
 
+const formatDescription = (text) => {
+  if (!text) return "";
+
+  // Marca fim de frase com um separador, evitando quebrar decimais (ex: 3.14)
+  const marked = text.replace(/\.(?:\s+|(?=[^\d\s]))/g, ".<SPLIT>");
+
+  const sentences = marked
+    .split("<SPLIT>")
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  if (sentences.length === 0) return "";
+
+  const MAX_INLINE = 100;
+
+  let result = sentences[0];
+
+  for (let i = 1; i < sentences.length; i++) {
+    const next = sentences[i];
+
+    // Se a próxima frase for curta (<= 70), mantém no mesmo parágrafo
+    // Se for maior, cria quebra dupla (novo parágrafo)
+    if (next.length <= MAX_INLINE) {
+      result += (result.endsWith(".") ? " " : " ") + next;
+    } else {
+      result += "\n\n" + next;
+    }
+  }
+
+  return result;
+};
+
+
+
 const getSpellFallbackImage = (item) => {
   if (item._folder !== 'spells' || !item.caracteristicas) return null;
   if (typeof item.caracteristicas !== 'string') return null;
@@ -89,6 +123,22 @@ const Highlight = ({ text, highlight }) => {
 
 const CompendiumItemIcon = ({ item }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [retrySuffix, setRetrySuffix] = useState('');
+
+  useEffect(() => {
+    setIsLoading(true);
+    setRetrySuffix('');
+  }, [item]);
+
+  useEffect(() => {
+    let timeout;
+    if (isLoading) {
+      timeout = setTimeout(() => {
+        setRetrySuffix(`?t=${Date.now()}`);
+      }, 2000);
+    }
+    return () => clearTimeout(timeout);
+  }, [isLoading, retrySuffix]);
 
   if (item._folder === 'conditions') {
     const config = CONDITION_ICONS[item.nome] || { icon: HelpCircle, color: 'text-zinc-600' };
@@ -103,7 +153,7 @@ const CompendiumItemIcon = ({ item }) => {
     imageSrc = `/${item._folder}/${normalizeItemFilename(item.nome)}.jpg`;
   } 
   else if (item._folder === 'ship') {
-    imageSrc = `/ship/${normalizeFilename(item.nome_ingles || item.nome)}.png`;
+    imageSrc = `/ship/${normalizeItemFilename(item.nome)}.jpg`;
   } 
   else if (item._folder === 'habilidades') {
     // Nova lógica para habilidades e classes
@@ -123,7 +173,7 @@ const CompendiumItemIcon = ({ item }) => {
         </div>
       )}
       <img
-        src={imageSrc}
+        src={`${imageSrc}${retrySuffix}`}
         alt={item.nome}
         className="w-full h-full object-cover"
         onLoad={() => setIsLoading(false)}
@@ -138,8 +188,12 @@ const CompendiumItemIcon = ({ item }) => {
             }
           } 
           else if (item._folder === 'ship') {
-             e.target.style.display = 'none';
-             setIsLoading(false);
+             if (e.target.src.endsWith('.jpg')) {
+                 e.target.src = e.target.src.replace('.jpg', '.png');
+             } else {
+                 e.target.style.display = 'none';
+                 setIsLoading(false);
+             }
           }
           else if (item._folder === 'habilidades') {
              // Se falhar a imagem da skill, esconde e mostra o ícone
@@ -210,6 +264,11 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
     return Array.from(classesSet).sort();
   }, []);
 
+  // Extração de Classes de Habilidades
+  const skillClasses = useMemo(() => {
+    return skillsData.map(c => c.nome).sort();
+  }, []);
+
   // Processamento de Objetos
   const formattedObjects = useMemo(() => {
     const formatCost = (c) => c ? `${c.quant} ${c.moeda}` : '-';
@@ -266,6 +325,38 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
 
     const formatCost = (c) => c ? `${c.quant} ${c.moeda}` : '-';
 
+    // Helper para formatar chaves de objetos (snake_case para Title Case)
+    const formatKey = (key) => {
+        const map = {
+            'pv_percent_delta': 'PV %',
+            'moral_delta': 'Moral',
+            'moral_delta_por_dia': 'Moral/Dia',
+            'ca_inimigo_delta': 'CA Inimigo',
+            'movimento_delta': 'Movimento',
+            'crise_automatica': 'Crise Automática',
+            'custo_diario_tripulacao_percent_delta': 'Custo Tripulação %',
+            'moral_inicial_delta': 'Moral Inicial',
+            'canhao_pesado_frontal_por_rodada_delta': 'Canhão Frontal/Rodada',
+            'ataques_em_todos_canhoes_delta': 'Ataques Totais',
+            'dano_colisao': 'Dano Colisão',
+            'vantagem_em': 'Vantagem em',
+            'ignora_primeira_crise_vela': 'Ignora 1ª Crise Vela',
+            'vento_a_favor': 'Vento a Favor',
+            'velocidade_delta': 'Velocidade',
+            'detectar_carga_ilegal': 'Detectar Carga Ilegal'
+        };
+        if (map[key]) return map[key];
+        return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    };
+
+    const formatValue = (val) => {
+        if (val === true) return 'Sim';
+        if (val === false) return 'Não';
+        if (Array.isArray(val)) return val.map(formatValue).join(', ');
+        if (typeof val === 'object') return JSON.stringify(val);
+        return val;
+    };
+
     const recursos = (apendice_navio.recursos_consumo || []).map(i => ({
       ...i,
       grupo: 'Recurso',
@@ -279,9 +370,9 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
       },
       descricao: i.efeitos_falta ? `Efeitos de Falta:\n${Object.entries(i.efeitos_falta).map(([k, v]) => {
         const key = k.replace(/_/g, ' ').replace('dia', 'Dia').replace('apos', 'Após');
-        const val = Object.entries(v).map(([vk, vv]) => `${vk.replace(/_/g, ' ')}: ${vv}`).join(', ');
+        const val = Object.entries(v).map(([vk, vv]) => `${formatKey(vk)}: ${vv}`).join(', ');
         return `• ${key}: ${val}`;
-      }).join('\n')}` : ''
+      }).join('\n')}` : (i.efeitos ? `Efeitos:\n${i.efeitos.map(e => Object.entries(e).map(([k, v]) => `• ${formatKey(k)}: ${v}`).join('\n')).join('\n')}` : '')
     }));
 
     const municao = (apendice_navio.municao_combate || []).map(i => ({
@@ -292,7 +383,10 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
         stats: [
           { label: 'Estoque', value: i.estoque_inicial ? `${i.estoque_inicial.min}-${i.estoque_inicial.max} ${i.estoque_inicial.unidade}` : '-' }
         ]
-      }
+      },
+      descricao: i.variantes_por_categoria_navio ? i.variantes_por_categoria_navio.map(v => 
+        `• ${v.categoria_navio}: ${formatCost(v.custo)} (${v.equivalencia})`
+      ).join('\n') : ''
     }));
 
     const municaoEsp = (apendice_navio.municao_especial || []).map(i => ({
@@ -305,7 +399,7 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
           { label: 'Crise', value: i.modificadores?.crise_automatica || '-' }
         ]
       },
-      descricao: i.modificadores ? Object.entries(i.modificadores).map(([k, v]) => `${k}: ${v}`).join('\n') : ''
+      descricao: i.modificadores ? Object.entries(i.modificadores).map(([k, v]) => `• ${formatKey(k)}: ${formatValue(v)}`).join('\n') : ''
     }));
 
     const reparos = (apendice_navio.reparos_manutencao || []).map(i => ({
@@ -316,7 +410,9 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
         stats: [
           { label: 'Custo', value: formatCost(i.custo) }
         ]
-      }
+      },
+      descricao: i.calculo_estoque ? `Cálculo de Estoque:\n• ${i.calculo_estoque.opcao_a}\n• ${i.calculo_estoque.opcao_b}\n(Regra: ${formatKey(i.calculo_estoque.regra)})` : 
+                 (i.estoque_por_categoria ? i.estoque_por_categoria.map(e => `• ${e.categoria_navio}: Suporta ${e.suporta_reparos} reparos`).join('\n') : '')
     }));
 
     const aprimoramentos = [
@@ -332,7 +428,7 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
           { label: 'Custo', value: formatCost(i.custo) }
         ]
       },
-      descricao: i.efeitos ? i.efeitos.map(e => Object.entries(e).map(([k, v]) => `${k}: ${v}`).join(' ')).join('\n') : ''
+      descricao: i.efeitos ? i.efeitos.map(e => Object.entries(e).map(([k, v]) => `• ${formatKey(k)}: ${formatValue(v)}`).join('\n')).join('\n') : ''
     }));
 
     return [...recursos, ...municao, ...municaoEsp, ...reparos, ...aprimoramentos].sort((a, b) => a.nome.localeCompare(b.nome));
@@ -408,9 +504,9 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
                     const requiredType = activeFilters.type.split(' ')[1].toLowerCase(); // "Leve", "Média", "Pesada"
                     // Normaliza a categoria do item (remove acentos)
                     const itemCat = normalizeText(item.categoria);
-                    if (requiredType === 'media' && itemCat === 'media') return true;
+                    if (requiredType === 'medio' && itemCat === 'medio') return true;
                     if (requiredType === 'leve' && itemCat === 'leve') return true;
-                    if (requiredType === 'pesada' && itemCat === 'pesada') return true;
+                    if (requiredType === 'pesado' && itemCat === 'pesado') return true;
                     return false;
                 }
             }
@@ -433,6 +529,22 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
                 const cleanClasses = item.classes ? item.classes.replace(/[()]/g, '') : '';
                 if (!cleanClasses.includes(activeFilters.subType)) return false;
             }
+        }
+
+        if (tab === 'habilidades') {
+            if (activeFilters.type) {
+                // Se uma classe está selecionada, mostra a classe e suas habilidades
+                if (item.nome !== activeFilters.type && item.origem !== activeFilters.type) {
+                    return false;
+                }
+            } else {
+                // Se nenhuma classe estiver selecionada, mostra apenas as classes pai
+                if (item.tipo !== 'classe') return false;
+            }
+        }
+
+        if (tab === 'ship' && activeFilters.type) {
+            if (item.grupo !== activeFilters.type) return false;
         }
 
         return true;
@@ -493,7 +605,7 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
           </div>
 
           {/* Área de Filtros (Aparece apenas em abas específicas) */}
-          {(tab === 'objects' || tab === 'spells') && (
+          {(tab === 'objects' || tab === 'spells' || tab === 'habilidades' || tab === 'ship') && (
             <div className="flex flex-col gap-2 animate-in slide-in-from-top-2">
                 <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
                     <Filter size={14} className="text-zinc-500 shrink-0" />
@@ -523,6 +635,36 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
                                     className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-colors border ${activeFilters.type === lvl ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/50' : 'bg-zinc-800 text-zinc-400 border-transparent hover:bg-zinc-700'}`}
                                 >
                                     {lvl === '0' ? 'Truque' : `${lvl}º`}
+                                </button>
+                            ))}
+                        </>
+                    )}
+
+                    {/* Filtros de Habilidades */}
+                    {tab === 'habilidades' && (
+                        <>
+                            {skillClasses.map(f => (
+                                <button
+                                    key={f}
+                                    onClick={() => toggleFilter('type', f)}
+                                    className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-colors border ${activeFilters.type === f ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/50' : 'bg-zinc-800 text-zinc-400 border-transparent hover:bg-zinc-700'}`}
+                                >
+                                    {f}
+                                </button>
+                            ))}
+                        </>
+                    )}
+
+                    {/* Filtros de Itens de Navio */}
+                    {tab === 'ship' && (
+                        <>
+                            {['Aprimoramento', 'Munição', 'Munição Especial', 'Recurso', 'Reparo'].map(f => (
+                                <button
+                                    key={f}
+                                    onClick={() => toggleFilter('type', f)}
+                                    className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-colors border ${activeFilters.type === f ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/50' : 'bg-zinc-800 text-zinc-400 border-transparent hover:bg-zinc-700'}`}
+                                >
+                                    {f}
                                 </button>
                             ))}
                         </>
@@ -661,7 +803,7 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
                           src={selectedItem._folder === 'itens'
                             ? `/${selectedItem._folder}/${normalizeItemFilename(selectedItem.nome)}.jpg`
                             : selectedItem._folder === 'ship'
-                            ? `/ship/${normalizeFilename(selectedItem.nome_ingles || selectedItem.nome)}.png`
+                            ? `/ship/${normalizeItemFilename(selectedItem.nome)}.jpg`
                             : selectedItem._folder === 'habilidades'
                             ? `/skills/${normalizeFilename(selectedItem.origem || selectedItem.nome)}.jpg`
                             : `/${selectedItem._folder}/${normalizeFilename(selectedItem.nome_ingles || selectedItem.nome)}.png`}
@@ -677,8 +819,12 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
                                 setDetailImageLoading(false);
                               }
                             } else if (selectedItem._folder === 'ship' || selectedItem._folder === 'habilidades') {
-                                e.target.style.display = 'none';
-                                setDetailImageLoading(false);
+                                if (e.target.src.endsWith('.jpg')) {
+                                    e.target.src = e.target.src.replace('.jpg', '.png');
+                                } else {
+                                    e.target.style.display = 'none';
+                                    setDetailImageLoading(false);
+                                }
                             } else {
                               const fallback = getSpellFallbackImage(selectedItem);
                               if (fallback && !e.target.src.includes(fallback)) {
@@ -746,7 +892,7 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
                       </div>
                       {selectedItem.descricao && (
                         <div className="whitespace-pre-wrap text-justify border-l-2 border-white/10 pl-3 sm:pl-4 text-xs sm:text-sm mt-4">
-                          <Highlight text={selectedItem.descricao} highlight={search} />
+                          <Highlight text={formatDescription(selectedItem.descricao)} highlight={search} />
                         </div>
                       )}
                     </div>
@@ -799,7 +945,7 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
                         </div>
                       )}
                       <div className="whitespace-pre-wrap text-justify border-l-2 border-white/10 pl-3 sm:pl-4 text-xs sm:text-sm">
-                        <Highlight text={selectedItem.descricao} highlight={search} />
+                        <Highlight text={formatDescription(selectedItem.descricao)} highlight={search} />
                       </div>
                     </>
                   )}

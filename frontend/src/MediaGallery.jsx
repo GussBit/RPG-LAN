@@ -1,18 +1,72 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { X, Upload, Music, Trash2, Check, Play, Pause, Search, Grid, List, Image, FileAudio } from 'lucide-react';
+import { X, Upload, Music, Trash2, Check, Play, Pause, Search, Grid, List, Image, FileAudio, Film, LayoutGrid } from 'lucide-react';
 import { Howl } from 'howler';
 import { useGameStore } from './store';
 import PillButton from './components/ui/PillButton';
 import { BACKEND_URL, getImageUrl } from './constants';
+
+// Helpers para verificar extensões
+const isAudio = (name) => /\.(mp3|wav|ogg|m4a)$/i.test(name);
+const isImage = (name) => /\.(jpg|jpeg|png|webp|gif)$/i.test(name);
+
+// Helper para extrair capa ID3 (v2.3/v2.4) sem dependências externas
+const extractCoverArt = async (url) => {
+  try {
+    // Baixa apenas o cabeçalho (primeiros 500KB) para performance
+    const response = await fetch(url, { headers: { 'Range': 'bytes=0-500000' } });
+    if (!response.ok) return null;
+    const buffer = await response.arrayBuffer();
+    const view = new DataView(buffer);
+    
+    // Verifica assinatura ID3
+    if (view.getUint8(0) !== 0x49 || view.getUint8(1) !== 0x44 || view.getUint8(2) !== 0x33) return null;
+    
+    const version = view.getUint8(3);
+    let offset = 10;
+    let size = ((view.getUint8(6) & 0x7f) << 21) | ((view.getUint8(7) & 0x7f) << 14) | ((view.getUint8(8) & 0x7f) << 7) | (view.getUint8(9) & 0x7f);
+    
+    while (offset < size && offset < buffer.byteLength - 10) {
+      let frameId, frameSize, headerSize;
+      
+      if (version === 3 || version === 4) {
+        frameId = String.fromCharCode(view.getUint8(offset), view.getUint8(offset+1), view.getUint8(offset+2), view.getUint8(offset+3));
+        frameSize = view.getUint32(offset + 4); 
+        headerSize = 10;
+      } else if (version === 2) {
+        frameId = String.fromCharCode(view.getUint8(offset), view.getUint8(offset+1), view.getUint8(offset+2));
+        frameSize = (view.getUint8(offset+3) << 16) | (view.getUint8(offset+4) << 8) | view.getUint8(offset+5);
+        headerSize = 6;
+      } else { break; }
+
+      if (frameId === 'APIC' || frameId === 'PIC') {
+        let mime = 'image/jpeg';
+        let ptr = offset + headerSize + 1;
+        if (version === 2) { ptr += 3; } 
+        else { while (view.getUint8(ptr) !== 0) { ptr++; } ptr++; } // Pula mime string
+        ptr++; // Pula picture type
+        const encoding = view.getUint8(offset + headerSize); // Pula descrição
+        while (ptr < buffer.byteLength && (view.getUint8(ptr) !== 0 || (encoding !== 0 && encoding !== 3 && view.getUint8(ptr+1) !== 0))) ptr++;
+        ptr += (encoding === 0 || encoding === 3) ? 1 : 2;
+        
+        const imgData = buffer.slice(ptr, offset + headerSize + frameSize);
+        return URL.createObjectURL(new Blob([imgData], { type: mime }));
+      }
+      offset += headerSize + frameSize;
+    }
+  } catch (e) { console.warn("Erro ao ler ID3:", e); }
+  return null;
+};
 
 // Componente auxiliar para item de áudio
 function AudioItem({ item, onSelect, onDelete, previewState, isSelected }) {
   const { playingName, setPlayingName, howlerRef } = previewState;
   const [duration, setDuration] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [coverArt, setCoverArt] = useState(item.thumbnail);
   const isPlaying = playingName === item.name;
 
   useEffect(() => {
+    // Tenta carregar metadados de áudio (duração)
     const audio = new Audio(getImageUrl(item.url));
     audio.preload = 'metadata';
     const onLoadedMetadata = () => {
@@ -28,6 +82,17 @@ function AudioItem({ item, onSelect, onDelete, previewState, isSelected }) {
       audio.src = '';
     };
   }, [item.url]);
+
+  // Tenta extrair capa do ID3 se não houver thumbnail externa
+  useEffect(() => {
+    if (!item.thumbnail) {
+      extractCoverArt(getImageUrl(item.url)).then(url => {
+        if (url) setCoverArt(url);
+      });
+    } else {
+      setCoverArt(item.thumbnail);
+    }
+  }, [item.thumbnail, item.url]);
 
   const togglePlay = (e) => {
     e.stopPropagation();
@@ -63,6 +128,17 @@ function AudioItem({ item, onSelect, onDelete, previewState, isSelected }) {
           : 'bg-black/20 border-white/5 hover:bg-white/5 hover:border-white/10'
       } ${onSelect ? 'cursor-pointer' : ''}`}
     >
+      {/* Thumbnail */}
+      <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-black/50 shrink-0 border border-white/10">
+        {coverArt ? (
+          <img src={coverArt.startsWith('blob:') ? coverArt : getImageUrl(coverArt)} className="w-full h-full object-cover" alt="" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-zinc-700">
+            <Music size={20} />
+          </div>
+        )}
+      </div>
+
       {/* Play Button */}
       <button 
         onClick={togglePlay} 
@@ -99,6 +175,136 @@ function AudioItem({ item, onSelect, onDelete, previewState, isSelected }) {
           <Check size={14} />
         </div>
       )}
+    </div>
+  );
+}
+
+// Componente de Álbum de Áudio (Visualização Quadrada)
+function AudioAlbumItem({ item, onSelect, onDelete, previewState, isSelected }) {
+  const { playingName, setPlayingName, howlerRef } = previewState;
+  const [duration, setDuration] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [coverArt, setCoverArt] = useState(item.thumbnail);
+  const isPlaying = playingName === item.name;
+
+  useEffect(() => {
+    const audio = new Audio(getImageUrl(item.url));
+    audio.preload = 'metadata';
+    const onLoadedMetadata = () => {
+      if (audio.duration !== Infinity && !isNaN(audio.duration)) {
+        setDuration(audio.duration);
+        setLoading(false);
+      }
+    };
+    audio.addEventListener('loadedmetadata', onLoadedMetadata);
+    audio.addEventListener('error', () => setLoading(false));
+    return () => {
+      audio.removeEventListener('loadedmetadata', onLoadedMetadata);
+      audio.src = '';
+    };
+  }, [item.url]);
+
+  useEffect(() => {
+    if (!item.thumbnail) {
+      extractCoverArt(getImageUrl(item.url)).then(url => {
+        if (url) setCoverArt(url);
+      });
+    } else {
+      setCoverArt(item.thumbnail);
+    }
+  }, [item.thumbnail, item.url]);
+
+  const togglePlay = (e) => {
+    e.stopPropagation();
+    if (isPlaying) {
+      howlerRef.current?.stop();
+      setPlayingName(null);
+    } else {
+      if (howlerRef.current) howlerRef.current.stop();
+      const sound = new Howl({ 
+        src: [getImageUrl(item.url)],
+        html5: true,
+        onend: () => setPlayingName(null)
+      });
+      howlerRef.current = sound;
+      sound.play();
+      setPlayingName(item.name);
+    }
+  };
+
+  const formatTime = (secs) => {
+    if (!secs) return '--:--';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <div 
+      onClick={() => onSelect && onSelect(item.url, item.name)} 
+      className={`group relative aspect-square rounded-xl border-2 overflow-hidden transition-all duration-300 ${
+        isSelected 
+          ? 'border-indigo-500 shadow-lg shadow-indigo-500/30 scale-[1.02]' 
+          : 'border-white/5 hover:border-white/20 bg-zinc-900'
+      } ${onSelect ? 'cursor-pointer' : ''}`}
+    >
+      {/* Cover Art Background */}
+      {coverArt ? (
+        <img src={coverArt.startsWith('blob:') ? coverArt : getImageUrl(coverArt)} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity" alt="" />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
+          <Music size={48} className="text-zinc-700" />
+        </div>
+      )}
+      
+      {/* Overlay Content */}
+      <div className="absolute inset-0 flex flex-col justify-between p-4 bg-gradient-to-b from-black/30 via-transparent to-black/90">
+        <div className="flex justify-between items-start">
+           {isSelected && <div className="bg-indigo-500 text-white rounded-full p-1 shadow-lg"><Check size={14} /></div>}
+           <button 
+            onClick={(e) => onDelete(e, item.name)}
+            className="ml-auto p-2 text-zinc-400 hover:text-red-400 hover:bg-black/50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+            title="Excluir Áudio"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+
+        <div className="flex flex-col items-center gap-3">
+           <button 
+            onClick={togglePlay} 
+            className={`p-4 rounded-full transition-all transform hover:scale-110 ${
+              isPlaying 
+                ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/50' 
+                : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+            }`}
+          >
+            {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
+          </button>
+          
+          {/* Waveform Visualization (Simulated) */}
+          <div className="h-8 w-full flex items-center justify-center gap-1 px-4">
+             {[...Array(16)].map((_, i) => (
+                <div 
+                  key={i}
+                  className={`w-1 bg-indigo-400 rounded-full transition-all duration-150 ${isPlaying ? 'animate-pulse' : ''}`}
+                  style={{ 
+                    height: isPlaying ? `${Math.max(20, Math.random() * 100)}%` : '4px',
+                    opacity: isPlaying ? 0.8 : 0.3,
+                    animationDelay: `${i * 0.05}s`
+                  }}
+                />
+             ))}
+          </div>
+        </div>
+
+        <div className="space-y-1 text-center">
+          <div className="text-sm font-bold text-white truncate drop-shadow-md">{item.name}</div>
+          <div className="text-xs text-zinc-400 font-mono bg-black/40 inline-block px-2 py-0.5 rounded-full">
+             {formatTime(duration)}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -216,7 +422,27 @@ export default function MediaGallery({ open, onClose, type = 'images', onSelect 
 
   if (!open) return null;
 
-  const items = (activeTab === 'images' ? gallery?.images : gallery?.audio) || [];
+  // Processamento de itens (separando áudio de imagens na pasta de áudio)
+  const getItems = () => {
+    if (activeTab === 'images') return gallery?.images || [];
+    if (activeTab === 'videos') return gallery?.videos || [];
+    
+    // Audio Tab: Processa thumbnails
+    const allFiles = gallery?.audio || [];
+    const audioFiles = allFiles.filter(f => isAudio(f.name));
+    const imageFiles = allFiles.filter(f => isImage(f.name));
+    
+    return audioFiles.map(audio => {
+      const baseName = audio.name.substring(0, audio.name.lastIndexOf('.')).toLowerCase();
+      const thumb = imageFiles.find(img => img.name.substring(0, img.name.lastIndexOf('.')).toLowerCase() === baseName);
+      return {
+        ...audio,
+        thumbnail: thumb ? thumb.url : null
+      };
+    });
+  };
+
+  const items = getItems();
   
   // Filtrar items por busca
   const filteredItems = items.filter(item => 
@@ -286,8 +512,8 @@ export default function MediaGallery({ open, onClose, type = 'images', onSelect 
             </div>
 
             {/* View Mode Toggle (apenas para imagens) */}
-            {activeTab === 'images' && (
-              <div className="flex bg-black/30 p-1 rounded-lg">
+            <div className="flex bg-black/30 p-1 rounded-lg">
+              {(activeTab === 'images' || activeTab === 'videos') && (
                 <button 
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded transition-all ${viewMode === 'grid' ? 'bg-white/10 text-white' : 'text-zinc-500'}`}
@@ -295,6 +521,16 @@ export default function MediaGallery({ open, onClose, type = 'images', onSelect 
                 >
                   <Grid size={16} />
                 </button>
+              )}
+              {activeTab === 'audio' && (
+                <button 
+                  onClick={() => setViewMode('album')}
+                  className={`p-2 rounded transition-all ${viewMode === 'album' ? 'bg-white/10 text-white' : 'text-zinc-500'}`}
+                  title="Visualização em Álbum"
+                >
+                  <LayoutGrid size={16} />
+                </button>
+              )}
                 <button 
                   onClick={() => setViewMode('list')}
                   className={`p-2 rounded transition-all ${viewMode === 'list' ? 'bg-white/10 text-white' : 'text-zinc-500'}`}
@@ -302,8 +538,7 @@ export default function MediaGallery({ open, onClose, type = 'images', onSelect 
                 >
                   <List size={16} />
                 </button>
-              </div>
-            )}
+            </div>
           </div>
         </div>
 
@@ -451,18 +686,33 @@ export default function MediaGallery({ open, onClose, type = 'images', onSelect 
             )
           ) : (
             // Audio List
-            <div className="space-y-2">
-              {filteredItems.map((item, idx) => (
-                <AudioItem 
-                  key={item.id || idx}
-                  item={item}
-                  onSelect={onSelect ? handleSelect : null}
-                  onDelete={handleDelete}
-                  previewState={{ playingName, setPlayingName, howlerRef }}
-                  isSelected={selectedItem === item.name}
-                />
-              ))}
-            </div>
+            viewMode === 'album' ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {filteredItems.map((item, idx) => (
+                  <AudioAlbumItem 
+                    key={item.id || idx}
+                    item={item}
+                    onSelect={onSelect ? handleSelect : null}
+                    onDelete={handleDelete}
+                    previewState={{ playingName, setPlayingName, howlerRef }}
+                    isSelected={selectedItem === item.name}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {filteredItems.map((item, idx) => (
+                  <AudioItem 
+                    key={item.id || idx}
+                    item={item}
+                    onSelect={onSelect ? handleSelect : null}
+                    onDelete={handleDelete}
+                    previewState={{ playingName, setPlayingName, howlerRef }}
+                    isSelected={selectedItem === item.name}
+                  />
+                ))}
+              </div>
+            )
           )}
         </div>
 
