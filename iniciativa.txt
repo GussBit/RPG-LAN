@@ -1,0 +1,271 @@
+Sistema de Iniciativa - Especificação Detalhada
+Vou organizar e melhorar esse pedido para você:
+
+📋 Funcionalidades Solicitadas:
+1. Campo de Iniciativa Individual
+✅ Input numérico no MobCard (GM view)
+
+✅ Input numérico na PlayerPrivateView (Player view)
+
+✅ Valor salvo individualmente para cada mob/player
+
+✅ Visível sempre, mesmo fora de combate
+
+2. Off-Canvas de Iniciativa (Lateral Direita)
+✅ Painel lateral retrátil/expansível
+
+✅ Lista vertical com bolinhas coloridas
+
+✅ Cada bolinha herda a cor do personagem/mob
+
+✅ Iniciais do nome dentro da bolinha
+
+✅ Ordenação automática (maior iniciativa = topo)
+
+✅ Disponível para GM e Players
+
+3. Sistema de "Rolar Iniciativa"
+✅ Botão "Rolar Iniciativa" (apenas GM pode ativar)
+
+✅ Quando ativado, abre modal para todos os jogadores
+
+✅ Jogador digita o valor e confirma
+
+✅ Valor salvo automaticamente no off-canvas
+
+✅ Mestre vê todos os valores em tempo real
+
+4. Visual do Off-Canvas
+text
+┌─────────────────────┐
+│ 🎲 INICIATIVA       │
+├─────────────────────┤
+│ ┌──┐  ZP    (23)   │ ← Maior
+│ └──┘                │
+│ ┌──┐  MM    (18)   │
+│ └──┘                │
+│ ┌──┐  IB    (12)   │ ← Menor
+│ └──┘                │
+└─────────────────────┘
+📁 Arquivos a Serem Modificados:
+Backend (server.js)
+javascript
+E:\RPG-LAN\backend\server.js
+Modificações:
+
+✅ Adicionar campo initiative no schema de mobs e players
+
+✅ Endpoint POST (broadcast para players)
+
+✅ Endpoint PUT (salvar iniciativa)
+
+✅ Endpoint PUT  (salvar iniciativa)
+
+✅ Socket.io event initiative-rolled (notificar players)
+
+✅ Socket.io event initiative-updated (atualizar em tempo real)
+
+Frontend - Store (Zustand)
+javascript
+E:\RPG-LAN\frontend\src\store\store.js
+Modificações:
+
+✅ Estado initiativeTrackerOpen (controla off-canvas)
+
+✅ Estado rollInitiativeModal (controla modal)
+
+✅ Estado sortedInitiativeList (lista ordenada)
+
+✅ Action setPlayerInitiative(playerId, value)
+
+✅ Action setMobInitiative(mobId, value)
+
+✅ Action rollInitiativeForAll()
+
+✅ Action toggleInitiativeTracker()
+
+✅ Computed getInitiativeOrder() (ordenação automática)
+
+Frontend - Componentes a CRIAR:
+1. InitiativeTracker.jsx (Off-Canvas Lateral)
+javascript
+E:\RPG-LAN\frontend\src\components\InitiativeTracker.jsx
+Responsabilidades:
+
+✅ Off-canvas deslizante da direita
+
+✅ Lista vertical de participantes
+
+✅ Bolinhas coloridas com iniciais
+
+✅ Ordenação automática por valor
+
+✅ Botão toggle para abrir/fechar
+
+✅ Responsivo mobile/desktop
+
+2. InitiativeModal.jsx (Modal para Jogador)
+javascript
+E:\RPG-LAN\frontend\src\components\modals\InitiativeModal.jsx
+Responsabilidades:
+
+✅ Modal que abre quando GM rola iniciativa
+
+✅ Input numérico grande e visível
+
+✅ Botão "Confirmar Iniciativa"
+
+✅ Validação (apenas números)
+
+✅ Feedback visual após confirmar
+
+3. InitiativeButton.jsx (Botão Flutuante - GM)
+javascript
+E:\RPG-LAN\frontend\src\components\InitiativeButton.jsx
+Responsabilidades:
+
+✅ Botão "🎲 Rolar Iniciativa" (apenas GM)
+
+✅ Dispara evento para todos os players
+
+✅ Abre modal para GM também
+
+✅ Visual destacado (cor especial)
+
+Frontend - Componentes a MODIFICAR:
+4. MobCard.jsx
+javascript
+E:\RPG-LAN\frontend\src\components\MobCard.jsx
+Adicionar:
+
+✅ Input de iniciativa no card (pequeno, canto superior)
+
+✅ Badge mostrando valor atual
+
+✅ onChange atualiza store + backend
+
+5. PlayerPrivateView.jsx
+javascript
+E:\RPG-LAN\frontend\src\components\player\PlayerPrivateView.jsx
+Adicionar:
+
+✅ Input de iniciativa (edição manual)
+
+✅ Badge mostrando valor atual
+
+✅ Integração com InitiativeModal
+
+6. app.jsx
+javascript
+E:\RPG-LAN\frontend\src\components\app.jsx
+Adicionar:
+
+✅ Renderizar <InitiativeButton />
+
+✅ Renderizar <InitiativeTracker />
+
+✅ Gerenciar estado de combate ativo
+
+7. PlayerView.jsx
+javascript
+E:\RPG-LAN\frontend\src\components\player\PlayerView.jsx
+Adicionar:
+
+✅ Renderizar <InitiativeTracker /> (read-only)
+
+✅ Renderizar <InitiativeModal /> (quando chamado)
+
+✅ Socket listener para initiative-rolled
+
+
+sequenceDiagram
+    GM->>Backend: Click "Rolar Iniciativa"
+    Backend->>All Players: Socket "initiative-rolled"
+    All Players->>All Players: Abre InitiativeModal
+    Player1->>Backend: PUT initiative (15)
+    Backend->>All Clients: Socket "initiative-updated"
+    All Clients->>InitiativeTracker: Atualiza e reordena
+📊 Schema de Dados (Backend):
+javascript
+// Player Schema
+{
+  id: String,
+  name: String,
+  characterName: String,
+  initiative: Number, // ← NOVO
+  color: String,      // ← NOVO (para a bolinha)
+  // ... outros campos
+}
+
+// Mob Schema
+
+  initiative: Number, // ← NOVO
+
+
+// Combat State
+{
+  isActive: Boolean,
+  currentTurn: String, // ID do participante atual
+  initiativeOrder: Array // IDs ordenados
+
+  tenha liberdade para decidir o que é melhor
+}
+✅ Checklist de Implementação:
+
+ Adicionar campos initiative e color nos schemas
+
+ Criar endpoints de iniciativa
+
+ Implementar Socket.io events
+
+ Testar broadcast para players
+
+
+ Adicionar estados de iniciativa
+
+ Criar actions de manipulação
+
+ Implementar ordenação automática
+
+ Integrar com Socket.io
+
+
+ Criar InitiativeTracker.jsx
+
+ Criar InitiativeModal.jsx
+
+ Criar InitiativeButton.jsx
+
+ Testar responsividade
+
+
+ Modificar MobCard.jsx
+
+ Modificar PlayerPrivateView.jsx
+
+ Modificar GMView.jsx
+
+ Modificar PlayerView.jsx
+
+ Testar rolar iniciativa como GM
+
+ Testar input como jogador
+
+ Testar ordenação automática
+
+ Testar sincronização em tempo real
+
+ Testar responsividade mobile
+
+🚀 Por Onde Começar:
+Eu sugiro implementar nesta ordem:
+
+Backend primeiro (server.js) - Base de dados
+
+Store (store.js) - Lógica central
+
+InitiativeTracker - Visual principal
+
+InitiativeModal - Interação do player
+
+Integrações - MobCard, PlayerView, etc.
