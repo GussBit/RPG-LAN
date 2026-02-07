@@ -88,9 +88,9 @@
               "quantity": 2
             }
           ],
-          "initiative": 15,
+          "initiative": 14,
           "hidden": true,
-          "hiddenInInitiative": false
+          "hiddenInInitiative": true
         },
         {
           "id": "mob-1770052863413",
@@ -173,7 +173,7 @@
               "quantity": 1
             }
           ],
-          "initiative": 17,
+          "initiative": 16,
           "hiddenInInitiative": true,
           "hidden": false
         },
@@ -340,9 +340,23 @@
               "quantity": 1
             }
           ],
-          "initiative": 3,
-          "hiddenInInitiative": false,
+          "initiative": 15,
+          "hiddenInInitiative": true,
           "hidden": true
+        },
+        {
+          "id": "mob-1770223575835",
+          "name": "Brutamontes",
+          "color": "#8B4513",
+          "maxHp": 32,
+          "currentHp": 32,
+          "damageDice": "1d6+1",
+          "toHit": 4,
+          "image": "",
+          "initiative": 3,
+          "hiddenInInitiative": true,
+          "conditions": [],
+          "inventory": []
         }
       ],
       "players": [
@@ -524,9 +538,185 @@
               "quantity": 1
             }
           ],
-          "initiative": 10,
+          "initiative": 16,
           "hidden": true,
           "hiddenInInitiative": false
+        },
+        {
+          "id": "player-1770235465982",
+          "playerName": "Lucas",
+          "characterName": "Silvaré",
+          "photo": "",
+          "maxHp": 27,
+          "ac": 10,
+          "damageDice": "1d4",
+          "toHit": 0,
+          "currentHp": 27,
+          "accessUrl": "/p/cky27tvl66b",
+          "initiative": 5,
+          "accessToken": "cky27tvl66b",
+          "conditions": [],
+          "inventory": [
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Rapieira",
+              "custo": {
+                "quant": 25,
+                "moeda": "po"
+              },
+              "dano": "1d8 perfurante",
+              "peso_kg": 1,
+              "propriedades": [
+                "acuidade"
+              ],
+              "propriedades_texto": "acuidade",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "acuidade"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d8 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "1 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "25 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Adaga",
+              "custo": {
+                "quant": 2,
+                "moeda": "po"
+              },
+              "dano": "1d4 perfurante",
+              "peso_kg": 0.5,
+              "propriedades": [
+                "acuidade",
+                "leve",
+                "arremesso (distância 6/18)"
+              ],
+              "propriedades_texto": "acuidade, leve, arremesso (distância 6/18)",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "acuidade",
+                  "leve",
+                  "arremesso (distância 6/18)"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d4 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "0.5 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "2 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "tipo": "arma",
+              "grupo": "Arma",
+              "nome": "Arco Curto",
+              "custo": {
+                "quant": 25,
+                "moeda": "po"
+              },
+              "dano": "1d6 perfurante",
+              "peso_kg": 1,
+              "propriedades": [
+                "munição (distância 24/96)",
+                "duas mãos"
+              ],
+              "propriedades_texto": "munição (distância 24/96), duas mãos",
+              "renderData": {
+                "tags": [
+                  "Arma",
+                  "munição (distância 24/96)",
+                  "duas mãos"
+                ],
+                "stats": [
+                  {
+                    "label": "Dano",
+                    "value": "1d6 perfurante"
+                  },
+                  {
+                    "label": "Peso",
+                    "value": "1 kg"
+                  },
+                  {
+                    "label": "Custo",
+                    "value": "25 po"
+                  }
+                ]
+              },
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "ATAQUE FURTIVO",
+              "descricao": "A partir do 1º nível, você sabe como atacar sutilmente e explorar a distração de seus inimigos. Uma vez por turno, você pode adicionar 1d6 nas jogadas de dano contra qualquer criatura que acertar, desde que tenha vantagem nas jogadas de ataque. O ataque deve ser com uma arma de acuidade ou à distância.\n\nVocê não precisa ter vantagem nas jogadas de ataque se outro inimigo do seu alvo estiver a 1,5 metro de distância dele, desde que este inimigo não esteja incapacitado e você não tenha desvantagem nas jogadas de ataque.\n\nA quantidade de dano extra aumenta conforme você ganha níveis nessa classe, como mostrado na coluna Ataque Furtivo da tabela O Ladino.",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "ESPECIALIZAÇÃO",
+              "descricao": "No 1º nível, você escolhe duas de suas perícias nas quais seja proficiente, ou uma perícia na qual seja proficiente e ferramentas de ladrão. Seu bônus de proficiência é dobrado em qualquer teste de habilidade que você fizer usando qualquer uma dessas proficiências escolhidas.\n\nNo 6º nível, você pode escolher outras duas de suas proficiências (em perícias ou ferramentas de ladrão) para ganhar esse mesmo benefício.",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "TRAPACEIRO ARCANO",
+              "descricao": "escrita e comportamento de outra pessoa, infalivelmente.\nVocê deve gastar pelo menos três horas estudando esses Alguns ladinos aprimoram suas finas perícias de três componentes do comportamento de uma pessoa, furtividade e agilidade com magia, aprendendo truques ouvindo sua articulação, examinando sua escrita e de encantamento e ilusão. Esses ladinos incluem não observando seus maneirismos.\nsomente batedores de carteira e assaltantes, mas também Habilidade de Conjuração. Sua habilidade de trapaceiros, enganadores e um número significativo de conjuração é Inteligência para suas magias de mago, aventureiros.\nportanto, você usa sua Inteligência sempre que alguma magia se referir à sua habilidade de conjurar magias.\nCONJURAÇÃO Além disso, você usa o seu modificador de Inteligência Quando você alcançar o 3° nível, você adquire a para definir a CD dos testes de resistência para as magias habilidade de conjurar magias. Veja o capítulo 10 para as de mago que você conjura e quando você realiza uma regras gerais de conjuração e o capítulo 11 para a lista de jogada de ataque com uma magia.\nmagias de mago.\nTruques. Você aprende três truques: mãos mágicas e CD para suas magias = 8 + bônus de proficiência + outros dois truques, à sua escolha, da lista de magias de seu modificador de Inteligência mago. Você aprende um truque de mago adicional, à sua escolha, no 10° nível.\nModificador de ataque de magia = seu bônus de Espaços de Magia. A tabela Conjuração de proficiência + seu modificador de Inteligência Trapaceiro Arcano mostra quantos espaços de magia de 1° nível e superiores você possui disponíveis para MÃOS MÁGICAS MALABARISTAS conjuração. Para conjurar uma dessas magias, você deve A partir do 3° nível, quando você conjurar mãos mágicas, gastar uma espaço de magia do nível da magia ou você pode fazer a mão espectral ficar invisível e poderá superior. Você recobra todos os espaços de magia gastos realizar as seguintes tarefas adicionais:\nquando você completa um descanso longo.\n Você pode guardar um objeto que a mão estiver Por exemplo, se você quiser conjurar a magia de 1° segurando em um recipiente vestido ou carregado por nível enfeitiçar pessoa e você tiver um espaço de magia de outra criatura.\n1° nível e um de 2° nível disponíveis, você poderá conjurar  Você pode recuperar um objeto guardado em um enfeitiçar pessoa usando qualquer dos dois espaços.\nrecipiente vestido ou carregado por outra criatura.\nMagias Conhecidas de 1° Nível e Superiores. Você  Você pode usar ferramentas de ladrão para abrir conhece três magias de 1° nível, à sua escolha, as quais fechaduras ou desarmar armadilhas à distância.\nduas delas você deve escolher das magias de encantamento e ilusão da lista de magias de mago.\nVocê pode realizar qualquer dessas tarefas sem ser A coluna Magias Conhecidas na tabela Conjuração do notado por uma criatura se for bem sucedido num teste de Trapaceiro Arcano mostra quando você aprende mais Destreza (Prestidigitação) resistido por um teste de magias de mago, de 1° nível ou superior. Cada uma Sabedoria (Percepção) da criatura.\ndessas magias deve ser uma magia de encantamento ou Além disso, você pode usar a ação bônus concedida por ilusão, à sua escolha, de um nível a que você tenha sua Ação Ardilosa para controlar a mão.\nacesso, como mostrado na tabela. Por exemplo, quando você alcança o 7° nível da classe, você pode aprender uma EMBOSCADA MÁGICA nova magia de 1° ou 2° nível.\nA partir do 9° nível, se você estiver escondido de uma As magias que você aprende no 8°, 14° e 20° nível criatura quando conjurar uma magia nela, a criatura terá podem vir de qualquer escola de magia.\nAlém disso, quando você adquire um nível nessa desvantagem em qualquer teste de resistência que ela classe, você pode escolher uma magia de mago que você fizer contra a magia nesse turno.\nconheça e substituí-la por outra magia da lista de magias de mago, que também deve ser de um nível ao qual você TRAPACEIRO VERSÁTIL tenha espaços de magia e deve ser uma magia de No 13° nível, você ganha a habilidade de distrair alvos encantamento ou ilusão, exceto as magias substituídas no com suas mãos mágicas. Com uma ação bônus, no seu 8°, 14° e 20º nível.\nturno, você pode designar uma criatura a até 1,5 metro da mão espectral criada por essa magia. Fazer isso, lhe CONJURAÇÃO DE TRAPACEIRO ARCANO concede vantagem nas jogadas de ataque contra essa Nível de Truques Magias Espaços de Magia por Nível criatura até o final do turno.\nLadino Conhecidos Conhecidas LADRÃO DE MAGIA No 17° nível, você ganha a habilidade de, magicamente, roubar o conhecimento de como conjurar uma magia de outro conjurador.\nImediatamente depois de uma criatura conjurar uma magia que tenha você como alvo ou inclua você na sua área de efeito, você pode usar sua reação para forçar a criatura a realizar um teste de resistência com o 10° modificador de habilidade de conjuração dele. A CD é 11° igual a CD das suas magias. Numa falha, você ignora o 12° efeito da magia sobre você e rouba o conhecimento da 13° magia, se ela for de, pelo menos, 1° nível e de um nível 14° que você possa conjurar (não precisa ser uma magia de 15° mago). Pelas próximas 8 horas, você conhece a magia e 16° pode conjurá-la usando seus espaços de magia. A criatura 17° não pode conjurar a magia até que 8 horas tenham se 18° passado.\n19° Uma vez que você tenha usado essa característica, 20° você não pode usá-la novamente até ter terminado um descanso longo.",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Mãos Mágicas",
+              "nome_ingles": "Mage Hand",
+              "caracteristicas": "Truque de  Invocação (Artífice, Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:V S\nDuração:1 minuto",
+              "descricao": "Uma mão flutuante e espectral aparece em um ponto à sua escolha e no alcance da magia. A mão permanece enquanto a magia durar ou até você dispensá-la com uma ação. A mão desaparece caso se distancie mais de 9 metros [30 ft.] de você ou se você conjurar a magia novamente.Você pode usar sua ação para controlar a mão. Você pode fazer com que ela manipule objetos, abra portas ou recipientes destrancados, guarde ou pegue itens de recipientes abertos, ou derrame o conteúdo de frascos. Você pode movê-la até 9 metros [30 ft.] a cada vez que a usa. Ela não pode atacar, ativar itens mágicos ou carregar mais de 4,5 quilos [10 pounds].\nLivro do Jogador (PHB), p. 256 (256)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Ilusão Menor",
+              "nome_ingles": "Minor Illusion",
+              "caracteristicas": "Truque de  Ilusão (Bardo, Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:9m [30 ft.]\nComponentes:S M (um pouco de lã)\nDuração:1 minuto",
+              "descricao": "Você cria um som ou uma imagem de um objeto ao alcanceda magia, que permanece enquanto esta durar. A ilusão termina se você a dispensar com uma ação ou conjurá-la novamente.Se você cria um som, o volume emitido pode variar desdeum sussurro até um grito. Pode ser a sua voz, a voz de outra pessoa, o rugido de um leão, a batida de tambores ou qualquer outro som à sua escolha. O som continua no mesmo tom enquanto a magia durar, ou você pode fazer sons mais discretos em momentos diferentes, antes que amagia termine.Se você criar uma imagem de um objeto - como uma cadeira, pegadas lamacentas ou uma pequena arca - esta não pode ser maior que um cubo de 1,5 metro [5-foot cube]. A imagem não pode emitir som, luz, odor ou qualquer outro efeito sensorial. Interação física com a imagem revela que se trata de uma ilusão, pois coisas passam através dela.Se uma criatura usar uma ação para examinar o som ou a imagem, a criatura pode determinar que é uma ilusão comum teste bem-sucedido de Inteligência (Investigação) contra a CD para evitar sua magia. A ilusão torna-se desbotada para uma criatura que consiga discerni-la.\nLivro do Jogador (PHB), p. 248 (260)",
+              "visible": true,
+              "quantity": 1
+            },
+            {
+              "nome": "Lâmina Estrondosa",
+              "nome_ingles": "Booming Blade",
+              "caracteristicas": "Truque de  Evocação (Bruxo, Feiticeiro, Mago)\nTempo de Conjuração:Uma ação\nAlcance:1,5m [5 ft.]\nComponentes:V M (uma arma)\nDuração:Uma rodada",
+              "descricao": "Como parte da ação usada para conjurar esta magia, você deve fazer um ataque corpo a corpo com uma arma contra uma criatura dentro do alcance da magia, do contrário a magia falha. Se acertar, o alvo sofre os efeitos normais do ataque e fica envolto em uma energia estrondosa até o começo do próximo turno do conjurador. Se o alvo se mover voluntariamente antes disso, ele imediatamente recebe 1d8 de dano trovejante e a magia encerra.\nTasha's Cauldron to Everything, p. 106",
+              "visible": true,
+              "quantity": 1
+            }
+          ]
         }
       ],
       "playlist": [
@@ -537,8 +727,8 @@
           "type": "sfx",
           "volume": 0.5,
           "ambienceMode": "exploration",
-          "pulseInterval": 0,
-          "pulseActive": false
+          "pulseInterval": 15,
+          "pulseActive": true
         },
         {
           "id": "track-1770172941835",
@@ -553,7 +743,14 @@
           "name": "Karliene - The Vampire.mp3",
           "url": "/audio/Karliene - The Vampire.mp3",
           "type": "musica",
-          "volume": 0.24
+          "volume": 0.52
+        },
+        {
+          "id": "track-1770234769189",
+          "name": "Epiphany.mp3",
+          "url": "/audio/Epiphany.mp3",
+          "type": "musica",
+          "volume": 0.5
         }
       ],
       "notes": "Os jogadores sobrevivem a um naufrágio na costa oeste de Skaug. Procurando abrigo, encontram a caverna do Santuário Esquecido e Nhal'zar, o último Eshar'kai livre. Ao final, são resgatados pelo Capitão Torvald.",
@@ -1112,7 +1309,10 @@
               "visible": true,
               "quantity": 1
             }
-          ]
+          ],
+          "ac": 10,
+          "damageDice": "1d4",
+          "toHit": 0
         }
       ],
       "playlist": [],
@@ -2482,7 +2682,10 @@
         "class": "Ladino (Trapaceiro Arcano)",
         "level": 6,
         "race": "Humano",
-        "createdAt": "2026-02-02T01:30:53.000Z"
+        "createdAt": "2026-02-02T01:30:53.000Z",
+        "ac": 10,
+        "damageDice": "1d4",
+        "toHit": 0
       }
     ],
     "ships": [

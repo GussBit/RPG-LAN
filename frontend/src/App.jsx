@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { 
@@ -11,27 +11,27 @@ import { useGameStore } from './store';
 
 // Componentes Extraídos
 import Mixer from './Mixer';
-import MediaGallery from './MediaGallery';
-import PresetsManager from './PresetsManager';
-import InventoryModal from './components/modals/InventoryModal';
-import QRCodeModal from './components/modals/QRCodeModal';
-import Compendium from './components/Compendium';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Arena from './components/Arena';
-// Novos Modais Componentizados
-import SceneModals from './components/modals/SceneModals';
-import MobModals from './components/modals/MobModals';
-import PlayerModals from './components/modals/PlayerModals';
-import ShipModals from './components/modals/ShipModals';
 import Modal from './components/ui/Modal'; // Ainda usado para o Mapa
 import { CONDITIONS, getImageUrl } from './constants';
 import { API_URL } from './api';
 import PillButton from './components/ui/PillButton';
-import CharacterSheetModal from './components/character/CharacterSheetModal';
-import InitiativeTracker from './components/InitiativeTracker';
 import InitiativeButton from './components/InitiativeButton';
 
+// Componentes com Lazy Loading
+const MediaGallery = lazy(() => import('./MediaGallery'));
+const PresetsManager = lazy(() => import('./PresetsManager'));
+const InventoryModal = lazy(() => import('./components/modals/InventoryModal'));
+const QRCodeModal = lazy(() => import('./components/modals/QRCodeModal'));
+const Compendium = lazy(() => import('./components/Compendium'));
+const SceneModals = lazy(() => import('./components/modals/SceneModals'));
+const MobModals = lazy(() => import('./components/modals/MobModals'));
+const PlayerModals = lazy(() => import('./components/modals/PlayerModals'));
+const ShipModals = lazy(() => import('./components/modals/ShipModals'));
+const CharacterSheetModal = lazy(() => import('./components/character/CharacterSheetModal'));
+const InitiativeTracker = lazy(() => import('./components/InitiativeTracker'));
 
 export default function App() {
   const {
@@ -103,17 +103,22 @@ export default function App() {
 
   // Efeitos
   useEffect(() => { fetchScenes(); }, [fetchScenes]);
+  
   useEffect(() => { 
     fetchPresets('mobs'); 
     fetchPresets('players'); 
     fetchPresets('ships');
     fetchCustomItems();
-  }, [fetchPresets]);
+  }, []); // Executa apenas uma vez ao montar
   
   useEffect(() => {
-    const interval = setInterval(() => syncPlayers(), 2000);
+    // SyncPlayers - SEM dependências para evitar recriação do intervalo
+    const interval = setInterval(() => {
+      const { syncPlayers } = useGameStore.getState();
+      syncPlayers();
+    }, 5000);
     return () => clearInterval(interval);
-  }, [syncPlayers]);
+  }, []);
 
   // Lógica de Redimensionamento Unificada
   useEffect(() => {
@@ -601,7 +606,9 @@ export default function App() {
         <div className="fixed inset-0 z-0 opacity-10 bg-cover bg-center" style={{ backgroundImage: `url(${getImageUrl(activeScene.background)})` }} />
       )}
 
-      <InitiativeTracker isGM={true} />
+      <Suspense fallback={null}>
+        <InitiativeTracker isGM={true} />
+      </Suspense>
       <InitiativeButton side="left" />
 
       <div className="relative z-10 h-full grid grid-rows-[56px_1fr]">
@@ -723,121 +730,122 @@ export default function App() {
       </div>
 
       {/* --- MODAIS COMPONENTIZADOS --- */}
-      
-      <SceneModals 
-        createOpen={sceneModalOpen} onCloseCreate={() => setSceneModalOpen(false)}
-        editOpen={editSceneModalOpen} onCloseEdit={() => { setEditSceneModalOpen(false); setEditingScene(null); }}
-        editingScene={editingScene}
-        onCreate={handleCreateScene}
-        onEdit={handleEditScene}
-        onUploadBg={handleUploadBg}
-        onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
-      />
-
-      <MobModals 
-        createOpen={mobModalOpen} onCloseCreate={() => setMobModalOpen(false)}
-        editOpen={editMobModalOpen} onCloseEdit={() => { setEditMobModalOpen(false); setEditingMob(null); }}
-        editingMob={editingMob}
-        onCreate={handleCreateMob}
-        onEdit={handleEditMob}
-        onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
-        onOpenPresets={(cb) => { setPresetsType('mobs'); setPresetsCallback(() => cb); setPresetsOpen(true); }}
-        onSavePreset={handleSaveMobPreset}
-      />
-
-      <PlayerModals 
-        createOpen={playerModalOpen} onCloseCreate={() => setPlayerModalOpen(false)}
-        editOpen={editPlayerModalOpen} onCloseEdit={() => { setEditPlayerModalOpen(false); setEditingPlayer(null); }}
-        editingPlayer={editingPlayer}
-        onCreate={handleCreatePlayer}
-        onEdit={handleEditPlayer}
-        onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
-      />
-
-      <ShipModals 
-        createOpen={shipModalOpen} onCloseCreate={() => setShipModalOpen(false)}
-        editOpen={editShipModalOpen} onCloseEdit={() => { setEditShipModalOpen(false); setEditingShip(null); }}
-        editingShip={editingShip}
-        onCreate={handleCreateShip}
-        onEdit={handleEditShip}
-        onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
-        onOpenPresets={(cb) => { setPresetsType('ships'); setPresetsCallback(() => cb); setPresetsOpen(true); }}
-      />
-
-      <Modal open={mapOpen} title="Mapa da cena" onClose={() => setMapOpen(false)} widthClass="max-w-5xl">
-        <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
-          <div className="aspect-[16/9] relative">
-            {mapScene?.background ? <img src={getImageUrl(mapScene.background)} className="absolute inset-0 w-full h-full object-contain" /> : <div className="absolute inset-0 flex items-center justify-center text-zinc-500">Sem mapa.</div>}
-          </div>
-        </div>
-      </Modal>
-
-      <MediaGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} type={galleryType} onSelect={(url, name) => { galleryCallback?.(url, name); setGalleryOpen(false); }} />
-      <PresetsManager open={presetsOpen} onClose={() => setPresetsOpen(false)} type={presetsType} onUse={(p) => { presetsCallback?.(p); setPresetsOpen(false); }} />
-      
-      <InventoryModal 
-        open={!!inventoryPlayerId} 
-        onClose={() => setInventoryPlayerId(null)}
-        player={activeScene?.players?.find(p => p.id === inventoryPlayerId)}
-        onRemoveItem={handleRemoveItemFromPlayer}
-        onUpdateQuantity={handleUpdatePlayerInventoryQuantity}
-        onToggleVisibility={handleTogglePlayerItemVisibility}
-        onOpenCompendium={() => setCompendiumOpen(true)}
-      />
-
-      <InventoryModal 
-        open={!!inventoryMobId} 
-        onClose={() => setInventoryMobId(null)}
-        player={(() => {
-           const m = activeScene?.mobs?.find(m => m.id === inventoryMobId);
-           return m ? { ...m, characterName: m.name, playerName: 'Mob' } : null;
-        })()}
-        onRemoveItem={handleRemoveItemFromMob}
-        onUpdateQuantity={handleUpdateMobInventoryQuantity}
-        onToggleVisibility={handleToggleMobItemVisibility}
-        onOpenCompendium={() => setCompendiumOpen(true)}
-      />
-
-      <InventoryModal 
-        open={!!inventoryShipId} 
-        onClose={() => setInventoryShipId(null)}
-        player={(() => {
-           const s = activeScene?.ships?.find(s => s.id === inventoryShipId);
-           return s ? { ...s, characterName: s.name, playerName: 'Carga do Navio' } : null;
-        })()}
-        onRemoveItem={handleRemoveItemFromShip}
-        onUpdateQuantity={handleUpdateShipInventoryQuantity}
-        onToggleVisibility={handleToggleShipItemVisibility}
-        onOpenCompendium={() => setCompendiumOpen(true)}
-      />
-
-      <Compendium 
-        open={compendiumOpen} 
-        onClose={() => setCompendiumOpen(false)} 
-        onAddItem={inventoryPlayerId ? handleAddItemToPlayer : (inventoryMobId ? handleAddItemToMob : (inventoryShipId ? handleAddItemToShip : null))}
-        customItems={customItems}
-        onCreateCustomItem={createCustomItem}
-        onDeleteCustomItem={deleteCustomItem}
-        isGM={true}
-      />
-
-      <QRCodeModal 
-        open={!!qrCodeData} 
-        onClose={() => setQrCodeData(null)} 
-        url={qrCodeData?.url} 
-        title={qrCodeData?.title} 
-      />
-
-      {/* Ficha Expandida (GM) */}
-      {expandedCharacter && (
-        <CharacterSheetModal
-          entity={expandedCharacter.type === 'mob' 
-            ? activeScene.mobs.find(m => m.id === expandedCharacter.id)
-            : activeScene.players.find(p => p.id === expandedCharacter.id)}
-          type={expandedCharacter.type}
-          onClose={closeCharacterSheet}
+      <Suspense fallback={null}>
+        <SceneModals 
+          createOpen={sceneModalOpen} onCloseCreate={() => setSceneModalOpen(false)}
+          editOpen={editSceneModalOpen} onCloseEdit={() => { setEditSceneModalOpen(false); setEditingScene(null); }}
+          editingScene={editingScene}
+          onCreate={handleCreateScene}
+          onEdit={handleEditScene}
+          onUploadBg={handleUploadBg}
+          onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
         />
-      )}
+
+        <MobModals 
+          createOpen={mobModalOpen} onCloseCreate={() => setMobModalOpen(false)}
+          editOpen={editMobModalOpen} onCloseEdit={() => { setEditMobModalOpen(false); setEditingMob(null); }}
+          editingMob={editingMob}
+          onCreate={handleCreateMob}
+          onEdit={handleEditMob}
+          onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
+          onOpenPresets={(cb) => { setPresetsType('mobs'); setPresetsCallback(() => cb); setPresetsOpen(true); }}
+          onSavePreset={handleSaveMobPreset}
+        />
+
+        <PlayerModals 
+          createOpen={playerModalOpen} onCloseCreate={() => setPlayerModalOpen(false)}
+          editOpen={editPlayerModalOpen} onCloseEdit={() => { setEditPlayerModalOpen(false); setEditingPlayer(null); }}
+          editingPlayer={editingPlayer}
+          onCreate={handleCreatePlayer}
+          onEdit={handleEditPlayer}
+          onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
+        />
+
+        <ShipModals 
+          createOpen={shipModalOpen} onCloseCreate={() => setShipModalOpen(false)}
+          editOpen={editShipModalOpen} onCloseEdit={() => { setEditShipModalOpen(false); setEditingShip(null); }}
+          editingShip={editingShip}
+          onCreate={handleCreateShip}
+          onEdit={handleEditShip}
+          onOpenGallery={(type, cb) => { setGalleryType(type); setGalleryCallback(() => cb); setGalleryOpen(true); }}
+          onOpenPresets={(cb) => { setPresetsType('ships'); setPresetsCallback(() => cb); setPresetsOpen(true); }}
+        />
+
+        <Modal open={mapOpen} title="Mapa da cena" onClose={() => setMapOpen(false)} widthClass="max-w-5xl">
+          <div className="rounded-2xl overflow-hidden border border-white/10 bg-black/30">
+            <div className="aspect-[16/9] relative">
+              {mapScene?.background ? <img src={getImageUrl(mapScene.background)} className="absolute inset-0 w-full h-full object-contain" /> : <div className="absolute inset-0 flex items-center justify-center text-zinc-500">Sem mapa.</div>}
+            </div>
+          </div>
+        </Modal>
+
+        <MediaGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} type={galleryType} onSelect={(url, name) => { galleryCallback?.(url, name); setGalleryOpen(false); }} />
+        <PresetsManager open={presetsOpen} onClose={() => setPresetsOpen(false)} type={presetsType} onUse={(p) => { presetsCallback?.(p); setPresetsOpen(false); }} />
+        
+        <InventoryModal 
+          open={!!inventoryPlayerId} 
+          onClose={() => setInventoryPlayerId(null)}
+          player={activeScene?.players?.find(p => p.id === inventoryPlayerId)}
+          onRemoveItem={handleRemoveItemFromPlayer}
+          onUpdateQuantity={handleUpdatePlayerInventoryQuantity}
+          onToggleVisibility={handleTogglePlayerItemVisibility}
+          onOpenCompendium={() => setCompendiumOpen(true)}
+        />
+
+        <InventoryModal 
+          open={!!inventoryMobId} 
+          onClose={() => setInventoryMobId(null)}
+          player={(() => {
+            const m = activeScene?.mobs?.find(m => m.id === inventoryMobId);
+            return m ? { ...m, characterName: m.name, playerName: 'Mob' } : null;
+          })()}
+          onRemoveItem={handleRemoveItemFromMob}
+          onUpdateQuantity={handleUpdateMobInventoryQuantity}
+          onToggleVisibility={handleToggleMobItemVisibility}
+          onOpenCompendium={() => setCompendiumOpen(true)}
+        />
+
+        <InventoryModal 
+          open={!!inventoryShipId} 
+          onClose={() => setInventoryShipId(null)}
+          player={(() => {
+            const s = activeScene?.ships?.find(s => s.id === inventoryShipId);
+            return s ? { ...s, characterName: s.name, playerName: 'Carga do Navio' } : null;
+          })()}
+          onRemoveItem={handleRemoveItemFromShip}
+          onUpdateQuantity={handleUpdateShipInventoryQuantity}
+          onToggleVisibility={handleToggleShipItemVisibility}
+          onOpenCompendium={() => setCompendiumOpen(true)}
+        />
+
+        <Compendium 
+          open={compendiumOpen} 
+          onClose={() => setCompendiumOpen(false)} 
+          onAddItem={inventoryPlayerId ? handleAddItemToPlayer : (inventoryMobId ? handleAddItemToMob : (inventoryShipId ? handleAddItemToShip : null))}
+          customItems={customItems}
+          onCreateCustomItem={createCustomItem}
+          onDeleteCustomItem={deleteCustomItem}
+          isGM={true}
+        />
+
+        <QRCodeModal 
+          open={!!qrCodeData} 
+          onClose={() => setQrCodeData(null)} 
+          url={qrCodeData?.url} 
+          title={qrCodeData?.title} 
+        />
+
+        {/* Ficha Expandida (GM) */}
+        {expandedCharacter && (
+          <CharacterSheetModal
+            entity={expandedCharacter.type === 'mob' 
+              ? activeScene.mobs.find(m => m.id === expandedCharacter.id)
+              : activeScene.players.find(p => p.id === expandedCharacter.id)}
+            type={expandedCharacter.type}
+            onClose={closeCharacterSheet}
+          />
+        )}
+      </Suspense>
 
     </div>
   );

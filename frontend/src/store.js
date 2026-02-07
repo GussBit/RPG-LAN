@@ -267,7 +267,6 @@ export const useGameStore = create((set, get) => ({
       activeScene: updatedScene,
       scenes: scenes.map(s => s.id === activeScene.id ? updatedScene : s)
     });
-    get().fetchPresets('players'); // Atualiza lista de presets
   },
 
   updatePlayerHp: async (sceneId, playerId, delta) => {
@@ -346,7 +345,6 @@ export const useGameStore = create((set, get) => ({
         body: JSON.stringify({ conditions: newConditions })
       });
     } catch (error) { console.error("Erro ao atualizar condição:", error); }
-    get().fetchPresets('players'); // Atualiza lista de presets (condições são salvas no preset)
   },
 
   deletePlayer: async (sceneId, playerId) => {
@@ -393,7 +391,6 @@ export const useGameStore = create((set, get) => ({
         body: JSON.stringify(updates)
       });
     } catch (error) { console.error("Erro ao atualizar player:", error); }
-    get().fetchPresets('players'); // Atualiza lista de presets
   },
 
   // --- SHIPS (BATALHA NAVAL) ---
@@ -412,7 +409,6 @@ export const useGameStore = create((set, get) => ({
       activeScene: updatedScene,
       scenes: scenes.map(s => s.id === activeScene.id ? updatedScene : s)
     });
-    get().fetchPresets('ships'); // Atualiza sempre, pois agora todos geram presets
   },
 
   updateShip: async (sceneId, shipId, updates) => {

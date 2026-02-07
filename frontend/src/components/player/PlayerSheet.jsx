@@ -33,6 +33,7 @@ export default function PlayerSheet({ player, updateHP, toggleCondition, conditi
             <img
               src={getImageUrl(player.photo)}
               alt={player.characterName}
+              loading="lazy"
               className={`absolute inset-0 w-full h-full object-cover object-top ${
                 conditions.includes('blinded') ? 'brightness-[0.2] blur-[1px] grayscale' : ''
               } ${

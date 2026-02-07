@@ -6,14 +6,8 @@ import {
   ChevronLeft, Package, Anchor, Globe, Loader, List, Shield, Filter
 } from 'lucide-react';
 
-// Importando os dados
-import spellsData from '../data/spells.json';
-import actionsData from '../data/actions.json';
-import conditionsData from '../data/conditions.json';
-import skillsData from '../data/habilidades.json';
-import shipItemsData from '../data/itensNavio.json';
-import objectsData from '../data/objetos.json';
 
+// Importando os dados
 const CONDITION_ICONS = {
   'Caído': { icon: ArrowDownCircle, color: 'text-amber-500' },
   'Contido': { icon: LinkIcon, color: 'text-zinc-400' },
@@ -227,6 +221,31 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
   const [selectedItem, setSelectedItem] = useState(null);
   const [isVisible, setIsVisible] = useState(true);
   const [detailImageLoading, setDetailImageLoading] = useState(true);
+  const [libraryData, setLibraryData] = useState(null);
+
+  useEffect(() => {
+    if (open && !libraryData) {
+      Promise.all([
+        import('../data/spells.json'),
+        import('../data/actions.json'),
+        import('../data/conditions.json'),
+        import('../data/habilidades.json'),
+        import('../data/itensNavio.json'),
+        import('../data/objetos.json')
+      ]).then(([spells, actions, conditions, skills, shipItems, objects]) => {
+        setLibraryData({
+          spells: spells.default || spells,
+          actions: actions.default || actions,
+          conditions: conditions.default || conditions,
+          skills: skills.default || skills,
+          shipItems: shipItems.default || shipItems,
+          objects: objects.default || objects
+        });
+      }).catch(err => {
+        console.error("Erro ao carregar dados do compêndio:", err);
+      });
+    }
+  }, [open, libraryData]);
   
   // Estado para filtros
   const [activeFilters, setActiveFilters] = useState({
@@ -248,8 +267,9 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
 
   // Extração de Classes Únicas das Magias (com limpeza de parênteses)
   const spellClasses = useMemo(() => {
+    if (!libraryData) return [];
     const classesSet = new Set();
-    spellsData.forEach(spell => {
+    libraryData.spells.forEach(spell => {
         if (spell.classes) {
             // Remove parênteses e seus conteúdos para limpeza ou apenas os caracteres ()
             // O user pediu para "ignorar parenteses", vou remover os caracteres globais
@@ -262,18 +282,20 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
         }
     });
     return Array.from(classesSet).sort();
-  }, []);
+  }, [libraryData]);
 
   // Extração de Classes de Habilidades
   const skillClasses = useMemo(() => {
-    return skillsData.map(c => c.nome).sort();
-  }, []);
+    if (!libraryData) return [];
+    return libraryData.skills.map(c => c.nome).sort();
+  }, [libraryData]);
 
   // Processamento de Objetos
   const formattedObjects = useMemo(() => {
+    if (!libraryData) return [];
     const formatCost = (c) => c ? `${c.quant} ${c.moeda}` : '-';
 
-    const armors = (objectsData.armaduras || []).map(i => ({
+    const armors = (libraryData.objects.armaduras || []).map(i => ({
       ...i,
       grupo: 'Armadura',
       renderData: {
@@ -290,7 +312,7 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
       }
     }));
 
-    const weapons = (objectsData.armas || []).map(i => ({
+    const weapons = (libraryData.objects.armas || []).map(i => ({
       ...i,
       grupo: 'Arma',
       renderData: {
@@ -303,7 +325,7 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
       }
     }));
 
-    const gear = (objectsData.equipamentos || []).map(i => ({
+    const gear = (libraryData.objects.equipamentos || []).map(i => ({
       ...i,
       grupo: 'Equipamento',
       renderData: {
@@ -316,11 +338,12 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
     }));
 
     return [...armors, ...weapons, ...gear].sort((a, b) => a.nome.localeCompare(b.nome));
-  }, []);
+  }, [libraryData]);
 
   // Processamento de Navio
   const formattedShipItems = useMemo(() => {
-    const { apendice_navio } = shipItemsData;
+    if (!libraryData) return [];
+    const { apendice_navio } = libraryData.shipItems;
     if (!apendice_navio) return [];
 
     const formatCost = (c) => c ? `${c.quant} ${c.moeda}` : '-';
@@ -432,10 +455,11 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
     }));
 
     return [...recursos, ...municao, ...municaoEsp, ...reparos, ...aprimoramentos].sort((a, b) => a.nome.localeCompare(b.nome));
-  }, []);
+  }, [libraryData]);
 
   const formattedSkills = useMemo(() => {
-     return skillsData.flatMap(classe => {
+     if (!libraryData) return [];
+     return libraryData.skills.flatMap(classe => {
         const parent = { ...classe, _folder: 'habilidades' };
         let children = [];
         if (classe.habilidades && Array.isArray(classe.habilidades)) {
@@ -448,25 +472,26 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
         }
         return [parent, ...children];
      });
-  }, []);
+  }, [libraryData]);
 
   const data = useMemo(() => {
+    if (!libraryData) return [];
     let baseData = [];
     const tag = (arr, folder) => arr.map(i => ({ ...i, _folder: folder }));
 
     if (tab === 'general') {
       baseData = [
-        ...tag(spellsData, 'spells'),
-        ...tag(actionsData, 'actions'),
-        ...tag(conditionsData, 'conditions'),
+        ...tag(libraryData.spells, 'spells'),
+        ...tag(libraryData.actions, 'actions'),
+        ...tag(libraryData.conditions, 'conditions'),
         ...formattedSkills,
         ...tag(formattedObjects, 'itens'),
         ...tag(formattedShipItems, 'ship')
       ];
     }
-    else if (tab === 'spells') baseData = tag(spellsData, 'spells');
-    else if (tab === 'actions') baseData = tag(actionsData, 'actions');
-    else if (tab === 'conditions') baseData = tag(conditionsData, 'conditions');
+    else if (tab === 'spells') baseData = tag(libraryData.spells, 'spells');
+    else if (tab === 'actions') baseData = tag(libraryData.actions, 'actions');
+    else if (tab === 'conditions') baseData = tag(libraryData.conditions, 'conditions');
     else if (tab === 'habilidades') baseData = formattedSkills;
     else if (tab === 'objects') baseData = tag(formattedObjects, 'itens');
     else if (tab === 'ship') baseData = tag(formattedShipItems, 'ship');
@@ -476,7 +501,7 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
       .map(i => ({ ...i, _folder: i.categoria }));
 
     return [...baseData, ...custom].sort((a, b) => a.nome.localeCompare(b.nome));
-  }, [tab, formattedObjects, formattedShipItems, formattedSkills, customItems]);
+  }, [tab, libraryData, formattedObjects, formattedShipItems, formattedSkills, customItems]);
 
   // Lógica de Filtragem Principal
   const filtered = useMemo(() => {
@@ -572,6 +597,17 @@ export default function Compendium({ open, onClose, onAddItem, isGM, customItems
   };
 
   if (!open) return null;
+
+  if (!libraryData) {
+    return (
+      <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+        <div className="text-white flex flex-col items-center gap-4">
+          <Loader className="w-10 h-10 animate-spin text-indigo-500" />
+          <p className="text-sm font-medium text-zinc-400">Carregando Compêndio...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-200">

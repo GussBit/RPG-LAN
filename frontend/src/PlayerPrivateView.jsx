@@ -53,7 +53,7 @@ export default function PlayerPrivateView() {
 
     useEffect(() => {
         fetchPlayerData();
-        const interval = setInterval(fetchPlayerData, 1500);
+        const interval = setInterval(fetchPlayerData, 3000);
         return () => clearInterval(interval);
     }, [token]);
 

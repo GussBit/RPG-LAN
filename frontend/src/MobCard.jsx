@@ -84,6 +84,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
              <img 
                src={`http://${window.location.hostname}:3333${mob.image}`}
                className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-500" 
+               loading="lazy"
                alt={mob.name} 
              />
           ) : (
@@ -192,6 +193,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
                <img 
                  src={`http://${window.location.hostname}:3333${mob.image}`}
                  className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700" 
+                 loading="lazy"
                  alt={mob.name} 
                />
             ) : (
@@ -337,6 +339,7 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
                <img 
                  src={`http://${window.location.hostname}:3333${mob.image}`}
                  className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700" 
+                 loading="lazy"
                  alt={mob.name} 
                />
             ) : (

@@ -46,7 +46,10 @@ const db = await JSONFilePreset('db.json', defaultData);
 
 // Configuração de Upload (Memória para processamento)
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // Limite de 10MB para evitar estouro de RAM
+});
 
 // ====================================================================
 // --- SISTEMA DE ARQUIVOS (FILE SYSTEM SCAN) ---
