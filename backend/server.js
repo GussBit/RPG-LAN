@@ -388,6 +388,7 @@ app.post('/api/scenes/:sceneId/mobs', async (req, res) => {
     color: mob.color || 'red',
     maxHp: Number(mob.maxHp),
     currentHp: Number(mob.currentHp ?? mob.maxHp),
+    ac: Number(mob.ac || mob.ca || 10),
     damageDice: mob.damageDice || '1d6',
     toHit: Number(mob.toHit ?? 0),
     image: mob.image || '',
@@ -414,28 +415,47 @@ app.patch('/api/scenes/:sceneId/mobs/:mobId', async (req, res) => {
 
   Object.assign(mob, updates);
 
-  // --- SYNC GLOBAL DE INVENTÁRIO PARA MOBS ---
-  // Se o inventário foi alterado, propaga para o preset e para todos os outros mobs com o mesmo nome
-  if (updates.inventory) {
-    // 1. Atualiza o Preset (se existir)
+  // Se atualizou AC, remove 'ca' legado para manter consistência
+  if (updates.ac !== undefined && mob.ca !== undefined) {
+      delete mob.ca;
+  }
+
+  // --- SYNC GLOBAL (Mob -> Preset & Outros Mobs) ---
+  // Se inventário ou AC forem alterados, propaga para o preset e outros mobs
+  if (updates.inventory || updates.ac !== undefined) {
     if (!db.data.presets) db.data.presets = { mobs: [], players: [] };
     if (!db.data.presets.mobs) db.data.presets.mobs = [];
     
     const preset = db.data.presets.mobs.find(p => p.name === mob.name);
-    if (preset) {
-      preset.inventory = updates.inventory;
+    
+    // Sincroniza Inventário
+    if (updates.inventory) {
+      if (preset) preset.inventory = updates.inventory;
+      db.data.scenes.forEach(s => {
+        if (s.mobs) {
+          s.mobs.forEach(m => {
+            if (m.name === mob.name && m.id !== mobId) {
+              m.inventory = updates.inventory;
+            }
+          });
+        }
+      });
     }
 
-    // 2. Atualiza outras instâncias em todas as cenas
-    db.data.scenes.forEach(s => {
-      if (s.mobs) {
-        s.mobs.forEach(m => {
-          if (m.name === mob.name && m.id !== mobId) {
-            m.inventory = updates.inventory;
-          }
-        });
-      }
-    });
+    // Sincroniza AC
+    if (updates.ac !== undefined) {
+      if (preset) preset.ac = updates.ac;
+      db.data.scenes.forEach(s => {
+        if (s.mobs) {
+          s.mobs.forEach(m => {
+            if (m.name === mob.name && m.id !== mobId) {
+              m.ac = updates.ac;
+              if (m.ca !== undefined) delete m.ca;
+            }
+          });
+        }
+      });
+    }
   }
 
   await db.write();
@@ -486,7 +506,7 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
     characterName: player.characterName || 'Personagem',
     photo: baseData.photo,
     maxHp: baseData.maxHp,
-    ac: Number(player.ac || 10), // Novo: Classe de Armadura
+    ac: Number(player.ac || player.ca || 10), // Novo: Classe de Armadura
     damageDice: player.damageDice || '1d4', // Novo: Dano base
     toHit: Number(player.toHit || 0), // Novo: Bônus de acerto
     currentHp: baseData.currentHp,
@@ -813,6 +833,23 @@ app.patch('/api/presets/:type/:presetId', async (req, res) => {
   
   console.log(`✅ Atualizando preset: ${preset.id}`);
   Object.assign(preset, updates);
+
+  // --- SYNC GLOBAL (Preset -> Cenas) ---
+  // Se AC for atualizado no preset de mobs, propaga para todas as instâncias nas cenas
+  if (type === 'mobs' && updates.ac !== undefined) {
+      console.log(`🔄 Sincronizando AC (${updates.ac}) do preset "${preset.name}" para as cenas...`);
+      db.data.scenes.forEach(s => {
+          if (s.mobs) {
+              s.mobs.forEach(m => {
+                  if (m.name === preset.name) {
+                      m.ac = updates.ac;
+                      if (m.ca !== undefined) delete m.ca; // Remove propriedade legada
+                  }
+              });
+          }
+      });
+  }
+
   await db.write();
   console.log('💾 Salvo com sucesso!');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');

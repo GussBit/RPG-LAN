@@ -279,14 +279,14 @@ export default function App() {
         if (type === 'mobs') {
             await createMob({
                 name: preset.name, color: preset.color, maxHp: preset.maxHp,
-                damageDice: preset.damageDice, toHit: preset.toHit, image: preset.image,
+                ac: preset.ac || preset.ca, damageDice: preset.damageDice, toHit: preset.toHit, image: preset.image,
                 inventory: preset.inventory
             });
             toast.success(`${preset.name} invocado!`);
         } else if (type === 'players') {
             await createPlayer({
                 playerName: preset.playerName, characterName: preset.characterName,
-                photo: preset.photo, maxHp: preset.maxHp,
+                photo: preset.photo, maxHp: preset.maxHp, ac: preset.ac || preset.ca
             });
             toast.success(`${preset.characterName} entrou na cena!`);
         } else if (type === 'ships') {

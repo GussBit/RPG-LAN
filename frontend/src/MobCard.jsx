@@ -102,21 +102,28 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
               </span>
             </div>
           )}
+
+          {/* Stats Overlay (Vertical Layout) */}
+          <div className="absolute top-1 left-1 flex flex-col gap-1 z-10 pointer-events-none">
+             <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-black/40 backdrop-blur-md rounded border border-white/10 text-[10px] w-fit">
+                <Shield size={10} className="text-zinc-400" />
+                <span className="text-zinc-200 font-bold">{mob.ac || 10}</span>
+             </div>
+             <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-black/40 backdrop-blur-md rounded border border-white/10 text-[10px] w-fit">
+                <Swords size={10} className="text-amber-400" />
+                <span className="text-zinc-200 font-bold">{mob.damageDice}</span>
+             </div>
+             <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-black/40 backdrop-blur-md rounded border border-white/10 text-[10px] w-fit">
+                <Target size={10} className="text-blue-400" />
+                <span className="text-zinc-200 font-bold">+{mob.toHit}</span>
+             </div>
+          </div>
         </div>
 
         {/* Conteúdo */}
         <div className="p-2 space-y-2 rounded-b-[10px] overflow-visible">
           <div className="flex items-center justify-between text-[10px]">
-            <div className="flex gap-2">
-              <div className="flex items-center gap-1 px-1.5 py-0.5 bg-black/40 rounded border border-white/10" title="Dano">
-                <Swords size={10} className="text-amber-400" />
-                <span className="text-zinc-300 font-semibold">{mob.damageDice}</span>
-              </div>
-              <div className="flex items-center gap-1 px-1.5 py-0.5 bg-black/40 rounded border border-white/10" title="Acerto">
-                <Target size={10} className="text-blue-400" />
-                <span className="text-zinc-300 font-semibold">+{mob.toHit}</span>
-              </div>
-            </div>
+            <div className="flex gap-2"></div>
             <div className={clsx("font-bold text-base tabular-nums", theme.text)}>
                {hp}<span className="text-[10px] text-zinc-500 font-normal">/{mob.maxHp}</span>
             </div>
@@ -213,17 +220,19 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
             )}
 
             {/* Stats sobre a imagem */}
-            <div className="absolute bottom-1.5 left-1.5 right-1.5 space-y-1 z-10">
-              <div className="flex items-center gap-1 px-1.5 py-1 bg-black/90 backdrop-blur-sm rounded border border-white/20">
-                <Swords size={10} className="text-amber-400 shrink-0" />
-                <span className="text-[10px] text-zinc-500">Dano:</span>
-                <span className="text-[10px] text-zinc-200 font-bold ml-auto">{mob.damageDice}</span>
-              </div>
-              <div className="flex items-center gap-1 px-1.5 py-1 bg-black/90 backdrop-blur-sm rounded border border-white/20">
-                <Target size={10} className="text-blue-400 shrink-0" />
-                <span className="text-[10px] text-zinc-500">Acerto:</span>
-                <span className="text-[10px] text-zinc-200 font-bold ml-auto">+{mob.toHit}</span>
-              </div>
+            <div className="absolute top-8 left-1.5 flex flex-col gap-1 z-10 pointer-events-none">
+               <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-black/40 backdrop-blur-md rounded border border-white/10 text-[10px] w-fit">
+                  <Shield size={10} className="text-zinc-400" />
+                  <span className="text-zinc-200 font-bold">{mob.ac || 10}</span>
+               </div>
+               <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-black/40 backdrop-blur-md rounded border border-white/10 text-[10px] w-fit">
+                  <Swords size={10} className="text-amber-400" />
+                  <span className="text-zinc-200 font-bold">{mob.damageDice}</span>
+               </div>
+               <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-black/40 backdrop-blur-md rounded border border-white/10 text-[10px] w-fit">
+                  <Target size={10} className="text-blue-400" />
+                  <span className="text-zinc-200 font-bold">+{mob.toHit}</span>
+               </div>
             </div>
           </div>
         </div>
@@ -359,21 +368,19 @@ export default function MobCard({ mob, onUpdate, onDelete, onEdit, onToggleCondi
             )}
 
             {/* Stats sobre a imagem */}
-            <div className="absolute bottom-2 left-2 right-2 flex gap-2 z-10">
-              <div className="flex-1 flex items-center gap-1.5 px-2 py-1.5 bg-black/90 backdrop-blur-sm rounded-lg border border-white/20">
-                <Swords size={12} className="text-amber-400 shrink-0" />
-                <div className="flex-1">
-                  <div className="text-[8px] text-zinc-500 uppercase leading-none mb-0.5">Dano</div>
-                  <div className="text-xs text-zinc-200 font-bold leading-none">{mob.damageDice}</div>
-                </div>
-              </div>
-              <div className="flex-1 flex items-center gap-1.5 px-2 py-1.5 bg-black/90 backdrop-blur-sm rounded-lg border border-white/20">
-                <Target size={12} className="text-blue-400 shrink-0" />
-                <div className="flex-1">
-                  <div className="text-[8px] text-zinc-500 uppercase leading-none mb-0.5">Acerto</div>
-                  <div className="text-xs text-zinc-200 font-bold leading-none">+{mob.toHit}</div>
-                </div>
-              </div>
+            <div className="absolute top-10 left-2 flex flex-col gap-1.5 z-10 pointer-events-none">
+               <div className="flex items-center gap-2 px-2 py-1 bg-black/40 backdrop-blur-md rounded border border-white/10 text-xs w-fit">
+                  <Shield size={12} className="text-zinc-400" />
+                  <span className="text-zinc-200 font-bold">{mob.ac || 10}</span>
+               </div>
+               <div className="flex items-center gap-2 px-2 py-1 bg-black/40 backdrop-blur-md rounded border border-white/10 text-xs w-fit">
+                  <Swords size={12} className="text-amber-400" />
+                  <span className="text-zinc-200 font-bold">{mob.damageDice}</span>
+               </div>
+               <div className="flex items-center gap-2 px-2 py-1 bg-black/40 backdrop-blur-md rounded border border-white/10 text-xs w-fit">
+                  <Target size={12} className="text-blue-400" />
+                  <span className="text-zinc-200 font-bold">+{mob.toHit}</span>
+               </div>
             </div>
           </div>
         </div>

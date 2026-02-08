@@ -143,7 +143,7 @@ export default function CharacterSheetModal({ entity, type, onClose }) {
                     <div className="bg-zinc-800/80 p-3 rounded-xl border border-white/10 text-center min-w-[80px]">
                         <Shield size={20} className="mx-auto text-zinc-400 mb-1" />
                         <EditableField 
-                            value={entity.ac || 10} 
+                            value={entity.ac || entity.ca || 10} 
                             type="number" 
                             onSave={(v) => handleUpdate('ac', v)}
                             className="text-2xl font-black text-white block"
