@@ -18,6 +18,19 @@ export default function Arena({
   const [battleMode, setBattleMode] = useState('normal'); // 'normal' | 'naval'
   const { openCharacterSheet } = useGameStore();
 
+  // Helper para formatar URL (slug) - Mesma lógica do backend
+  const toSlug = (str) => {
+    return str
+      .toString()
+      .toLowerCase()
+      .trim()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '')
+      .replace(/\-\-+/g, '-');
+  };
+
   // Helpers para atualizar Moral (usando as funções genéricas de update)
   const handleUpdatePlayerMorale = (id, delta) => {
     const player = activeScene.players.find(p => p.id === id);
@@ -91,6 +104,10 @@ export default function Arena({
             const conditions = p.conditions || [];
             const isDead = p.currentHp <= 0;
             const hpPercent = Math.min(100, Math.max(0, (p.currentHp / p.maxHp) * 100));
+            
+            // Gera o link amigável
+            const playerSlug = toSlug(p.characterName || 'personagem');
+            const playerLink = `http://${window.location.hostname}:5173/p/${playerSlug}`;
             
             // Classes base do card
             let cardClasses = clsx(
@@ -242,15 +259,15 @@ export default function Arena({
                       <div 
                         className="flex-1 bg-black/40 px-2 py-1.5 rounded-lg border border-white/10 text-[9px] text-zinc-500 font-mono truncate cursor-pointer hover:bg-black/60 transition-colors"
                         onClick={() => {
-                          navigator.clipboard.writeText(`http://${window.location.hostname}:5173${p.accessUrl}`);
+                          navigator.clipboard.writeText(playerLink);
                           toast.success('Link copiado!');
                         }}
                         title="Clique para copiar"
                       >
-                        http://{window.location.hostname}:5173{p.accessUrl}
+                        {playerLink}
                       </div>
                       <button 
-                        onClick={() => onOpenQRCode(`http://${window.location.hostname}:5173${p.accessUrl}`, p.characterName)}
+                        onClick={() => onOpenQRCode(playerLink, p.characterName)}
                         className="px-2.5 bg-black/40 hover:bg-black/60 border border-white/10 rounded-lg text-zinc-400 hover:text-zinc-200 transition-colors"
                         title="Gerar QR Code"
                       >
@@ -386,15 +403,15 @@ export default function Arena({
                         <div 
                           className="flex-1 bg-black/40 px-2 py-1.5 rounded-lg border border-white/10 text-[10px] text-zinc-500 font-mono truncate cursor-pointer hover:bg-black/60 transition-colors"
                           onClick={() => {
-                            navigator.clipboard.writeText(`http://${window.location.hostname}:5173${p.accessUrl}`);
+                            navigator.clipboard.writeText(playerLink);
                             toast.success('Link copiado!');
                           }}
                           title="Clique para copiar"
                         >
-                          {window.location.hostname}:5173{p.accessUrl}
+                          {playerLink.replace(/^https?:\/\//, '')}
                         </div>
                         <button 
-                          onClick={() => onOpenQRCode(`http://${window.location.hostname}:5173${p.accessUrl}`, p.characterName)}
+                          onClick={() => onOpenQRCode(playerLink, p.characterName)}
                           className="px-2.5 bg-black/40 hover:bg-black/60 border border-white/10 rounded-lg text-zinc-400 hover:text-zinc-200 transition-colors"
                           title="Gerar QR Code"
                         >

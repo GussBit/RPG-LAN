@@ -14,7 +14,7 @@
           "damageDice": "1d6+2",
           "toHit": 4,
           "image": "/images/freepik__dungeons-dragons-style-fantasy-illustration-of-an-__74375-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 9,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -151,7 +151,7 @@
           "damageDice": "1d12",
           "toHit": 5,
           "image": "/images/freepik__dungeons-dragons-style-illustration-of-an-amnian-a__74376-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 14,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -292,7 +292,7 @@
           "damageDice": "1d4+1",
           "toHit": 3,
           "image": "/images/freepik__middle-aged-battle-mage-wearing-a-dark-blue-robe-e__74374-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 6,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -390,7 +390,7 @@
           "damageDice": "1d8+3",
           "toHit": 5,
           "image": "/images/freepik__veteran-amnian-officer-of-imposing-stature-wearing__74373-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 13,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -557,7 +557,7 @@
           "damageDice": "1d6+2",
           "toHit": 4,
           "image": "/images/freepik__dungeons-dragons-style-fantasy-illustration-of-an-__74375-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 18,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -698,7 +698,7 @@
           "toHit": 0,
           "currentHp": 27,
           "accessUrl": "/p/x7uerry2bp",
-          "initiative": 0,
+          "initiative": 5,
           "accessToken": "x7uerry2bp",
           "conditions": [],
           "inventory": [
@@ -1047,10 +1047,21 @@
           ]
         }
       ],
-      "playlist": [],
+      "playlist": [
+        {
+          "id": "track-1770567006126",
+          "name": "Multi Cannon Fire Sound Effect.mp3",
+          "url": "/audio/Multi Cannon Fire Sound Effect.mp3",
+          "type": "sfx",
+          "volume": 0.5,
+          "pulseActive": false,
+          "pulseInterval": 5
+        }
+      ],
       "notes": "Interceptação de navio dos Devotos de Umberlee para roubar mapas dos altares.",
       "images": [],
-      "ships": []
+      "ships": [],
+      "initiativeActive": true
     },
     {
       "id": "cena-singing-rocks",
@@ -1066,7 +1077,7 @@
           "damageDice": "1d6+2",
           "toHit": 4,
           "image": "/images/freepik__dungeons-dragons-style-dark-fantasy-illustration-o__74379-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 10,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -1160,7 +1171,7 @@
           "damageDice": "1d6+2",
           "toHit": 4,
           "image": "/images/freepik__dungeons-dragons-style-dark-fantasy-illustration-o__74379-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 18,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -1254,7 +1265,7 @@
           "damageDice": "1d8",
           "toHit": 5,
           "image": "/images/freepik__dungeons-dragons-style-dark-fantasy-illustration-o__74380-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 2,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -1342,7 +1353,7 @@
           "damageDice": "1d4+2",
           "toHit": 4,
           "image": "/images/freepik__dungeons-dragons-style-dark-fantasy-illustration-o__74381-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 6,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -1456,7 +1467,7 @@
           "damageDice": "1d8+3",
           "toHit": 5,
           "image": "/images/freepik__dungeons-dragons-style-epic-dark-fantasy-illustrat__74383-07-02-2026.webp",
-          "initiative": 0,
+          "initiative": 2,
           "hiddenInInitiative": true,
           "conditions": [],
           "inventory": [
@@ -1652,7 +1663,7 @@
           "toHit": 0,
           "currentHp": 27,
           "accessUrl": "/p/chcz2jnbrx5",
-          "initiative": 0,
+          "initiative": 10,
           "accessToken": "chcz2jnbrx5",
           "conditions": [],
           "inventory": [
@@ -1822,7 +1833,8 @@
               "visible": true,
               "quantity": 1
             }
-          ]
+          ],
+          "hiddenInInitiative": false
         },
         {
           "id": "player-1770556916683",
@@ -2004,7 +2016,8 @@
       "playlist": [],
       "notes": "Recuperação da Harpa de Sélina na Gruta da Rainha Afogada.",
       "images": [],
-      "ships": []
+      "ships": [],
+      "initiativeActive": true
     },
     {
       "id": "cena-mar-negra",
@@ -5459,7 +5472,7 @@
       "ships": []
     }
   ],
-  "activeSceneId": "cena-singing-rocks",
+  "activeSceneId": "cena-saque-arauto",
   "library": {
     "mobs": [],
     "tracks": []

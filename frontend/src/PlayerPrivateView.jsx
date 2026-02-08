@@ -39,7 +39,8 @@ const CRISIS_CONDITIONS = [
 ];
 
 export default function PlayerPrivateView() {
-    const { token } = useParams();
+    const { token } = useParams(); // Mantemos o nome 'token' do router, mas ele representa o characterName/Slug
+    const characterNameParam = token;
     const navigate = useNavigate();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -52,30 +53,59 @@ export default function PlayerPrivateView() {
     const [showInitModal, setShowInitModal] = useState(false);
 
     useEffect(() => {
-        fetchPlayerData();
-        const interval = setInterval(fetchPlayerData, 3000);
-        return () => clearInterval(interval);
-    }, [token]);
+        let isMounted = true;
 
-    const fetchPlayerData = async () => {
-        try {
-            const res = await fetch(`${BACKEND_URL}/api/players/token/${token}`);
-            if (!res.ok) throw new Error('Token inválido ou jogador não encontrado');
-            const json = await res.json();
-            setData(json);
-            
-            // Lógica de Iniciativa: Se a cena está em modo de iniciativa e o jogador tem iniciativa 0, abre o modal
-            if (json.scene.initiativeActive && json.player.initiative === 0) {
-                setShowInitModal(true);
+        const fetchPlayerData = async () => {
+            try {
+                // Tenta buscar por nome (novo método) na cena ativa
+                const res = await fetch(`${BACKEND_URL}/api/player-by-name/${characterNameParam}`);
+                
+                if (!res.ok) {
+                    // Fallback: Tenta buscar por Token antigo se o nome falhar
+                    const resOld = await fetch(`${BACKEND_URL}/api/players/token/${characterNameParam}`);
+                    if (!resOld.ok) throw new Error('Jogador não encontrado na cena ativa.');
+                    
+                    const jsonOld = await resOld.json();
+                    if (isMounted) {
+                        setData(jsonOld);
+                        setError(null);
+                        setLoading(false);
+                    }
+                    return;
+                }
+
+                const json = await res.json();
+                
+                if (isMounted) {
+                    // Verifica mudança de cena para feedback visual (opcional)
+                    if (data && data.scene.id !== json.scene.id) {
+                        toast.info(`Cena mudou para: ${json.scene.name}`, { autoClose: 3000 });
+                    }
+
+                    setData(json);
+                    
+                    // Lógica de Iniciativa
+                    if (json.scene.initiativeActive && json.player.initiative === 0 && !showInitModal) {
+                        setShowInitModal(true);
+                    }
+
+                    setError(null);
+                    setLoading(false);
+                }
+            } catch (err) {
+                if (isMounted && loading) {
+                    setError(err.message);
+                }
             }
+        };
 
-            setError(null);
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+        fetchPlayerData();
+        const interval = setInterval(fetchPlayerData, 3000); // Polling a cada 3s
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+        };
+    }, [characterNameParam]); // Dependência apenas do parametro da URL
 
     const toggleCondition = async (conditionId) => {
         if (!data) return;
@@ -92,7 +122,7 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ conditions: newConditions })
             });
-            fetchPlayerData();
+            // O polling atualizará o estado, ou podemos chamar fetchPlayerData() manualmente se extrairmos a função
             
             const condition = CONDITIONS.find(c => c.id === conditionId);
             toast.info(
@@ -116,7 +146,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ currentHp: newHp })
             });
-            fetchPlayerData();
         } catch (err) { 
             console.error(err); 
         }
@@ -143,7 +172,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ inventory: newInventory })
             });
-            fetchPlayerData();
         } catch (err) { 
             toast.error('Erro ao salvar item'); 
         }
@@ -171,7 +199,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ inventory: newInventory })
             });
-            fetchPlayerData();
         } catch (err) { 
             toast.error('Erro ao atualizar inventário'); 
         }
@@ -189,7 +216,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ inventory: newInventory })
             });
-            fetchPlayerData();
             toast.success('Item removido');
         } catch (err) { 
             toast.error('Erro ao remover item'); 
@@ -220,7 +246,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ inventory: newInventory })
             });
-            fetchPlayerData();
         } catch (err) { 
             toast.error('Erro ao carregar item'); 
         }
@@ -251,7 +276,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ inventory: newInventory })
             });
-            fetchPlayerData();
         } catch (err) { 
             toast.error('Erro ao atualizar carga'); 
         }
@@ -272,7 +296,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ inventory: newInventory })
             });
-            fetchPlayerData();
             toast.success('Item removido do navio');
         } catch (err) { 
             toast.error('Erro ao remover item'); 
@@ -292,7 +315,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ currentHp: newHp })
             });
-            fetchPlayerData();
         } catch (err) { console.error(err); }
     };
 
@@ -309,7 +331,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ currentMorale: newMorale })
             });
-            fetchPlayerData();
         } catch (err) { console.error(err); }
     };
 
@@ -330,7 +351,6 @@ export default function PlayerPrivateView() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ conditions: newConditions })
             });
-            fetchPlayerData();
 
             const condition = CRISIS_CONDITIONS.find(c => c.id === conditionId);
             const shipName = ship.name || 'Navio';
@@ -354,7 +374,6 @@ export default function PlayerPrivateView() {
                 body: JSON.stringify({ initiative: value })
             });
             setShowInitModal(false);
-            fetchPlayerData();
             toast.success(`Iniciativa ${value} definida!`);
         } catch (err) { toast.error('Erro ao salvar iniciativa'); }
     };

@@ -228,6 +228,19 @@ app.post('/api/data/:filename', (req, res) => {
   }
 });
 
+// Helper para formatar URL (slug)
+const toSlug = (str) => {
+  return str
+    .toString()
+    .toLowerCase()
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-');
+};
+
 // --- CUSTOM ITEMS (COMPÊNDIO) ---
 
 app.get('/api/customItems', (req, res) => {
@@ -472,6 +485,44 @@ app.delete('/api/scenes/:sceneId/mobs/:mobId', async (req, res) => {
   res.status(204).send();
 });
 
+// --- ROTA DE BUSCA DE JOGADOR POR NOME (PERMALINK) ---
+app.get('/api/player-by-name/:characterName', (req, res) => {
+  const { characterName } = req.params;
+  const activeSceneId = db.data.activeSceneId;
+
+  if (!activeSceneId) {
+    return res.status(404).json({ error: 'Nenhuma cena ativa no momento.' });
+  }
+
+  const scene = db.data.scenes.find(s => s.id === activeSceneId);
+  if (!scene) {
+    return res.status(404).json({ error: 'Cena ativa não encontrada.' });
+  }
+
+  // Busca o jogador na cena ativa comparando os slugs
+  const player = (scene.players || []).find(p => 
+    toSlug(p.characterName) === characterName
+  );
+
+  if (!player) {
+    return res.status(404).json({ error: 'Jogador não encontrado na cena ativa.' });
+  }
+
+  // Retorna dados do jogador e da cena
+  res.json({
+    player,
+    scene: {
+      id: scene.id,
+      name: scene.name,
+      background: scene.background,
+      initiativeActive: scene.initiativeActive,
+      mobs: scene.mobs || [],
+      players: scene.players || [],
+      ships: scene.ships || []
+    }
+  });
+});
+
 // --- PLAYERS ---
 
 app.post('/api/scenes/:sceneId/players', async (req, res) => {
@@ -510,7 +561,7 @@ app.post('/api/scenes/:sceneId/players', async (req, res) => {
     damageDice: player.damageDice || '1d4', // Novo: Dano base
     toHit: Number(player.toHit || 0), // Novo: Bônus de acerto
     currentHp: baseData.currentHp,
-    accessUrl: `/p/${token}`,
+    accessUrl: `/p/${toSlug(player.characterName || 'personagem')}`, // Gera URL amigável
     initiative: Number(player.initiative || 0),
     accessToken: token,
     conditions: baseData.conditions,

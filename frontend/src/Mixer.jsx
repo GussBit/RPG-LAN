@@ -4,7 +4,7 @@ import { Howl, Howler } from 'howler';
 import {
   Volume2, Play, Pause, Wind, Zap, UploadCloud, Trash2, Music,
   SkipForward, SkipBack, Swords, Map as MapIcon, Trophy, GripVertical,
-  Plus, Clock, MoreVertical, ArrowRight, Repeat, Repeat1, Maximize2, Minimize2
+  Plus, Clock, MoreVertical, ArrowRight, Repeat, Repeat1, Maximize2, Minimize2, Power
 } from 'lucide-react';
 import { useGameStore } from './store';
 import { getImageUrl } from './constants';
@@ -479,7 +479,7 @@ const MusicPlayer = memo(({ tracks, masterVolume, onUpdate, onDelete, onChangeCa
 const SfxGrid = memo(({ tracks, masterVolume, onDelete, onUpdate, onChangeCategory, isExpanded }) => {
   const [playingId, setPlayingId] = useState(null);
   const soundsRef = useRef({});
-  const intervalsRef = useRef({});
+  const activeIntervalsRef = useRef({});
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [selectedTrackId, setSelectedTrackId] = useState(null);
@@ -503,9 +503,7 @@ const SfxGrid = memo(({ tracks, masterVolume, onDelete, onUpdate, onChangeCatego
 
     return () => {
       Object.values(soundsRef.current).forEach((sound) => sound.unload());
-      Object.values(intervalsRef.current).forEach((interval) => clearInterval(interval));
       soundsRef.current = {};
-      intervalsRef.current = {};
     };
   }, [trackIds]);
 
@@ -529,19 +527,44 @@ const SfxGrid = memo(({ tracks, masterVolume, onDelete, onUpdate, onChangeCatego
     }, 300);
   }, []);
 
-  const togglePulse = useCallback((track) => {
-    if (intervalsRef.current[track.id]) {
-      clearInterval(intervalsRef.current[track.id]);
-      delete intervalsRef.current[track.id];
-      onUpdate(track.id, { pulseActive: false });
-    } else {
-      const intervalMs = (track.pulseInterval || 5) * 1000;
-      intervalsRef.current[track.id] = setInterval(() => {
-        playSound(track.id);
-      }, intervalMs);
-      onUpdate(track.id, { pulseActive: true });
-    }
-  }, [onUpdate, playSound]);
+  // ✅ GERENCIAMENTO DE PULSO (ROBUSTO)
+  useEffect(() => {
+    // 1. Mapeia o estado desejado (quais faixas devem pulsar e com qual intervalo)
+    const desiredPulses = {};
+    tracks.forEach(track => {
+      if (track.pulseActive) {
+        desiredPulses[track.id] = (track.pulseInterval || 5) * 1000;
+      }
+    });
+
+    // 2. Remove pulsos que não deveriam existir ou cuja duração mudou
+    Object.keys(activeIntervalsRef.current).forEach(id => {
+      const current = activeIntervalsRef.current[id];
+      const desiredDuration = desiredPulses[id];
+
+      if (!desiredDuration || desiredDuration !== current.duration) {
+        clearInterval(current.timerId);
+        delete activeIntervalsRef.current[id];
+      }
+    });
+
+    // 3. Cria novos pulsos para os que faltam (ou foram recém removidos por mudança de duração)
+    Object.keys(desiredPulses).forEach(id => {
+      if (!activeIntervalsRef.current[id]) {
+        const duration = desiredPulses[id];
+        const timerId = setInterval(() => playSound(id), duration);
+        activeIntervalsRef.current[id] = { timerId, duration };
+      }
+    });
+  }, [tracks, playSound]);
+
+  // Limpeza final ao desmontar
+  useEffect(() => {
+    return () => {
+        Object.values(activeIntervalsRef.current).forEach(i => clearInterval(i.timerId));
+        activeIntervalsRef.current = {};
+    };
+  }, []);
 
   // ✅ CORRIGIDO: Permite digitação livre e aplica debounce
   const handlePulseIntervalChange = useCallback((trackId, value) => {
@@ -567,19 +590,7 @@ const SfxGrid = memo(({ tracks, masterVolume, onDelete, onUpdate, onChangeCatego
 
     // Atualiza no store
     onUpdate(trackId, { pulseInterval: numValue });
-
-    // Se o pulso está ativo, recria o interval
-    const track = tracks.find(t => t.id === trackId);
-    if (track?.pulseActive) {
-      if (intervalsRef.current[trackId]) {
-        clearInterval(intervalsRef.current[trackId]);
-      }
-      const intervalMs = numValue * 1000;
-      intervalsRef.current[trackId] = setInterval(() => {
-        playSound(trackId);
-      }, intervalMs);
-    }
-  }, [tracks, onUpdate, playSound]);
+  }, [onUpdate]);
 
   const handleCategoryClick = useCallback((e, trackId) => {
     e.stopPropagation();
@@ -621,11 +632,6 @@ const SfxGrid = memo(({ tracks, masterVolume, onDelete, onUpdate, onChangeCatego
 
             <div className="w-full text-center px-2">
               <div className={`${isExpanded ? 'text-sm' : 'text-[10px] 2xl:text-xs'} font-bold text-zinc-300 line-clamp-2 leading-tight`}>{track.name}</div>
-              {track.pulseActive && (
-                <div className={`${isExpanded ? 'text-xs' : 'text-[9px]'} text-amber-400 mt-1.5 font-mono bg-black/40 rounded px-2 py-0.5 inline-block`}>
-                  Pulso {track.pulseInterval || 5}s
-                </div>
-              )}
             </div>
           </button>
 
@@ -644,7 +650,7 @@ const SfxGrid = memo(({ tracks, masterVolume, onDelete, onUpdate, onChangeCatego
                 }
               }}
               className={`flex items-center justify-center transition-colors ${
-                track.pulseActive ? 'text-amber-400 bg-amber-900/20 hover:bg-amber-900/40' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                editingPulseId === track.id ? 'text-amber-400 bg-amber-900/20' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
               }`}
               title="Configurar pulso"
             >
@@ -662,10 +668,6 @@ const SfxGrid = memo(({ tracks, masterVolume, onDelete, onUpdate, onChangeCatego
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                if (intervalsRef.current[track.id]) {
-                  clearInterval(intervalsRef.current[track.id]);
-                  delete intervalsRef.current[track.id];
-                }
                 onDelete(track.id);
               }}
               className="flex items-center justify-center text-zinc-500 hover:text-red-400 hover:bg-red-950/30 transition-colors"
@@ -714,32 +716,35 @@ const SfxGrid = memo(({ tracks, masterVolume, onDelete, onUpdate, onChangeCatego
                 <span className="text-[10px] text-zinc-500">seg</span>
               </div>
 
-              <div className="w-full flex gap-2">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    togglePulse(track);
-                    setEditingPulseId(null);
-                  }}
-                  className={`flex-1 py-2 rounded ${isExpanded ? 'text-xs' : 'text-[10px]'} font-bold uppercase tracking-wide transition-colors ${
-                    track.pulseActive ? 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' : 'bg-amber-600 text-white hover:bg-amber-500'
-                  }`}
-                >
-                  {track.pulseActive ? 'Parar' : 'Ativar'}
-                </button>
-
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setEditingPulseId(null);
-                  }} 
-                  className="px-3 py-2 bg-zinc-800 hover:bg-zinc-700 rounded text-zinc-400"
-                >
-                  <ArrowRight size={12} className="rotate-180" />
-                </button>
-              </div>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditingPulseId(null);
+                }} 
+                className="w-full py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded text-zinc-400 text-[10px] uppercase font-bold"
+              >
+                Fechar
+              </button>
             </div>
           )}
+
+          {/* Feedback de Tempo (Canto Superior Esquerdo) */}
+          <div className="absolute top-2 left-2 z-20 pointer-events-none">
+             <span className="text-[10px] font-bold font-mono text-zinc-300 bg-black/60 px-1.5 py-0.5 rounded backdrop-blur-md border border-white/10 shadow-sm">
+                {track.pulseInterval || 5} seg
+             </span>
+          </div>
+
+          {/* Switch iOS (Canto Superior Direito) */}
+          <div className="absolute top-2 right-2 z-20" onClick={(e) => e.stopPropagation()}>
+             <button
+                onClick={() => onUpdate(track.id, { pulseActive: !track.pulseActive })}
+                className={`w-8 h-4.5 rounded-full transition-colors relative border border-white/10 shadow-inner ${track.pulseActive ? 'bg-green-500' : 'bg-zinc-700'}`}
+                title={track.pulseActive ? "Desativar pulso" : "Ativar pulso"}
+             >
+                <div className={`absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white shadow-sm transition-all ${track.pulseActive ? 'translate-x-3.5' : 'translate-x-0.5'}`} />
+             </button>
+          </div>
         </div>
       ))}
 
@@ -770,11 +775,11 @@ export default function Mixer({ playlist = [], onOpenGallery, volAmbience, volMu
 
   const playlistKey = useMemo(() => playlist.map(t => t.id).join(','), [playlist]);
 
-  const musicTracks = useMemo(() => playlist.filter((t) => t.type === 'musica'), [playlistKey]);
-  const sfxTracks = useMemo(() => playlist.filter((t) => t.type === 'sfx'), [playlistKey]);
+  const musicTracks = useMemo(() => playlist.filter((t) => t.type === 'musica'), [playlist]);
+  const sfxTracks = useMemo(() => playlist.filter((t) => t.type === 'sfx'), [playlist]);
   const currentAmbienceTracks = useMemo(
     () => playlist.filter((t) => t.type === 'ambiente' && (t.ambienceMode === activeTab || !t.ambienceMode)),
-    [playlistKey, activeTab]
+    [playlist, activeTab]
   );
 
   const handleDrop = async (e, targetType, targetMode = null) => {
